@@ -20,7 +20,8 @@ def make(
         executer:
         path:
     """
-    print(executer("module load cuda/10.1; cd "+path+"; make"))
+    b = executer("module load cuda/10.1; cd "+path+"; make")
+    print("".join([p.decode('utf-8') for p in b]))
 
 def run(
     s: str,
@@ -46,6 +47,10 @@ def run(
         f: number of Fourier coefficients
         executer:
     """
+    if i!="" and i[-1]!="/":
+        i += "/"
+    if o!="" and o[-1]!="/":
+        o += "/"
     n = r*b # number of random points
     if not os.path.exists(o+s):
         os.mkdir(o+s)
