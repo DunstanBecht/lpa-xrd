@@ -59,4 +59,4 @@ def run(
     for e in os.listdir(i+s):
         args = " ".join(str(a) for a in [h, b, ipath+e, n, f, opath+e])
         print("- "+e+" ("+args+")")
-        executer("cd "+path+"; ./a.out "+args+" >& runs/"+e)
+        executer("cd "+path+"; ./a.out "+args+" >& run-"+s+"-"+e)
