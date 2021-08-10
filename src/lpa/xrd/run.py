@@ -5,28 +5,33 @@
 Module to automate the execution of simulations.
 """
 
-from . import *
+import os
+
+PATH = 'workspace/xrd' # simulator location
 
 def make(
-    executer=os.system
+    executer=os.system,
+    path=PATH,
 ) -> None:
     """
     Compile the simulation program.
 
     Input:
         executer:
+        path:
     """
-    print(executer("module load cuda/10.1; cd xray-diffraction; make"))
+    print(executer("module load cuda/10.1; cd "+path+"; make"))
 
 def run(
     s: str,
-    i: str = "input/",
-    o: str = "output/",
+    i: str = "",
+    o: str = "",
     h: int = 1,
     b: int = 200,
     r: int = 1000,
     f: int = 35,
     executer=os.system,
+    path=PATH,
 ) -> None:
     """
     Run the simulation on a sample of distributions.
@@ -44,9 +49,9 @@ def run(
     n = r*b # number of random points
     if not os.path.exists(o+s):
         os.mkdir(o+s)
-    ipath = i+s+"/"
-    opath = o+s+"/"
+    ipath = "../"+i+s+"/"
+    opath = "../"+o+s+"/"
     for e in os.listdir(i+s):
         args = " ".join(str(a) for a in [h, b, ipath+e, n, f, opath+e])
         print("- "+e+" ("+args+")")
-        executer("cd xray-diffraction; ./a.out "+args+" >& runs/"+e)
+        executer("cd "+path+"; ./a.out "+args+" >& runs/"+e)
