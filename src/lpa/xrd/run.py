@@ -7,7 +7,7 @@ Module to automate the execution of simulations.
 
 import os
 
-PATH = 'workspace/xrd' # simulator location
+PATH = os.getcwd()+'/xrd' # simulator location
 
 def make(
     executer=os.system,
