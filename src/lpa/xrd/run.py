@@ -7,7 +7,7 @@ Module to automate the execution of simulations.
 
 import os
 
-PATH = os.getcwd()+'/xrd' # simulator location
+PATH = os.path.join(os.getcwd(), 'xrd') # simulator program location
 
 def make(
     executer=os.system,
@@ -24,9 +24,9 @@ def make(
     print("".join([p.decode('utf-8') for p in b]))
 
 def run(
-    s: str,
-    i: str = "",
-    o: str = "",
+    imstm: str,
+    imdir: str = "",
+    exdir: str = "",
     h: int = 1,
     b: int = 200,
     r: int = 1000,
@@ -38,25 +38,31 @@ def run(
     Run the simulation on a sample of distributions.
 
     Input:
-        s: directory name of the sample of distributions
-        i: input directory
-        o: output directory
+        imstm: stem of the input
+        imdir: import directory
+        exdir: export directory
         h: hardware to use (1 for gpu / 0 for cpu)
         b: block size
         r: block repetitions (r*b gives the number of random points)
         f: number of Fourier coefficients
         executer:
     """
-    if i!="" and i[-1]!="/":
-        i += "/"
-    if o!="" and o[-1]!="/":
-        o += "/"
     n = r*b # number of random points
-    if not os.path.exists(o+s):
-        os.mkdir(o+s)
-    ipath = "../"+i+s+"/"
-    opath = "../"+o+s+"/"
+    imdir_stm = os.path.join(imdir, imstm)
+    exdir_stm = os.path.join(exdir, imstm)
+    if not os.path.exists(exdir_stm):
+        os.mkdir(exdir_stm)
+    ipath = "../"+imdir_stm
+    opath = "../"+exdir_stm
     for e in os.listdir(i+s):
-        args = " ".join(str(a) for a in [h, b, ipath+e, n, f, opath+e])
+        args = [
+            h,
+            b,
+            os.path.join(ipath, e),
+            n,
+            f,
+            os.path.join(opath, e),
+        ]
+        args = " ".join(args)
         print("- "+e+" ("+args+")")
         executer("cd "+path+"; ./a.out "+args+" >& run-"+s+"-"+e)
