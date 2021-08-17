@@ -63,6 +63,6 @@ def run(
             f,
             os.path.join(opath, e),
         ]
-        args = " ".join(args)
+        args = " ".join([str(a) for a in args])
         print("- "+e+" ("+args+")")
         executer("cd "+path+"; ./a.out "+args+" >& run-"+s+"-"+e)
