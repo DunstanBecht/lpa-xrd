@@ -65,4 +65,4 @@ def run(
         ]
         args = " ".join([str(a) for a in args])
         print("- "+e+" ("+args+")")
-        executer("cd "+path+"; ./a.out "+args+" >& run-"+s+"-"+e)
+        executer("cd "+path+"; ./a.out "+args+" >& run-"+imstm+"-"+e)
