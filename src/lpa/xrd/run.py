@@ -54,7 +54,7 @@ def run(
         os.mkdir(exdir_stm)
     ipath = "../"+imdir_stm
     opath = "../"+exdir_stm
-    for e in os.listdir(i+s):
+    for e in os.listdir(imdir_stm):
         args = [
             h,
             b,
