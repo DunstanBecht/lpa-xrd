@@ -2,8 +2,12 @@
 # coding: utf-8
 
 """
-Tools for automation of X-ray diffraction simulations.
+X-ray diffraction simulations program.
 """
 
-__author__ = "Dunstan Becht"
+__author__ = "Dunstan Becht, Asdin Aoufi"
 __version__ = "0.8.8"
+
+import os
+
+clone_dir = 'xrd' # default location of the local copy of the simulator code

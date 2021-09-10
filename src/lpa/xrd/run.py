@@ -5,13 +5,11 @@
 Module to automate the execution of simulations.
 """
 
-import os
-
-PATH = os.path.join(os.getcwd(), 'xrd') # simulator program location
+from . import *
 
 def make(
-    executer=os.system,
-    path=PATH,
+    executer = os.system,
+    path = clone_dir,
 ) -> None:
     """
     Compile the simulation program.
@@ -31,8 +29,8 @@ def run(
     b: int = 200,
     r: int = 1000,
     f: int = 35,
-    executer=os.system,
-    path=PATH,
+    executer = os.system,
+    path = clone_dir,
 ) -> None:
     """
     Run the simulation on a sample of distributions.
