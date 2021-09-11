@@ -10,6 +10,7 @@ from . import *
 import shutil
 import pkg_resources
 
+@beartype
 def clone(
     clndir: str = clone_dir,
 ) -> None:

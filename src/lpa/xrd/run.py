@@ -7,16 +7,17 @@ Module to automate the execution of simulations.
 
 from . import *
 
+@beartype
 def make(
     executer: Callable = os.system,
     clndir: str = clone_dir,
-) -> None:
+) -> tuple:
     """
     Compile the simulation program.
 
     Input:
-        executer: function executing shell commands
-        clndir: program code clone directory
+        executer (Callable): function executing shell commands
+        clndir (str): program code clone directory
     """
     clndir = os.path.abspath(clndir)
     cmd = "module load cuda/10.1; cd "+clndir+"; make"
@@ -25,6 +26,7 @@ def make(
         res = "".join([p.decode('utf-8') for p in res])
     return cmd, res
 
+@beartype
 def distribution(
     impstm: str,
     **kwargs,
@@ -85,6 +87,7 @@ def distribution(
     res = executer(cmd)
     return cmd, str(res)
 
+@beartype
 def sample(
     impstm: str,
     **kwargs,

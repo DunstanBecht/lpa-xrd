@@ -23,6 +23,8 @@ else:
     get_args = lambda x: x.__args__
     get_origin = lambda x: x.__origin__ if hasattr(x, '__origin__') else x
 
+from beartype import beartype
+
 clone_dir = 'xrd' # default location of the local copy of the simulator code
 
 def getkwa(
