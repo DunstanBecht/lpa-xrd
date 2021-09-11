@@ -6,7 +6,7 @@ X-ray diffraction simulations program.
 """
 
 __author__ = "Dunstan Becht, Asdin Aoufi"
-__version__ = "0.8.11"
+__version__ = "0.8.12"
 
 import os
 import sys
