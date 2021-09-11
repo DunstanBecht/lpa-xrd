@@ -71,7 +71,7 @@ def distribution(
     endkwa(kwargs)
     # make directory
     if not os.path.exists(rundir):
-        executer("mkdir "+rundir)
+        os.mkdir(rundir)
     # run
     args = " ".join((
         str(h), # hardware
@@ -115,11 +115,11 @@ def sample(
     rundir_stm = os.path.join(os.path.abspath(rundir), impstm)
     # make directories
     if not os.path.exists(rundir):
-        executer("mkdir "+rundir)
+        os.mkdir(rundir)
     if not os.path.exists(rundir_stm):
-        executer("mkdir "+rundir_stm)
+        os.mkdir(rundir_stm)
     if not os.path.exists(expdir_stm):
-        executer("mkdir "+expdir_stm)
+        os.mkdir(expdir_stm)
     else:
         raise ValueError("existing output directory: "+expdir_stm)
     # run
