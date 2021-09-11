@@ -11,13 +11,15 @@ import shutil
 import pkg_resources
 
 def clone(
-    expdir: str = clone_dir,
+    clndir: str = clone_dir,
 ) -> None:
     """
     Clone the simulation program files.
 
     Input:
-        expdir (str): export directory
+        clndir (str): export path of the cloned program
     """
+    if os.path.isdir(clndir):
+        raise ValueError("existing clone directory: "+clndir)
     path = pkg_resources.resource_filename('lpa.xrd', 'xrd/') # path to code
-    shutil.copytree(path, expdir) # copy program files
+    shutil.copytree(path, clndir) # copy program files

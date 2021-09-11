@@ -9,58 +9,65 @@ from . import *
 
 def make(
     executer = os.system,
-    path = clone_dir,
+    clndir = clone_dir,
 ) -> None:
     """
     Compile the simulation program.
 
     Input:
-        executer:
-        path:
+        executer: function executing shell commands
+        clndir: program code clone directory
     """
-    b = executer("module load cuda/10.1; cd "+path+"; make")
+    clndir = os.path.abspath(clndir)
+    b = executer("module load cuda/10.1; cd "+clndir+"; make")
     print("".join([p.decode('utf-8') for p in b]))
 
 def run(
-    imstm: str,
-    imdir: str = "",
-    exdir: str = "",
+    impstm: str,
+    expstm: str = "output",
+    impdir: str = "",
+    expdir: str = "",
+    clndir = clone_dir,
+    executer = os.system,
     h: int = 1,
     b: int = 200,
     r: int = 1000,
     f: int = 35,
-    executer = os.system,
-    path = clone_dir,
+
 ) -> None:
     """
     Run the simulation on a sample of distributions.
 
     Input:
-        imstm: stem of the input
-        imdir: import directory
-        exdir: export directory
+        impstm: stem of the input
+        expstm: stem of the output
+        impdir: import directory
+        expdir: export directory
+        clndir: program code clone directory
+        executer: function executing shell commands
         h: hardware to use (1 for gpu / 0 for cpu)
         b: block size
         r: block repetitions (r*b gives the number of random points)
         f: number of Fourier coefficients
-        executer:
     """
     n = r*b # number of random points
-    imdir_stm = os.path.join(imdir, imstm)
-    exdir_stm = os.path.join(exdir, imstm)
-    if not os.path.exists(exdir_stm):
-        os.mkdir(exdir_stm)
-    ipath = "../"+imdir_stm
-    opath = "../"+exdir_stm
-    for e in os.listdir(imdir_stm):
+    clndir = os.path.abspath(clndir)
+    impdir_stm = os.path.join(os.path.abspath(impdir), impstm)
+    expdir_stm = os.path.join(os.path.abspath(expdir), expstm)
+    if not os.path.exists(expdir_stm):
+        os.mkdir(expdir_stm)
+    else:
+        raise ValueError("existing output directory: "+expdir_stm)
+    for e in os.listdir(impdir_stm):
         args = [
             h,
             b,
-            os.path.join(ipath, e),
+            os.path.join(impdir_stm, e),
             n,
             f,
-            os.path.join(opath, e),
+            os.path.join(expdir_stm, e),
         ]
         args = " ".join([str(a) for a in args])
         print("- "+e+" ("+args+")")
-        executer("cd "+path+"; ./a.out "+args+" >& run-"+imstm+"-"+e)
+        print("cd "+clndir+"; ./a.out "+args+" >& run-"+impstm+"-"+e)
+        executer("cd "+clndir+"; ./a.out "+args+" >& run-"+impstm+"-"+e)
