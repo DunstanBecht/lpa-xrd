@@ -38,7 +38,7 @@ def distribution(
 
     Input:
         impstm (str): stem of the input
-      **expstm (str): stem of the output (default: 'output_<impstm>')
+      **expstm (str): stem of the output (default: '<impstm>_output')
       **impdir (str): import directory (default: '')
       **expdir (str): export directory (default: '')
       **impfmt (str): import format (default: 'dat')
@@ -56,7 +56,7 @@ def distribution(
         res (str): result of the sh command
     """
     # optional parameters
-    expstm = getkwa('expstm', kwargs, str, 'output_'+impstm)
+    expstm = getkwa('expstm', kwargs, str, impstm+'_output')
     impfmt = getkwa('impfmt', kwargs, str, 'dat')
     expfmt = getkwa('expfmt', kwargs, str, 'dat')
     impdir = os.path.abspath(getkwa('impdir', kwargs, str, ''))
@@ -103,7 +103,7 @@ def sample(
         res (str): result of the sh command
     """
     # optional arguments
-    expstm = getkwa('expstm', kwargs, str, 'output_'+impstm)
+    expstm = getkwa('expstm', kwargs, str, impstm+'_output')
     impdir = getkwa('impdir', kwargs, str, '')
     expdir = getkwa('expdir', kwargs, str, '')
     rundir = getkwa('rundir', kwargs, str, 'runs')
