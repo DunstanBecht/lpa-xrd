@@ -69,19 +69,18 @@ def distribution(
     r = getkwa('r', kwargs, int, 1000)
     f = getkwa('f', kwargs, int, 50)
     endkwa(kwargs)
-    # run
-    n = r*b # number of random points
+    # make directory
     if not os.path.exists(rundir):
         executer("mkdir "+rundir)
-    args = (
-        h,
-        b,
-        os.path.join(impdir, impstm+'.'+impfmt),
-        n,
-        f,
-        os.path.join(expdir, expstm+'.'+expfmt),
-    )
-    args = " ".join([str(a) for a in args])
+    # run
+    args = " ".join((
+        str(h), # hardware
+        str(b), # block size
+        os.path.join(impdir, impstm+'.'+impfmt), # input path
+        str(r*b), # number of random points
+        str(f), # number of Fourier coefficients
+        os.path.join(expdir, expstm+'.'+expfmt), # output path
+    ))
     cmd = ("cd "+clndir+"; "
         + "./a.out "+args+" >& "+os.path.join(rundir, impstm)+".out")
     res = executer(cmd)
@@ -114,7 +113,9 @@ def sample(
     impdir_stm = os.path.join(os.path.abspath(impdir), impstm)
     expdir_stm = os.path.join(os.path.abspath(expdir), expstm)
     rundir_stm = os.path.join(os.path.abspath(rundir), impstm)
-    print(rundir_stm)
+    # make directories
+    if not os.path.exists(rundir):
+        executer("mkdir "+rundir)
     if not os.path.exists(rundir_stm):
         executer("mkdir "+rundir_stm)
     if not os.path.exists(expdir_stm):
