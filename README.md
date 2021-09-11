@@ -14,7 +14,8 @@ The repository [`lpa-workspace`](https://github.com/DunstanBecht/lpa-workspace) 
 # Features
 
 The package `lpa.xrd` can be used to:
-* automate X-ray diffraction simulations
+* make a local copy of the X-ray diffraction simulator code
+* automate the tasks of compilations and executions
 
 # Installation
 
