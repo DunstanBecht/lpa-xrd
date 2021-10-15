@@ -21,6 +21,6 @@ def clone(
         clndir (str): export path of the cloned program
     """
     if os.path.isdir(clndir):
-        raise ValueError("existing clone directory: "+clndir)
+        raise ValueError(f"existing clone directory: {clndir}")
     path = pkg_resources.resource_filename('lpa.xrd', 'xrd/') # path to code
     shutil.copytree(path, clndir) # copy program files

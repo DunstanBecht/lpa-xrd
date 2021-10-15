@@ -20,7 +20,7 @@ def make(
         clndir (str): program code clone directory
     """
     clndir = os.path.abspath(clndir)
-    cmd = "module load cuda/10.1; cd "+clndir+"; make"
+    cmd = f"module load cuda/10.1; cd {clndir}; make"
     res = executer(cmd)
     if isinstance(res, bytes):
         res = "".join([p.decode('utf-8') for p in res])
@@ -81,8 +81,8 @@ def distribution(
         str(f), # number of Fourier coefficients
         os.path.join(expdir, expstm+'.'+expfmt), # output path
     ))
-    cmd = ("cd "+clndir+"; "
-        + "./a.out "+args+" >& "+os.path.join(rundir, impstm)+".out")
+    cmd = (f"cd {clndir}; "
+           f"./a.out {args} >& {os.path.join(rundir, impstm)}.out")
     res = executer(cmd)
     return cmd, str(res)
 
@@ -121,7 +121,7 @@ def sample(
     if not os.path.exists(expdir_stm):
         os.mkdir(expdir_stm)
     else:
-        raise ValueError("existing output directory: "+expdir_stm)
+        raise ValueError(f"existing output directory: {expdir_stm}")
     # run
     cmdl, resl = [], []
     stm_fmt = [os.path.splitext(e) for e in os.listdir(impdir_stm)]
