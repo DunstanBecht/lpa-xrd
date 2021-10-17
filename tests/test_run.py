@@ -17,8 +17,8 @@ if False: # generate input data
     from lpa.input import data, sets
     from lpa.input.models import RDD
     rdd = RDD, {'d': 5e13*1e-18}
-    data.export(sets.Sample(10, 'square', 3200, *rdd, S=0, c='PBCR1'))
-    data.export(sets.Distribution('square', 3200, *rdd, S=0, c='PBCR1'))
+    data.export(sets.Sample(10, 'square', 3200, *rdd, S=0), pbc=1)
+    data.export(sets.Distribution('square', 3200, *rdd, S=0, c='PBC1'))
 
 cmd, res = run.make()
 print("$ "+cmd)
@@ -26,7 +26,7 @@ print(res)
 print()
 
 cmd, res = run.distribution(
-    'rho5e13m-2_square_3200nm_RDD_d5e-5nm-2_screw_PBCR1_S0',
+    'rho5e13m-2_square_3200nm_RDD_d5e-5nm-2_screw_PBC1_S0',
     impdir='input',
     #expdir='output',
 )
@@ -35,7 +35,7 @@ print(res)
 print()
 
 cmd, res = run.sample(
-    '10_rho5e13m-2_square_3200nm_RDD_d5e-5nm-2_screw_PBCR1_S0',
+    '10_rho5e13m-2_square_3200nm_RDD_d5e-5nm-2_screw_S0_PBC1',
     impdir='input',
     #expdir='output',
 )
