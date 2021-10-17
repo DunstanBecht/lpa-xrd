@@ -2,7 +2,7 @@
   double cumulated_time_kernel2=0.0f;
   size_t globalSize2[]={Np}; /* --  It is the number of Random Points -- */
   size_t localSize2[]={64}; /* optimal value */
-    
+
 
   /* ================================== */
   /* Loop over all Fourier coefficients */
@@ -13,12 +13,12 @@
 
 
   /*--- 23 mai 2019 : format de sortie --*/
-  fprintf(FileFC,"%d\t# No of dislocations in the cell\n",Nd);
+  fprintf(FileFC,"%d\t# No of dislocations in the region of interest\n",Nd0);
   fprintf(FileFC,"%d\t# Np of point-pairs\n",Np);
   if (FLAG_SQUARE==1)
      fprintf(FileFC,"%6.0f\t# Square\n",Radius);
   else
-     fprintf(FileFC,"%6.0f\t# Radius\n",Radius);
+     fprintf(FileFC,"%6.0f\t# Circle\n",Radius);
 
   fprintf(FileFC,"%2.0f\t%2.0f\t%2.0f\t# diffraction vector, g:\n",H.x,H.y,H.z);
   fprintf(FileFC,"%2.0f\t%2.0f\t%2.0f\t# line vector, l:\n",ld.x,ld.y,ld.z);
@@ -34,7 +34,7 @@
   {
     /*== work index Fourier ==*/
     printf("--IndexFourier= %d\n",IndexFourier);
-    
+
     /*== Enqueue the parameter IndexFourier which is not constant over the computation ==*/
     printf("  Enqueue parameter IndexFourier to GPU ?\n");
 
@@ -45,7 +45,7 @@
     * Definition des arguments du kernel 2
     *
     -----------------------------------------*/
-  
+
     cl_double gs=length3(g);
     printf("   gs= %lf\n",gs);
 
@@ -54,60 +54,60 @@
     {
   	printf(" Erreur clSetKernelArg kernel2: arg 1\n");
   	exit(1);
-    }	
+    }
     err  = clSetKernelArg(kernel2,1,sizeof(cl_mem),&d_Vect8FC);
     if ( err != CL_SUCCESS )
     {
   	printf(" Erreur clSetKernelArg kernel2: arg 1\n");
   	exit(1);
-    }	
+    }
     err = clSetKernelArg(kernel2,2,sizeof(cl_mem),&d_Vect1FC);
     if ( err != CL_SUCCESS )
     {
   	printf(" Erreur clSetKernelArg kernel2: arg 2\n");
   	exit(1);
-    }	
+    }
     err |= clSetKernelArg(kernel2,3,sizeof(cl_mem),&d_rd0);
     if ( err != CL_SUCCESS )
     {
   	printf(" Erreur clSetKernelArg kernel2: arg 3\n");
   	exit(1);
-    }	
+    }
     err |= clSetKernelArg(kernel2,4,sizeof(cl_mem),&d_r1);
     err |= clSetKernelArg(kernel2,5,sizeof(cl_mem),&d_u1);
     err |= clSetKernelArg(kernel2,6,sizeof(cl_mem),&d_be);
     err |= clSetKernelArg(kernel2,7,sizeof(cl_mem),&d_bs);
     err |= clSetKernelArg(kernel2,8,sizeof(cl_double),&Radius);
     err |= clSetKernelArg(kernel2,9,sizeof(cl_double),&nu);
-    err |= clSetKernelArg(kernel2,10,sizeof(cl_int),&Np); 
-    err |= clSetKernelArg(kernel2,11,sizeof(cl_int),&IndexFourier); 
+    err |= clSetKernelArg(kernel2,10,sizeof(cl_int),&Np);
+    err |= clSetKernelArg(kernel2,11,sizeof(cl_int),&IndexFourier);
     err |= clSetKernelArg(kernel2,12,sizeof(cl_double),&gs);
     err |= clSetKernelArg(kernel2,13,sizeof(cl_double3),&gd);
     err |= clSetKernelArg(kernel2,14,sizeof(cl_double2),&a3vd);
     err |= clSetKernelArg(kernel2,15,sizeof(cl_double),&a3);
-    err |= clSetKernelArg(kernel2,16,sizeof(cl_int),&Nd);                   
-    err |= clSetKernelArg(kernel2,17,sizeof(cl_mem),&d_inout);                
+    err |= clSetKernelArg(kernel2,16,sizeof(cl_int),&Nd);
+    err |= clSetKernelArg(kernel2,17,sizeof(cl_mem),&d_inout);
     if ( err != CL_SUCCESS )
     {
   	printf(" Erreur clSetKernelArg 2\n");
   	exit(1);
-    }	
+    }
     printf("Definition des arguments du Kernel 2 \n");
 
     /*== Enqueue Kernel ==*/
     printf("  Enqueue Kernel\n");
     /* ==== globalsize and localsize for kernel 2=== */
     cl_event event_kernel2;
-    
+
     localSize2[0]=atoi(argv[2]); /* block value given by the user : 1 <= block <= 128 */
     printf("kernel2 : globalSize2= %lu\n",globalSize2[0]);
     printf("kernel2 : localSize2 = %lu\n",localSize2[0]);
-  
+
     err = clEnqueueNDRangeKernel(queue,kernel2,1,NULL,globalSize2,localSize2,0,NULL,&event_kernel2);
     if ( err != CL_SUCCESS )
     {
   	printf(" Erreur definition NDRange pour kernel 2\n");
-    }	
+    }
 
     printf("Enqueue Kernel2 done ....\n");
 
@@ -116,8 +116,8 @@
     /* ==== handle events to monitor kernel's execution number 2 === */
     clWaitForEvents(1, &event_kernel2);
     cl_ulong time_start_kernel2, time_stop_kernel2;
-    clGetEventProfilingInfo(event_kernel2,CL_PROFILING_COMMAND_START,sizeof(time_start_kernel2),&time_start_kernel2,NULL); 
-    clGetEventProfilingInfo(event_kernel2,CL_PROFILING_COMMAND_END,sizeof(time_stop_kernel2),&time_stop_kernel2,NULL);     
+    clGetEventProfilingInfo(event_kernel2,CL_PROFILING_COMMAND_START,sizeof(time_start_kernel2),&time_start_kernel2,NULL);
+    clGetEventProfilingInfo(event_kernel2,CL_PROFILING_COMMAND_END,sizeof(time_stop_kernel2),&time_stop_kernel2,NULL);
 
     /*== Get profiling data from kernel 2==*/
     printf("  Get profiling data from kernel 2\n");
@@ -131,7 +131,7 @@
     clEnqueueReadBuffer(queue,d_Vect8FC, CL_TRUE, 0, bytes_Vect8FC, h_Vect8FC, 0, NULL, NULL);
     clEnqueueReadBuffer(queue,d_Vect1FC, CL_TRUE, 0, bytes_Vect1FC, h_Vect1FC, 0, NULL, NULL);
     clEnqueueReadBuffer(queue,d_inout, CL_TRUE, 0, bytes_inout, h_inout, 0, NULL, NULL);
-  
+
     printf(".. On a fini avec le kernel 2 \n");
 
     /*== Dump the two arrays to file ==*/
@@ -157,8 +157,8 @@
         fprintf(filev,"%lf ",h_Vect8FC[i].s5);
         fprintf(filev,"%lf ",h_Vect8FC[i].s6);
         fprintf(filev,"%lf\n",h_Vect8FC[i].s7);
-      }  
-      fclose(filev);		
+      }
+      fclose(filev);
 
       strcpy(str,"VECT1FC_");
       sprintf(number,"%03d",IndexFourier);

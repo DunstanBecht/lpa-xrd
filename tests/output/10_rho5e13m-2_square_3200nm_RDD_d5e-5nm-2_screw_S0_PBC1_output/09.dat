@@ -1,4 +1,4 @@
-4608	# No of dislocations in the cell
+512	# No of dislocations in the region of interest
 200000	# Np of point-pairs
   3200	# Square
  2	 0	 0	# diffraction vector, g:
