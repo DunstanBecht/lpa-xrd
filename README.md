@@ -59,4 +59,13 @@ L	cos_AL	err_Cos	sin_AL	err_Sin	Cos_2AL	err_Cos_2AL	Sin_2AL	err_Sin_2AL	Cos_3AL	
 
 # User guide
 
-The directory `tests/` contains several examples of package module usage. The docstrings are carefully written and it is recommended to refer to the documentation with the `help()` command.
+The directory `tests/` contains several examples of package module usage. The docstrings are carefully written and it is recommended to refer to the documentation with the `help()` python command.
+
+The installation from PyPI does not allow the modification of the code. To edit the package and contribute to the development use the following commands in your working directory.
+```bash
+pip uninstall lpa-xrd
+git clone https://github.com/DunstanBecht/lpa-xrd.git
+pip install -e lpa-xrd
+cd lpa-xrd
+git branch <name_of_your_new_branch>
+```
