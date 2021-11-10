@@ -59,6 +59,8 @@ L	cos_AL	err_Cos	sin_AL	err_Sin	Cos_2AL	err_Cos_2AL	Sin_2AL	err_Sin_2AL	Cos_3AL	
 
 # User guide
 
+It is necessary to install the [NVIDIA CUDA Toolkit](https://developer.nvidia.com/cuda-downloads) to compile the OpenCL code on NVIDIA GPUs.
+
 The directory `tests/` contains several examples of package module usage. The docstrings are carefully written and it is recommended to refer to the documentation with the `help()` python command.
 
 The installation from PyPI does not allow the modification of the code. To edit the package and contribute to the development use the following commands in your working directory.
