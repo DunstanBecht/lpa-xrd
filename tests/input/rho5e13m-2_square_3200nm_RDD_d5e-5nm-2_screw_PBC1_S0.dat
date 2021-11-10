@@ -1,4 +1,5 @@
-# please keep the structure of this file unchanged
+   1.2.3 # v: lpa-input version
+5.00E+13 # d: dislocation density [m^-2]
  1  1  0 # z: direction of 'l' (line vector) [uvw]
 -1  1  0 # x: direction of 'L' (Fourier variable) [uvw]
  1  1  0 # b: Burgers vector direction [uvw]
@@ -8,8 +9,8 @@
     3200 # s: Square side [nm]
     11.8 # a3: step size of 'L' along x [nm]
    0.345 # nu: Poisson's number [1]
-    4608 # number of dislocations
-# Burgers vector and dislocation (x,y) coordinates
+    4608 # number of dislocations in this file
+# Burgers vector senses and dislocation (x,y) coordinates [1], [nm], [nm]
  1  2.038277399428654E+03  8.633174840443850E+02
  1  1.311152765958230E+02  5.288843369129310E+01
  1  2.602464765440872E+03  2.920817847288709E+03
