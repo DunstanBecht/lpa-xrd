@@ -2,7 +2,7 @@
   double cumulated_time_kernel2=0.0f;
   size_t globalSize2[]={Np}; /* --  It is the number of Random Points -- */
   size_t localSize2[]={64}; /* optimal value */
-
+  int jind = 0;
 
   /* ================================== */
   /* Loop over all Fourier coefficients */
@@ -11,22 +11,26 @@
   FileFC=fopen(argv[6],"w");
   printf("Fourier Coefficient's FileName= %s\n",argv[6]);
 
-
   /*--- 23 mai 2019 : format de sortie --*/
-  fprintf(FileFC,"%d\t# No of dislocations in the region of interest\n",Nd0);
-  fprintf(FileFC,"%d\t# Np of point-pairs\n",Np);
+  fprintf(FileFC, "%8s # v: lpa-xrd version\n", "!VERSION");
+  fprintf(FileFC, "%8.2e # d: dislocation density [m^-2]\n", density);
+  fprintf(FileFC, "%2.0f %2.0f %2.0f # z: direction of 'l' (line vector) [uvw]\n", ld.x, ld.y, ld.z);
+  fprintf(FileFC, "%2.0f %2.0f %2.0f # b: Burgers vector direction [uvw] \n", bd.x*2/a_cell_param, bd.y*2/a_cell_param, bd.z*2/a_cell_param);
+  fprintf(FileFC, "%2.0f %2.0f %2.0f # g: diffraction vector direction (hkl)\n", H.x, H.y, H.z);
+  fprintf(FileFC, "%8f # C: contrast coefficient [1]\n", cfact_str);
+  fprintf(FileFC, "%8f # a: cell parameter [nm]\n", a_cell_param);
   if (FLAG_SQUARE==1)
-     fprintf(FileFC,"%6.0f\t# Square\n",Radius);
+     fprintf(FileFC, "%8.0f # s: square side [nm]\n", Radius);
   else
-     fprintf(FileFC,"%6.0f\t# Circle\n",Radius);
-
-  fprintf(FileFC,"%2.0f\t%2.0f\t%2.0f\t# diffraction vector, g:\n",H.x,H.y,H.z);
-  fprintf(FileFC,"%2.0f\t%2.0f\t%2.0f\t# line vector, l:\n",ld.x,ld.y,ld.z);
-  fprintf(FileFC,"%f\t%f\t%f\t# Burgers vector, b in [nm] \n",bd.x,bd.y,bd.z);
-  fprintf(FileFC,"%f\t# C_factor/ nu = %f\n",cfact_str, nu);
-  fprintf(FileFC,"%f\t# lattice parameter, [nm]\n",a_cell_param);
-    fprintf(FileFC,"L\tcos_AL\terr_Cos\tsin_AL\terr_Sin\tCos_2AL\terr_Cos_2AL\tSin_2AL\terr_Sin_2AL\tCos_3AL\terr_Cos_3AL\tSin_3AL\terr_Sin_3AL\tCos_4AL\terr_Cos_4AL\tSin_4AL\terr_Sin_4AL\tCos_5AL\terr_Cos_5AL\tSin_5AL\terr_Sin_5AL\t<eps^2>\tbad_points\n");
-
+     fprintf(FileFC, "%8.0f # s: circle radius [nm]\n", Radius);
+  fprintf(FileFC, "%8f # nu: Poisson's number [1]\n", nu);
+  fprintf(FileFC, "%8d # number of dislocations in the input file\n", Nd0);
+  fprintf(FileFC, "%8d # number of random points\n", Np);
+  fprintf(FileFC, "# %4s", "L");
+  for (jind=1; jind<6; jind++ ){
+      fprintf(FileFC, " %9s%d %9s%d %9s%d %9s%d", "cos", jind, "err_cos", jind, "sin", jind, "err_sin", jind);
+   }
+  fprintf(FileFC, " %10s %10s\n", "<eps^2>", "bad_points");
 
   printf("\n... Start loop over Fourier Coefficients ...\n");
   cumulated_time_kernel2=0.0f;
