@@ -1,3 +1,6 @@
+[![DOI](https://zenodo.org/badge/394667513.svg)](https://zenodo.org/badge/latestdoi/394667513)
+[![License: CC0-1.0](https://img.shields.io/badge/License-CC0_1.0-lightgrey.svg)](http://creativecommons.org/publicdomain/zero/1.0/)
+
 <div align="center">
   <img width="250" src="https://dunstan.becht.network/views/signatures/mines.svg" alt="Mines Saint-Etienne">
 </div>
@@ -31,7 +34,7 @@ pip install -U lpa-xrd
    0.9.2 # v: lpa-xrd version
 5.00e+13 # d: dislocation density [m^-2]
  1  1  0 # z: direction of 'l' (line vector) [uvw]
- 1  1  0 # b: Burgers vector direction [uvw] 
+ 1  1  0 # b: Burgers vector direction [uvw]
  2  0  0 # g: diffraction vector direction (hkl)
 0.250000 # C: contrast coefficient [1]
 0.404940 # a: cell parameter [nm]
