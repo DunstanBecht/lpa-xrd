@@ -1,4 +1,4 @@
-   0.9.1 # v: lpa-xrd version
+   0.9.2 # v: lpa-xrd version
 5.00e+13 # d: dislocation density [m^-2]
  1  1  0 # z: direction of 'l' (line vector) [uvw]
  1  1  0 # b: Burgers vector direction [uvw] 
@@ -7,8 +7,8 @@
 0.404940 # a: cell parameter [nm]
     3200 # s: square side [nm]
 0.345000 # nu: Poisson's number [1]
-     512 # number of dislocations in the input file
-  200000 # number of random points
+     512 # nd: number of dislocations in the input file
+  200000 # np: number of random points
 #    L       cos1   err_cos1       sin1   err_sin1       cos2   err_cos2       sin2   err_sin2       cos3   err_cos3       sin3   err_sin3       cos4   err_cos4       sin4   err_sin4       cos5   err_cos5       sin5   err_sin5    <eps^2> bad_points
   11.8  0.9691625  0.0000020 -0.0321639  0.0000030  0.8996815  0.0000029 -0.0578311  0.0000039  0.8065846  0.0007878 -0.0736770  0.0012511  0.7017653  0.0010523 -0.0786154  0.0014417  0.5956731  0.0012755 -0.0740742  0.0015614  0.0000204      42638
   23.6  0.8962388  0.0000029 -0.0578932  0.0000039  0.6991245  0.0000041 -0.0785522  0.0000048  0.4943346  0.0014427 -0.0624379  0.0016372  0.3315737  0.0016187 -0.0317259  0.0017354  0.2208053  0.0016858 -0.0098936  0.0017842  0.0000181      42140

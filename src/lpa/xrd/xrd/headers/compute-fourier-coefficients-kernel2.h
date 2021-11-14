@@ -24,8 +24,8 @@
   else
      fprintf(FileFC, "%8.0f # s: circle radius [nm]\n", Radius);
   fprintf(FileFC, "%8f # nu: Poisson's number [1]\n", nu);
-  fprintf(FileFC, "%8d # number of dislocations in the input file\n", Nd0);
-  fprintf(FileFC, "%8d # number of random points\n", Np);
+  fprintf(FileFC, "%8d # nd: number of dislocations in the input file\n", Nd0);
+  fprintf(FileFC, "%8d # np: number of random points\n", Np);
   fprintf(FileFC, "# %4s", "L");
   for (jind=1; jind<6; jind++ ){
       fprintf(FileFC, " %9s%d %9s%d %9s%d %9s%d", "cos", jind, "err_cos", jind, "sin", jind, "err_sin", jind);
