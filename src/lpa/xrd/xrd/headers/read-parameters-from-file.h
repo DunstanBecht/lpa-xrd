@@ -297,24 +297,21 @@
   fgets(buff, BUZZ_SIZE, fbe);
   printf("string read from file = %s\n",buff);
 
-  char str_cylinder[12] = "Cylinder";
-  char str_square[12] = "Square";
-
   FLAG_CYLINDER=2;
   FLAG_SQUARE=2;
 
-  char *resucyl = strstr(buff,"Cylinder");
+  char *resucyl = strstr(buff,"radius");
   if ( resucyl != NULL )
   {
-    printf("Mot Clef Cylinder OK\n");
+    printf("Mot Clef radius OK\n");
     FLAG_CYLINDER=1;
     FLAG_SQUARE=0;
   }
 
-  char *resusquare = strstr(buff,"Square");
+  char *resusquare = strstr(buff,"side");
   if ( resusquare != NULL )
   {
-    printf("Mot Clef Square OK\n");
+    printf("Mot Clef side OK\n");
     FLAG_CYLINDER=0;
     FLAG_SQUARE=1;
 

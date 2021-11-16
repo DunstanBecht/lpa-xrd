@@ -19,10 +19,15 @@
   fprintf(FileFC, "%2.0f %2.0f %2.0f # g: diffraction vector direction (hkl)\n", H.x, H.y, H.z);
   fprintf(FileFC, "%8f # C: contrast coefficient [1]\n", cfact_str);
   fprintf(FileFC, "%8f # a: cell parameter [nm]\n", a_cell_param);
-  if (FLAG_SQUARE==1)
-     fprintf(FileFC, "%8.0f # s: square side [nm]\n", Radius);
+  if (FLAG_SQUARE==1) {
+    fprintf(FileFC, "%8.0f # s: side of the region of interest [nm]", Radius);
+    if (D_REPLICATION>0) {
+      fprintf(FileFC, " PBC%d", D_REPLICATION);
+    }
+    fprintf(FileFC, "\n");
+  }
   else
-     fprintf(FileFC, "%8.0f # s: circle radius [nm]\n", Radius);
+    fprintf(FileFC, "%8.0f # s: radius of the region of interest [nm]\n", Radius);
   fprintf(FileFC, "%8f # nu: Poisson's number [1]\n", nu);
   fprintf(FileFC, "%8d # nd: number of dislocations in the input file\n", Nd0);
   fprintf(FileFC, "%8d # np: number of random points\n", Np);
