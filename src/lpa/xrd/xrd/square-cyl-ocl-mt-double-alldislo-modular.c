@@ -1,7 +1,6 @@
-/** 28 juin 2021
----modification du calcul des des harmoniques des coefficients de fourier ordre 5
-**/
-
+/*
+november 2021: use of shared variable and compute Harmonic or order 1-5
+*/
 #include "headers/square-cyl.h"
 /*
 ------------------------
@@ -10,25 +9,22 @@ ENTRY POINT OF THE PROGRAM
 */
 int main(int argc, char **argv)
 {
-  printf("Version square-cyl-ocl-mt-double.c : june 2021\n");
+  printf("Version square-cyl-ocl-mt-double.c : november 2021\n");
   printf("3rd 4th 5th Fourier coefficients added in the opencl kernel\n");
-  printf("...modification of .c code and .cl kernel code\n");
   printf("...handles both square and cylinder geometries for the placement of the dislocations *\n");
-  printf("Calcul en double precision\n");
-  printf("Affichage des resultats en notation scientifique\n");
-  printf("prise en compte du mersenne twister pour random number generateur\n");
   printf("argc= %d\n",argc);
   if (argc != 7)
   {
     printf("Erreur arguments\n");
     printf("Mode d'emploi : ./a.out <type> <block> <ParameterFile> <Np> <NFC> <FC FileName>\n");
-    printf("arg 1 : type= 0 : cpu\n");
-    printf("arg 1 : type= 1 : gpu\n");
-    printf("arg 2 : block : 512 --> from 2 to 256 depending on the gpu characteristics\n");
+    printf("arg 1 : type= : 0/1 \n");
+    printf("        0=cpu 1=gpu\n");
+    printf("arg 2 : block : 64 --> from 2 to 256 depending on the gpu characteristics\n");
+    printf("        64 for optimal for use of shared memory\n");
     printf("arg 3 : FileName of DataFile\n");
-    printf("arg 4 : Np: Number of Random Points\n");
-    printf("arg 5 : NoFC: Number of Fourier Coefficients\n");
-    printf("arg 6 : File Name for the Fourier Coefficients\n");
+    printf("arg 4 : Np    : Number of Random Points\n");
+    printf("arg 5 : NoFC  : Number of Fourier Coefficients\n");
+    printf("arg 6 : File Name for the Fourier Coefficients computed by the program\n");
     exit(1);
   }
 

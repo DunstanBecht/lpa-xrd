@@ -1,4 +1,4 @@
-size_t irand=sizeof(cl_double)*Np;
+  size_t irand=sizeof(cl_double)*Np;
   printf("irand    = %10lu  Bytes\n",irand);
   printf("irand    = %10lu kBytes\n",irand/1024);
   printf("dim irand --- Angle and Distance = %d\n",Np*2);
@@ -25,7 +25,6 @@ size_t irand=sizeof(cl_double)*Np;
       for ( i = 0 ; i < Np ; i++ )
         RandRadius[i]=sqrt((double)(genrand()));
     }
-
   }
   else
   {
@@ -87,4 +86,3 @@ size_t irand=sizeof(cl_double)*Np;
     for ( i = 0 ; i < Np ; i++ )
       RandY[i]=(double)(genrand());
   }
-

@@ -1,4 +1,4 @@
-/*
+  /*
   -------------------------
   Read Parameters from file
   -------------------------
@@ -34,8 +34,8 @@
   cl_int    BCtype;
   cl_double  nu;
   cl_int    Nd0;
-  cl_double2 *rd0;
-  cl_double2 *rd0_all;
+  cl_double3 *rd0;
+  cl_double3 *rd0_all;
   cl_int    *sd0;
   cl_int    *sd0_all;
   cl_int    Nd;
@@ -221,7 +221,6 @@
   printf("ex.y = %lf\n",ex.y);
   printf("ex.z = %lf\n",ex.z);
 
-
   /* vector product ey=ez x ex */
   ey.x =ez.y*ex.z-ez.z*ex.y;
   ey.y =ez.z*ex.x-ez.x*ex.z;
@@ -241,7 +240,6 @@
   Om[2][1]=ey.z;
   Om[2][2]=ez.z;
 
-
   Om[0][0]=ex.x;
   Om[0][1]=ex.y;
   Om[0][2]=ex.z;
@@ -253,7 +251,6 @@
   Om[2][0]=ez.x;
   Om[2][1]=ez.y;
   Om[2][2]=ez.z;
-
 
   /* ---- 2     */
   cl_double coeff=length3(H)/a_cell_param;
@@ -272,7 +269,6 @@
   printf("om10=%lf om11=%lf om11=%lf\n",Om[1][0],Om[1][1],Om[1][2]);
   printf("om20=%lf om21=%lf om21=%lf\n",Om[2][0],Om[2][1],Om[2][2]);
 
-
   printf("gd.x = %lf\n",gd.x);
   printf("gd.y = %lf\n",gd.y);
   printf("gd.z = %lf\n",gd.z);
@@ -281,13 +277,15 @@
   egd.x=gd.x;
   egd.y=gd.y;
   egd.z=gd.z;
+
   /* ---- 5 : Normalize egd */
   cl_double norm=length3(egd);
   egd.x/=norm;
   egd.y/=norm;
   egd.z/=norm;
+  
+  printf("...Read the flag parameter Cylinder or Square_\n");
 
-  printf("...may 2021 read the flag parameter Cylinder or Square_\n");
   /* ---- */
   fgets(buff, BUZZ_SIZE, fbe);
   fscanf(fbe,"%lf",&Radius);
@@ -362,12 +360,12 @@
   printf("Nd0 =%d\n",Nd0);
   printf("\n");
 
-  size_t ird0=sizeof(cl_double2)*Nd0;
+  size_t ird0=sizeof(cl_double3)*Nd0;
   printf("ird0= %10lu  Bytes\n",ird0);
   printf("ird0= %10lu kBytes\n",ird0/1024);
 
-  /* -- allocate vector -- */
-  rd0 = (cl_double2 *)malloc(sizeof(cl_double2)*Nd0);
+  /* -- allocate vector -- */  
+  rd0 = (cl_double3 *)malloc(sizeof(cl_double3)*Nd0);
 
   size_t isd0=sizeof(cl_int)*Nd0;
   printf("isd0= %10lu  Bytes\n",isd0);

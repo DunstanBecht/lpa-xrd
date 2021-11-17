@@ -1,19 +1,9 @@
-/* may 2021 */
+/* november 2021 */
 /* single version of the program: handles both cylindrical and square based geometry */
 /* uses a moidified version of the input file  with keyword square or cylindrical */
 /* square-cyl-ocl-mt-double-alldislo.c */
-/* version du 3 septembre 2019 */
-/*
- * utilise la memoire globale pour stocker les
- * positions des dislocations situees dans le plan equatorial
- * les positions des points aleatoires situes dans la sphere
-*/
-/* double
-------------------------
-Program Cylinder
-November 2018
+/* 
 opencl version of the algorithm 
-------------------------
 */
 /*
 ------------------------
@@ -40,7 +30,6 @@ int FLAG_CYLINDER=1;
 int D_REPLICATION=0; 
 /* The number of replications ranges from -D to D in each direction */
 /* a total of (2D+1)*(2D+1) cells is then constructed*/
-
 
 /*
 ------------------------
@@ -289,6 +278,7 @@ int output_device_info(cl_device_id device_id)
 */
 cl_double length3(cl_double3 v)
 {
-  return sqrt(v.x*v.x+v.y*v.y+v.z*v.z);
+  cl_double longueur=sqrt(v.x*v.x+v.y*v.y+v.z*v.z);
+  return longueur;
 }
 
