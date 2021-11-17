@@ -15,4 +15,3 @@
   clEnqueueReadBuffer(queue,d_u1, CL_TRUE, 0, bytes_u1, h_u1, 0, NULL, NULL);
   
   printf(".. On a fini avec le kernel 1 /n");
-

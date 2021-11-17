@@ -1,15 +1,11 @@
-/* allocate variable for the dislocations including */
+  /* allocate variable for the dislocations including */
   printf("...may 2021 define replicated\n");
   /* -- allocate vector -- */  
-  rd0_all = (cl_double2 *)malloc(sizeof(cl_double2)*Nd);
+  rd0_all = (cl_double3 *)malloc(sizeof(cl_double3)*Nd);
   
   size_t isd0_all=sizeof(cl_int)*Nd;
   printf("isd0_all= %10lu  Bytes\n",isd0_all);
   printf("isd0_all= %10lu kBytes\n",isd0_all/1024);
-
-  sd0_all = (cl_int *)malloc(sizeof(cl_int)*Nd);
-  be      = (cl_double *)malloc(sizeof(cl_double)*Nd);
-  bs      = (cl_double *)malloc(sizeof(cl_double)*Nd);
 
   int index_all=-1;
   int ii,jj;
@@ -18,6 +14,7 @@
   printf("... create replicated cells of the central cell by translation along x and y\n");
   /* this loop works also for the cylindrical case */
   /* along X and Y directions it computes the position of the dislocation */
+  /* The z component contains the sign of the dislocation direction       */
   for (ii=-D_REPLICATION; ii<= D_REPLICATION; ii++)
   {
     for (jj=-D_REPLICATION; jj<= D_REPLICATION; jj++)
@@ -27,8 +24,7 @@
         index_all=index_all+1;
         rd0_all[index_all].x=rd0[idislo].x+ii*Radius;
         rd0_all[index_all].y=rd0[idislo].y+jj*Radius;
-        be[index_all]=bed*(double)(sd0[idislo]);
-        bs[index_all]=bsd*(double)(sd0[idislo]);
+        rd0_all[index_all].z=(double)(sd0[idislo]);
       } 
     }
   }
@@ -44,31 +40,10 @@
     exit(1);
   }
   for (ii=0; ii <= NbDisloWithReplication; ii++)
-    fprintf(FileAllDislo,"%e %e\n",rd0_all[ii].x,rd0_all[ii].y);
+    fprintf(FileAllDislo,"%e %e %e\n",rd0_all[ii].x,rd0_all[ii].y,rd0_all[ii].z);
   fclose(FileAllDislo);
 
   printf("BCtype = %d\n",BCtype);
- 
-  FILE *fb;
-  fb=fopen("be.res","w");
-  for ( i = 0 ; i < Nd ; i++ )
-    fprintf(fb,"%lf\n",be[i]);
-  fclose(fb);
-  printf("--Dump be to file\n");
-
-  fb=fopen("bs.res","w");
-  for ( i = 0 ; i < Nd ; i++ )
-    fprintf(fb,"%lf\n",bs[i]);
-  fclose(fb);
-  printf("--Dump bs to file\n");
-
-  printf("-- ???? \n");  
-  
-  /*
-  ------------
-  *
-  ------------
-  */
   
   /*-- constants --*/
   uaux =1-nu;
@@ -77,6 +52,4 @@
   printf("nu     = %lf\n",nu);
   printf("uaux   = %lf\n",uaux);
   printf("uaux1  = %lf\n",uaux1);
-  printf("uaux2  = %lf\n",uaux2);
-  printf("\n");
- 
+  printf("uaux2  = %lf\n\n",uaux2);

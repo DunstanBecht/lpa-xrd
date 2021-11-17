@@ -12,7 +12,6 @@
   err  = clGetPlatformIDs( 1, platforms, &nPlats);
   printf("Num platforms IDs = %d\n",nPlats);
 
-
   // Load the kernel source code into the array source_str
   FILE *fp;
   char *source_str;
@@ -45,7 +44,6 @@
 
   // print context
   err = output_device_info(device_id);
-
 
   /*-- --*/
   size_t local_size;

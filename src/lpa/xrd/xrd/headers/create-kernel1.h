@@ -1,4 +1,3 @@
-
   /*
   ------------ Creation du premier kernel : udislo
   */ 
@@ -30,11 +29,11 @@
   }
   printf("Allocation host : h_u1 de %lu Bytes\n",sizeof(cl_double3)*Np);
 
-  /* ==== Creation des inputs et output device buffers kernel 1=== */
-  // Essentiellement des tableaux de vecteurs 2d et 3d
+  /* ==== Creation inputs output device buffers kernel 1=== */
 
-  size_t  bytes_rd0= sizeof(cl_double2)*Nd;
-  cl_mem   d_rd0=clCreateBuffer(context,CL_MEM_READ_ONLY,bytes_rd0,NULL,NULL);
+  /* The dislocations are stored as a 3 dim vector where z component is the sign*/
+  size_t  bytes_rd0= sizeof(cl_double3)*Nd;
+  cl_mem   d_rd0=clCreateBuffer(context,CL_MEM_READ_ONLY|CL_MEM_ALLOC_HOST_PTR,bytes_rd0,NULL,NULL);
  
   size_t bytes_ran= sizeof(cl_double)*Np;
   cl_mem  d_ranradius=clCreateBuffer(context,CL_MEM_READ_ONLY|CL_MEM_ALLOC_HOST_PTR,bytes_ran,NULL,NULL);
@@ -49,19 +48,12 @@
   size_t  bytes_u1= sizeof(cl_double3)*Np;
   cl_mem   d_u1=clCreateBuffer(context,CL_MEM_READ_WRITE|CL_MEM_ALLOC_HOST_PTR,bytes_u1,NULL,NULL);
 
-  size_t  bytes_be= sizeof(cl_double)*Nd;
-  cl_mem   d_be=clCreateBuffer(context,CL_MEM_READ_ONLY,bytes_be,NULL,NULL);
-
-  size_t  bytes_bs= sizeof(cl_double)*Nd;
-  cl_mem   d_bs=clCreateBuffer(context,CL_MEM_READ_ONLY,bytes_bs,NULL,NULL);
-  
   printf("Create input and output device buffers for Kernel 1\n");
 
-  /* ==== Copie des donnees du host(cpu) vers le device(gpu)  kernel 1 === */
-  //cl_int err; /* variable err */
+  /* ==== Copy data from host(cpu) to device(gpu)  kernel 1 === */
  
   err  = clEnqueueWriteBuffer(queue,d_rd0 ,CL_TRUE,0,bytes_rd0 ,rd0_all,0,NULL,NULL);
-  /** Tester en fonction du type de maillage: cylindrique ou carre **/
+  /** Mesh : cylindrical or square ? **/
   if ( FLAG_SQUARE == 1 ) 
   {
      printf("...ENQUEUE FLAG_SQUARE=1\n");
@@ -70,18 +62,28 @@
   }
   else
   {
+    printf("...ENQUEUE FLAG_SQUARE=0\n");
     err |= clEnqueueWriteBuffer(queue,d_ranradius,CL_TRUE,0,bytes_ran,RandRadius,0,NULL,NULL);
     err |= clEnqueueWriteBuffer(queue,d_ranangle,CL_TRUE,0,bytes_ran,RandAngle,0,NULL,NULL);
   }
   err |= clEnqueueWriteBuffer(queue,d_r1 ,CL_TRUE,0,bytes_r1 ,h_r1 ,0,NULL,NULL);
   err |= clEnqueueWriteBuffer(queue,d_u1 ,CL_TRUE,0,bytes_u1 ,h_u1 ,0,NULL,NULL);
-  err |= clEnqueueWriteBuffer(queue,d_be ,CL_TRUE,0,bytes_be ,be ,0,NULL,NULL);
-  err |= clEnqueueWriteBuffer(queue,d_bs ,CL_TRUE,0,bytes_bs ,bs ,0,NULL,NULL);
   if ( err != CL_SUCCESS )
   {
   	printf(" Erreur Enqueue Write Buffer kernel 1\n");
   }	
-  printf("Definition des buffers mem sur le gpu et copie des donnees Kernel 1\n");
+
+  /* ==== globalsize and localsize for kernel 1=== */
+  size_t globalSize1[]={Np};
+  size_t localSize1[]={64}; /* optimal value by default */
+  localSize1[0]=atoi(argv[2]); /* choice of the local size by the parameter */
+  printf("kernel1 : globalSize1= %lu\n",globalSize1[0]);
+  printf("kernel1 : localSize1 = %lu\n",localSize1[0]);
+  
+  /* ==== Definition of the shared size to use the shared variable ==== */
+  size_t shared_size_kernel1;
+  shared_size_kernel1 = localSize1[0] * sizeof(cl_double3); 
+  printf("shared_size_kernel1= %d Bytes\n",shared_size_kernel1);
 
   /* ==== Definition des arguments du compute Kernel : kernel 1=== */
   if ( FLAG_SQUARE == 1 ) 
@@ -98,14 +100,15 @@
   err |= clSetKernelArg(kernel1,2,sizeof(cl_mem),&d_rd0);
   err |= clSetKernelArg(kernel1,3,sizeof(cl_mem),&d_r1);
   err |= clSetKernelArg(kernel1,4,sizeof(cl_mem),&d_u1);
-  err |= clSetKernelArg(kernel1,5,sizeof(cl_mem),&d_be);
-  err |= clSetKernelArg(kernel1,6,sizeof(cl_mem),&d_bs);
+  err |= clSetKernelArg(kernel1,5,sizeof(cl_double),&bed);
+  err |= clSetKernelArg(kernel1,6,sizeof(cl_double),&bsd);
   err |= clSetKernelArg(kernel1,7,sizeof(cl_double),&Radius);
   err |= clSetKernelArg(kernel1,8,sizeof(cl_double),&nu);
   err |= clSetKernelArg(kernel1,9,sizeof(cl_int),&Np); 
   err |= clSetKernelArg(kernel1,10,sizeof(cl_int),&Nd); 
-  err |= clSetKernelArg(kernel1,11,sizeof(cl_int),&FLAG_SQUARE); 
-
+  err |= clSetKernelArg(kernel1,11,sizeof(cl_int),&FLAG_SQUARE);
+  err |= clSetKernelArg(kernel1,12,shared_size_kernel1,NULL); /* Taille de la memoire partagee utilisee*/
+ 
   if ( err != CL_SUCCESS )
   {
   	printf(" Erreur clSetKernelArg 1\n");
@@ -113,13 +116,14 @@
   }	
   printf("Definition des arguments du Kernel 1 done\n");
   
+  /* Get the recommended thread size for kernel 1 */
+  size_t thread_size;
+  clGetKernelWorkGroupInfo(kernel1,device_id,CL_KERNEL_WORK_GROUP_SIZE,sizeof(size_t),&thread_size,NULL);
+  printf("*** Recommended workgroup size= %lu\n",thread_size);
+
   /* ==== globalsize and localsize for kernel 1=== */
   cl_event event_kernel1;
-  size_t globalSize1[]={Np};
-  size_t localSize1[]={64}; /* optimal value by default */
-  localSize1[0]=atoi(argv[2]); /* choice of the local size by the parameter */
-  printf("kernel1 : globalSize1= %lu\n",globalSize1[0]);
-  printf("kernel1 : localSize1 = %lu\n",localSize1[0]);
+  
   err = clEnqueueNDRangeKernel(queue,kernel1,1,NULL,globalSize1,localSize1,0,NULL,&event_kernel1);
   if ( err != CL_SUCCESS )
   {
@@ -127,4 +131,3 @@
 	exit(1);
   }	
   printf("Enqueue Kernel1\n");
-  
