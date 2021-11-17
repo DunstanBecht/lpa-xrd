@@ -3,6 +3,7 @@ message: "If you use this software, please cite it as below."
 authors:
   - family-names: Aoufi
     given-names: Asdin
+    orcid: https://orcid.org/0000-0002-5240-0941
   - family-names: Becht
     given-names: Dunstan
     orcid: https://orcid.org/0000-0002-8524-4527
