@@ -105,7 +105,7 @@
     printf("s5AL=%lf s5AL*s5AL=%lf err_S5=%lf\n",s5AL,s5AL*s5AL,err_S5);
 
     /*== Dump to File the Fourier coefficients ==*/
-    fprintf(FileFC,"%6.1lf\t%10.7f\t%10.7f\t%10.7f\t%10.7f\t%10.7f\t%10.7f\t%10.7f\t%10.7f\t%10.7f\t%10.7f\t%10.7f\t%10.7f\t%10.7f\t%10.7f\t%10.7f\t%10.7f\t%10.7f\t%10.7f\t%10.7f\t%10.7f\t%10.7f\t%4d\n",
+    fprintf(FileFC, "%6.1lf %10.7f %10.7f %10.7f %10.7f %10.7f %10.7f %10.7f %10.7f %10.7f %10.7f %10.7f %10.7f %10.7f %10.7f %10.7f %10.7f %10.7f %10.7f %10.7f %10.7f %10.7f %10d\n",
             IndexFourier*a3,
             cAL, err_C, sAL, err_S,
             c2AL, err_C2, s2AL, err_S2,

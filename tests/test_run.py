@@ -13,13 +13,6 @@ python3 test_run.py
 
 from lpa.xrd import run
 
-if False: # generate input data
-    from lpa.input import data, sets
-    from lpa.input.models import RDD
-    rdd = RDD, {'d': 5e13*1e-18}
-    data.export(sets.Sample(10, 'square', 3200, *rdd, S=0), pbc=1)
-    data.export(sets.Distribution('square', 3200, *rdd, S=0, c='PBC1'))
-
 cmd, res = run.make()
 print("$ "+cmd)
 print(res)

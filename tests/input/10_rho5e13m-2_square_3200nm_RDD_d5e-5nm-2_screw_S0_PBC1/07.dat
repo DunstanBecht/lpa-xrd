@@ -1,15 +1,16 @@
-# please keep the structure of this file unchanged
+   1.2.4 # v: lpa-input version
+5.00E+13 # d: dislocation density [m^-2]
  1  1  0 # z: direction of 'l' (line vector) [uvw]
 -1  1  0 # x: direction of 'L' (Fourier variable) [uvw]
  1  1  0 # b: Burgers vector direction [uvw]
  2  0  0 # g: diffraction vector direction (hkl)
 0.250000 # C: contrast coefficient [1]
 0.404940 # a: cell parameter [nm]
-    3200 # s: Square_1 side [nm]
+    3200 # s: side of the region of interest [nm] PBC1
     11.8 # a3: step size of 'L' along x [nm]
    0.345 # nu: Poisson's number [1]
-     512 # number of dislocations
-# Burgers vector and dislocation (x,y) coordinates
+     512 # nd: number of dislocations in this file
+# Burgers vector senses and dislocation (x,y) coordinates [1], [nm], [nm]
  1  2.234464356903110E+03  2.812257805978540E+03
  1  1.897781094087971E+03  1.392495992413874E+03
  1  2.565627042465198E+02  3.171308428155079E+02

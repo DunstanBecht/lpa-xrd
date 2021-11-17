@@ -9,7 +9,7 @@
   size_t i , j, k , p , q;
 
   /* -- list of variables of the computation -- */
-  cl_double3 ld; 
+  cl_double3 ld;
   cl_double3 ex;
   cl_double3 ey;
   cl_double3 bd;/* Burgers vector */
@@ -50,8 +50,10 @@
   cl_double  *RandY; /* random numbers for Y in cartesian coordinates */
   cl_double  Radius;  /* radius of the dislocation points */
   cl_double8 *FC;  /* Pack 8 fourier coefficients */
-  
-  cl_int    IndexFourier; /* entier entre 0 et NoFC-1, pour le calcul de la distance */  
+
+  cl_int    IndexFourier; /* entier entre 0 et NoFC-1, pour le calcul de la distance */
+  char version[8];
+  float density;
 
   /* -- list of variables of the computation -- */
 
@@ -69,8 +71,17 @@
     printf("\n----Error reading file : %s\n",argv[3]);
     exit(1);
   }
- 
-  fgets(buff, BUZZ_SIZE, fbe); 
+
+  fscanf(fbe,"%s", &version);
+  printf("lpa-input version: %s \n", version);
+  printf("\n");
+
+  fgets(buff, BUZZ_SIZE, fbe);
+  fscanf(fbe,"%e", &density);
+  printf("Density: %1.2e m^-2\n", density);
+  printf("\n");
+
+  fgets(buff, BUZZ_SIZE, fbe);
   fscanf(fbe,"%lf %lf %lf",&ld.x,&ld.y,&ld.z);
   printf("Normal of the model plane parallel to  l \n");
   printf("ld.x=%lf\n",ld.x);
@@ -78,7 +89,7 @@
   printf("ld.z=%lf\n",ld.z);
   printf("\n");
 
-  fgets(buff, BUZZ_SIZE, fbe); 
+  fgets(buff, BUZZ_SIZE, fbe);
   fscanf(fbe,"%lf %lf %lf",&ex.x,&ex.y,&ex.z);
   printf("Crystallographic direction along x \n");
   printf("ex.x=%lf\n",ex.x);
@@ -86,7 +97,7 @@
   printf("ex.z=%lf\n",ex.z);
   printf("\n");
 
-  fgets(buff, BUZZ_SIZE, fbe); 
+  fgets(buff, BUZZ_SIZE, fbe);
   fscanf(fbe,"%lf %lf %lf",&bd.x,&bd.y,&bd.z);
   printf("Burgers vector \n");
   printf("bd.x=%lf\n",bd.x);
@@ -107,7 +118,7 @@
   printf("ez.z=%lf\n",ez.z);
   printf("\n");
 
-  fgets(buff, BUZZ_SIZE, fbe); 
+  fgets(buff, BUZZ_SIZE, fbe);
   fscanf(fbe,"%lf %lf %lf",&H.x,&H.y,&H.z);
   printf("Diffraction vector hkl \n");
   printf("H.x=%lf\n",H.x);
@@ -128,17 +139,17 @@
   printf("eg.z=%lf\n",eg.z);
   printf("\n");
 
-  fgets(buff, BUZZ_SIZE, fbe); 
+  fgets(buff, BUZZ_SIZE, fbe);
   fscanf(fbe,"%lf",&cfact_str);
   printf("cfact_str=%lf\n",cfact_str);
   printf("\n");
-  
-  fgets(buff, BUZZ_SIZE, fbe); 
+
+  fgets(buff, BUZZ_SIZE, fbe);
   fscanf(fbe,"%lf",&a_cell_param);
   printf("cell parameter a  =%lf\n",a_cell_param);
   printf("\n");
-  
-  /* bd=a/2*bd */ 
+
+  /* bd=a/2*bd */
   bd.x *=a_cell_param/2;
   bd.y *=a_cell_param/2;
   bd.z *=a_cell_param/2;
@@ -179,13 +190,13 @@
   cl_double bscrewl=length3(bscrew);
   printf("norm bscrew = %lf\n",bscrewl);
   printf("\n");
- 
+
   if ( bscrewl < EPS )
   {
     printf("  edge   dislocation\n");
     bed=length3(bd);
     bsd=0.0;
-  } 
+  }
   else if (length3(bedge) < EPS )
   {
     printf("  screw  dislocation\n");
@@ -209,18 +220,18 @@
   printf("ex.x = %lf\n",ex.x);
   printf("ex.y = %lf\n",ex.y);
   printf("ex.z = %lf\n",ex.z);
-  
+
   /* vector product ey=ez x ex */
   ey.x =ez.y*ex.z-ez.z*ex.y;
   ey.y =ez.z*ex.x-ez.x*ex.z;
   ey.z =ez.x*ex.y-ez.y*ex.x;
 
-  /* ---- 1 : create the 3x3 matrix    */  
+  /* ---- 1 : create the 3x3 matrix    */
   cl_double Om[3][3];
   Om[0][0]=ex.x;
   Om[0][1]=ey.x;
   Om[0][2]=ez.x;
-  
+
   Om[1][0]=ex.y;
   Om[1][1]=ey.y;
   Om[1][2]=ez.y;
@@ -232,7 +243,7 @@
   Om[0][0]=ex.x;
   Om[0][1]=ex.y;
   Om[0][2]=ex.z;
-  
+
   Om[1][0]=ey.x;
   Om[1][1]=ey.y;
   Om[1][2]=ey.z;
@@ -240,7 +251,7 @@
   Om[2][0]=ez.x;
   Om[2][1]=ez.y;
   Om[2][2]=ez.z;
-  
+
   /* ---- 2     */
   cl_double coeff=length3(H)/a_cell_param;
   /* ---- 2 bis g= coeff * eg*/
@@ -249,7 +260,7 @@
   g.y=coeff*eg.y;
   g.z=coeff*eg.z;
 
-  /* ---- 3 : product matrix vector Om by g:   gd=Om g*/ 
+  /* ---- 3 : product matrix vector Om by g:   gd=Om g*/
   gd.x=Om[0][0]*g.x+Om[0][1]*g.y+Om[0][2]*g.z;
   gd.y=Om[1][0]*g.x+Om[1][1]*g.y+Om[1][2]*g.z;
   gd.z=Om[2][0]*g.x+Om[2][1]*g.y+Om[2][2]*g.z;
@@ -261,7 +272,7 @@
   printf("gd.x = %lf\n",gd.x);
   printf("gd.y = %lf\n",gd.y);
   printf("gd.z = %lf\n",gd.z);
-  
+
   /* ---- 4 : egd=gd */
   egd.x=gd.x;
   egd.y=gd.y;
@@ -274,46 +285,44 @@
   egd.z/=norm;
   
   printf("...Read the flag parameter Cylinder or Square_\n");
+
   /* ---- */
-  fgets(buff, BUZZ_SIZE, fbe); 
+  fgets(buff, BUZZ_SIZE, fbe);
   fscanf(fbe,"%lf",&Radius);
   printf("Radius  =%lf\n",Radius);
   printf("\n");
 
-  fgets(buff, BUZZ_SIZE, fbe); 
+  fgets(buff, BUZZ_SIZE, fbe);
   printf("string read from file = %s\n",buff);
 
-  char str_cylinder[12] = "Cylinder";
-  char str_square[12] = "Square";
-  
   FLAG_CYLINDER=2;
   FLAG_SQUARE=2;
 
-  char *resucyl = strstr(buff,"Cylinder");
+  char *resucyl = strstr(buff,"radius");
   if ( resucyl != NULL )
   {
-    printf("Mot Clef Cylinder OK\n");
+    printf("Mot Clef radius OK\n");
     FLAG_CYLINDER=1;
     FLAG_SQUARE=0;
   }
-  
-  char *resusquare = strstr(buff,"Square");
+
+  char *resusquare = strstr(buff,"side");
   if ( resusquare != NULL )
   {
-    printf("Mot Clef Square OK\n");
+    printf("Mot Clef side OK\n");
     FLAG_CYLINDER=0;
     FLAG_SQUARE=1;
 
     /*--get the value of the number of replications */
     char numbers[10];
     strcat(numbers,"");
-    int i=0; 
+    int i=0;
     printf("longueur=%ld\n",strlen(buff));
     int index=0;
     for (i = 0; i<strlen(buff); i++)
-    { 
+    {
       printf("i=%d\n",i);
-      if (isdigit(buff[i])) 
+      if (isdigit(buff[i]))
       {
        //printf("ok caractere=int %d\n",buff[i]);
        numbers[index]=buff[i];
@@ -325,7 +334,7 @@
     printf("replication D=%d\n",entier);
     D_REPLICATION=entier;
   }
-  
+
   fscanf(fbe,"%lf",&a3);
   printf("a3  =%lf\n",a3);
   printf("\n");
@@ -340,13 +349,13 @@
   a3vd.y=a3v.y;
   printf("a3vd.x= %lf\n",a3vd.x);
   printf("a3vd.y= %lf\n",a3vd.y);
-  
-  fgets(buff, BUZZ_SIZE, fbe); 
+
+  fgets(buff, BUZZ_SIZE, fbe);
   fscanf(fbe,"%lf",&nu);
   printf("nu  =%lf\n",nu);
   printf("\n");
 
-  fgets(buff, BUZZ_SIZE, fbe); 
+  fgets(buff, BUZZ_SIZE, fbe);
   fscanf(fbe,"%d",&Nd0);
   printf("Nd0 =%d\n",Nd0);
   printf("\n");
@@ -357,16 +366,16 @@
 
   /* -- allocate vector -- */  
   rd0 = (cl_double3 *)malloc(sizeof(cl_double3)*Nd0);
-  
+
   size_t isd0=sizeof(cl_int)*Nd0;
   printf("isd0= %10lu  Bytes\n",isd0);
   printf("isd0= %10lu kBytes\n",isd0/1024);
 
   sd0 = (cl_int *)malloc(sizeof(cl_int)*Nd0);
 
-  fgets(buff, BUZZ_SIZE, fbe); 
-  fgets(buff, BUZZ_SIZE, fbe); 
-  /*  sd0: sign of dislocation 
+  fgets(buff, BUZZ_SIZE, fbe);
+  fgets(buff, BUZZ_SIZE, fbe);
+  /*  sd0: sign of dislocation
       rd0: abscissa of dislocation
       rd1: y of dislocation
   */
@@ -383,7 +392,7 @@
       fprintf(ndislo,"%e %e\n",rd0[i].x,rd0[i].y);
     else
       fprintf(pdislo,"%e %e\n",rd0[i].x,rd0[i].y);
-  } 
+  }
   fclose(fbe);
   fclose(ndislo);
   fclose(pdislo);

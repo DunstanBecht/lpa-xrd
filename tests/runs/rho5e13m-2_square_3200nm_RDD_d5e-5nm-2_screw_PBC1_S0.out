@@ -15,6 +15,10 @@ NoFC= 50
 ++++++++++++++++++++++++++++
 Start Olvas_model function
 Parameter File = /export/home/becht/xrd-test/input/rho5e13m-2_square_3200nm_RDD_d5e-5nm-2_screw_PBC1_S0.dat
+lpa-input version: 1.2.4 
+
+Density: 5.00e+13 m^-2
+
 Normal of the model plane parallel to  l 
 ld.x=1.000000
 ld.y=1.000000
@@ -79,10 +83,10 @@ gd.z = 3.492403
 ...may 2021 read the flag parameter Cylinder or Square_
 Radius  =3200.000000
 
-string read from file =  # s: Square side [nm]
+string read from file =  # s: side of the region of interest [nm]
 
-Mot Clef Square OK
-longueur=24
+Mot Clef side OK
+longueur=43
 i=0
 i=1
 i=2
@@ -107,6 +111,25 @@ i=20
 i=21
 i=22
 i=23
+i=24
+i=25
+i=26
+i=27
+i=28
+i=29
+i=30
+i=31
+i=32
+i=33
+i=34
+i=35
+i=36
+i=37
+i=38
+i=39
+i=40
+i=41
+i=42
 replication D=0
 a3  =11.800000
 
@@ -23199,7 +23222,7 @@ Using Mersenne Twister random number generator implemented in C
 
 STEP 04
 Num platforms IDs = 1
-Kernel size       = 10971 Bytes
+Kernel size       = 11280 Bytes
 type accelerateur= 1
    : 1=gpu 0=cpu 
  Device is  Tesla P100-PCIE-16GB  GPU from  NVIDIA Corporation  with a max of 56 compute units 
@@ -23241,7 +23264,7 @@ Creation du Kernel 2 :-- Compute Fourier Transform coefficients
 clFinish(queue);
 
 STEP 07
-Execution timekernel1 : 118.030 ms
+Execution timekernel1 : 117.908 ms
 On lit les champs de vecteurs calcules par kernel 1
 .. On a fini avec le kernel 1 /n
 STEP 08
@@ -23260,17 +23283,17 @@ kernel2 : localSize2 = 200
 Enqueue Kernel2 done ....
   Define profiling event
   Get profiling data from kernel 2
-Execution timekernel2 : 125.741 ms
+Execution timekernel2 : 118.007 ms
   Read Back from gpu arrays VECT16FC, VECT8FC and VECT1FC
 .. On a fini avec le kernel 2 
----cumulated-time-kernel2 [ms]=125.740960
+---cumulated-time-kernel2 [ms]=118.006688
 
 STEP 09
 Np      = 200000
 Np-good = 157362
 
 --------
-time-reduction [s]= 3.000000e-03
+time-reduction [s]= 3.161000e-03
 coeff = 1/Np= 0.000006
 cAL2 =0.935069 cAL =0.961215 cAL *cAL =0.923935 err_C =0.000002
 sAL2 =0.064931 sAL =0.093348 sAL *sAL =0.008714 err_S =0.000003
@@ -23293,17 +23316,17 @@ kernel2 : localSize2 = 200
 Enqueue Kernel2 done ....
   Define profiling event
   Get profiling data from kernel 2
-Execution timekernel2 : 120.627 ms
+Execution timekernel2 : 118.022 ms
   Read Back from gpu arrays VECT16FC, VECT8FC and VECT1FC
 .. On a fini avec le kernel 2 
----cumulated-time-kernel2 [ms]=246.367616
+---cumulated-time-kernel2 [ms]=236.028640
 
 STEP 09
 Np      = 200000
 Np-good = 157860
 
 --------
-time-reduction [s]= 3.006000e-03
+time-reduction [s]= 3.145000e-03
 coeff = 1/Np= 0.000006
 cAL2 =0.802637 cAL =0.866581 cAL *cAL =0.750963 err_C =0.000003
 sAL2 =0.197363 sAL =0.170769 sAL *sAL =0.029162 err_S =0.000004
@@ -23326,17 +23349,17 @@ kernel2 : localSize2 = 200
 Enqueue Kernel2 done ....
   Define profiling event
   Get profiling data from kernel 2
-Execution timekernel2 : 118.175 ms
+Execution timekernel2 : 117.964 ms
   Read Back from gpu arrays VECT16FC, VECT8FC and VECT1FC
 .. On a fini avec le kernel 2 
----cumulated-time-kernel2 [ms]=364.542304
+---cumulated-time-kernel2 [ms]=353.992288
 
 STEP 09
 Np      = 200000
 Np-good = 158315
 
 --------
-time-reduction [s]= 2.997000e-03
+time-reduction [s]= 3.138000e-03
 coeff = 1/Np= 0.000006
 cAL2 =0.669107 cAL =0.737986 cAL *cAL =0.544623 err_C =0.000004
 sAL2 =0.330893 sAL =0.223875 sAL *sAL =0.050120 err_S =0.000005
@@ -23359,17 +23382,17 @@ kernel2 : localSize2 = 200
 Enqueue Kernel2 done ....
   Define profiling event
   Get profiling data from kernel 2
-Execution timekernel2 : 120.539 ms
+Execution timekernel2 : 117.947 ms
   Read Back from gpu arrays VECT16FC, VECT8FC and VECT1FC
 .. On a fini avec le kernel 2 
----cumulated-time-kernel2 [ms]=485.081760
+---cumulated-time-kernel2 [ms]=471.939392
 
 STEP 09
 Np      = 200000
 Np-good = 158779
 
 --------
-time-reduction [s]= 2.985000e-03
+time-reduction [s]= 3.151000e-03
 coeff = 1/Np= 0.000006
 cAL2 =0.570957 cAL =0.594817 cAL *cAL =0.353807 err_C =0.000004
 sAL2 =0.429043 sAL =0.250235 sAL *sAL =0.062617 err_S =0.000005
@@ -23392,17 +23415,17 @@ kernel2 : localSize2 = 200
 Enqueue Kernel2 done ....
   Define profiling event
   Get profiling data from kernel 2
-Execution timekernel2 : 118.182 ms
+Execution timekernel2 : 117.967 ms
   Read Back from gpu arrays VECT16FC, VECT8FC and VECT1FC
 .. On a fini avec le kernel 2 
----cumulated-time-kernel2 [ms]=603.264000
+---cumulated-time-kernel2 [ms]=589.906208
 
 STEP 09
 Np      = 200000
 Np-good = 159209
 
 --------
-time-reduction [s]= 2.975000e-03
+time-reduction [s]= 3.146000e-03
 coeff = 1/Np= 0.000006
 cAL2 =0.517024 cAL =0.452878 cAL *cAL =0.205099 err_C =0.000005
 sAL2 =0.482976 sAL =0.251537 sAL *sAL =0.063271 err_S =0.000005
@@ -23425,17 +23448,17 @@ kernel2 : localSize2 = 200
 Enqueue Kernel2 done ....
   Define profiling event
   Get profiling data from kernel 2
-Execution timekernel2 : 120.514 ms
+Execution timekernel2 : 117.943 ms
   Read Back from gpu arrays VECT16FC, VECT8FC and VECT1FC
 .. On a fini avec le kernel 2 
----cumulated-time-kernel2 [ms]=723.778304
+---cumulated-time-kernel2 [ms]=707.848832
 
 STEP 09
 Np      = 200000
 Np-good = 159649
 
 --------
-time-reduction [s]= 2.980000e-03
+time-reduction [s]= 3.159000e-03
 coeff = 1/Np= 0.000006
 cAL2 =0.498672 cAL =0.324354 cAL *cAL =0.105206 err_C =0.000005
 sAL2 =0.501328 sAL =0.233683 sAL *sAL =0.054608 err_S =0.000005
@@ -23458,17 +23481,17 @@ kernel2 : localSize2 = 200
 Enqueue Kernel2 done ....
   Define profiling event
   Get profiling data from kernel 2
-Execution timekernel2 : 118.212 ms
+Execution timekernel2 : 117.944 ms
   Read Back from gpu arrays VECT16FC, VECT8FC and VECT1FC
 .. On a fini avec le kernel 2 
----cumulated-time-kernel2 [ms]=841.989952
+---cumulated-time-kernel2 [ms]=825.792384
 
 STEP 09
 Np      = 200000
 Np-good = 160128
 
 --------
-time-reduction [s]= 2.998000e-03
+time-reduction [s]= 3.153000e-03
 coeff = 1/Np= 0.000006
 cAL2 =0.499424 cAL =0.216011 cAL *cAL =0.046661 err_C =0.000005
 sAL2 =0.500576 sAL =0.201012 sAL *sAL =0.040406 err_S =0.000005
@@ -23491,17 +23514,17 @@ kernel2 : localSize2 = 200
 Enqueue Kernel2 done ....
   Define profiling event
   Get profiling data from kernel 2
-Execution timekernel2 : 120.640 ms
+Execution timekernel2 : 117.937 ms
   Read Back from gpu arrays VECT16FC, VECT8FC and VECT1FC
 .. On a fini avec le kernel 2 
----cumulated-time-kernel2 [ms]=962.629664
+---cumulated-time-kernel2 [ms]=943.729152
 
 STEP 09
 Np      = 200000
 Np-good = 160541
 
 --------
-time-reduction [s]= 2.979000e-03
+time-reduction [s]= 3.144000e-03
 coeff = 1/Np= 0.000006
 cAL2 =0.505139 cAL =0.130483 cAL *cAL =0.017026 err_C =0.000005
 sAL2 =0.494861 sAL =0.159918 sAL *sAL =0.025574 err_S =0.000005
@@ -23524,17 +23547,17 @@ kernel2 : localSize2 = 200
 Enqueue Kernel2 done ....
   Define profiling event
   Get profiling data from kernel 2
-Execution timekernel2 : 120.621 ms
+Execution timekernel2 : 117.919 ms
   Read Back from gpu arrays VECT16FC, VECT8FC and VECT1FC
 .. On a fini avec le kernel 2 
----cumulated-time-kernel2 [ms]=1083.251008
+---cumulated-time-kernel2 [ms]=1061.648064
 
 STEP 09
 Np      = 200000
 Np-good = 160962
 
 --------
-time-reduction [s]= 3.009000e-03
+time-reduction [s]= 3.152000e-03
 coeff = 1/Np= 0.000006
 cAL2 =0.509012 cAL =0.068377 cAL *cAL =0.004675 err_C =0.000005
 sAL2 =0.490988 sAL =0.114903 sAL *sAL =0.013203 err_S =0.000005
@@ -23557,17 +23580,17 @@ kernel2 : localSize2 = 200
 Enqueue Kernel2 done ....
   Define profiling event
   Get profiling data from kernel 2
-Execution timekernel2 : 118.219 ms
+Execution timekernel2 : 117.918 ms
   Read Back from gpu arrays VECT16FC, VECT8FC and VECT1FC
 .. On a fini avec le kernel 2 
----cumulated-time-kernel2 [ms]=1201.470336
+---cumulated-time-kernel2 [ms]=1179.565664
 
 STEP 09
 Np      = 200000
 Np-good = 161407
 
 --------
-time-reduction [s]= 3.011000e-03
+time-reduction [s]= 3.150000e-03
 coeff = 1/Np= 0.000006
 cAL2 =0.507460 cAL =0.027285 cAL *cAL =0.000744 err_C =0.000005
 sAL2 =0.492540 sAL =0.072206 sAL *sAL =0.005214 err_S =0.000005
@@ -23590,17 +23613,17 @@ kernel2 : localSize2 = 200
 Enqueue Kernel2 done ....
   Define profiling event
   Get profiling data from kernel 2
-Execution timekernel2 : 120.537 ms
+Execution timekernel2 : 117.959 ms
   Read Back from gpu arrays VECT16FC, VECT8FC and VECT1FC
 .. On a fini avec le kernel 2 
----cumulated-time-kernel2 [ms]=1322.007392
+---cumulated-time-kernel2 [ms]=1297.524544
 
 STEP 09
 Np      = 200000
 Np-good = 161788
 
 --------
-time-reduction [s]= 3.075000e-03
+time-reduction [s]= 3.149000e-03
 coeff = 1/Np= 0.000006
 cAL2 =0.500776 cAL =0.003883 cAL *cAL =0.000015 err_C =0.000005
 sAL2 =0.499224 sAL =0.034605 sAL *sAL =0.001198 err_S =0.000005
@@ -23623,17 +23646,17 @@ kernel2 : localSize2 = 200
 Enqueue Kernel2 done ....
   Define profiling event
   Get profiling data from kernel 2
-Execution timekernel2 : 118.161 ms
+Execution timekernel2 : 117.939 ms
   Read Back from gpu arrays VECT16FC, VECT8FC and VECT1FC
 .. On a fini avec le kernel 2 
----cumulated-time-kernel2 [ms]=1440.168544
+---cumulated-time-kernel2 [ms]=1415.463392
 
 STEP 09
 Np      = 200000
 Np-good = 162208
 
 --------
-time-reduction [s]= 3.001000e-03
+time-reduction [s]= 3.149000e-03
 coeff = 1/Np= 0.000006
 cAL2 =0.493541 cAL =-0.006109 cAL *cAL =0.000037 err_C =0.000005
 sAL2 =0.506459 sAL =0.003797 sAL *sAL =0.000014 err_S =0.000005
@@ -23656,17 +23679,17 @@ kernel2 : localSize2 = 200
 Enqueue Kernel2 done ....
   Define profiling event
   Get profiling data from kernel 2
-Execution timekernel2 : 118.139 ms
+Execution timekernel2 : 117.948 ms
   Read Back from gpu arrays VECT16FC, VECT8FC and VECT1FC
 .. On a fini avec le kernel 2 
----cumulated-time-kernel2 [ms]=1558.307392
+---cumulated-time-kernel2 [ms]=1533.411328
 
 STEP 09
 Np      = 200000
 Np-good = 162629
 
 --------
-time-reduction [s]= 2.963000e-03
+time-reduction [s]= 3.154000e-03
 coeff = 1/Np= 0.000006
 cAL2 =0.490100 cAL =-0.006559 cAL *cAL =0.000043 err_C =0.000005
 sAL2 =0.509900 sAL =-0.018814 sAL *sAL =0.000354 err_S =0.000005
@@ -23689,17 +23712,17 @@ kernel2 : localSize2 = 200
 Enqueue Kernel2 done ....
   Define profiling event
   Get profiling data from kernel 2
-Execution timekernel2 : 120.482 ms
+Execution timekernel2 : 117.922 ms
   Read Back from gpu arrays VECT16FC, VECT8FC and VECT1FC
 .. On a fini avec le kernel 2 
----cumulated-time-kernel2 [ms]=1678.789728
+---cumulated-time-kernel2 [ms]=1651.333632
 
 STEP 09
 Np      = 200000
 Np-good = 163017
 
 --------
-time-reduction [s]= 2.986000e-03
+time-reduction [s]= 3.153000e-03
 coeff = 1/Np= 0.000006
 cAL2 =0.491614 cAL =-0.001001 cAL *cAL =0.000001 err_C =0.000005
 sAL2 =0.508386 sAL =-0.033553 sAL *sAL =0.001126 err_S =0.000005
@@ -23722,17 +23745,17 @@ kernel2 : localSize2 = 200
 Enqueue Kernel2 done ....
   Define profiling event
   Get profiling data from kernel 2
-Execution timekernel2 : 118.142 ms
+Execution timekernel2 : 117.890 ms
   Read Back from gpu arrays VECT16FC, VECT8FC and VECT1FC
 .. On a fini avec le kernel 2 
----cumulated-time-kernel2 [ms]=1796.931328
+---cumulated-time-kernel2 [ms]=1769.223392
 
 STEP 09
 Np      = 200000
 Np-good = 163414
 
 --------
-time-reduction [s]= 2.986000e-03
+time-reduction [s]= 3.148000e-03
 coeff = 1/Np= 0.000006
 cAL2 =0.496864 cAL =0.007362 cAL *cAL =0.000054 err_C =0.000005
 sAL2 =0.503136 sAL =-0.040284 sAL *sAL =0.001623 err_S =0.000005
@@ -23755,17 +23778,17 @@ kernel2 : localSize2 = 200
 Enqueue Kernel2 done ....
   Define profiling event
   Get profiling data from kernel 2
-Execution timekernel2 : 118.149 ms
+Execution timekernel2 : 117.884 ms
   Read Back from gpu arrays VECT16FC, VECT8FC and VECT1FC
 .. On a fini avec le kernel 2 
----cumulated-time-kernel2 [ms]=1915.080768
+---cumulated-time-kernel2 [ms]=1887.107744
 
 STEP 09
 Np      = 200000
 Np-good = 163818
 
 --------
-time-reduction [s]= 2.982000e-03
+time-reduction [s]= 3.153000e-03
 coeff = 1/Np= 0.000006
 cAL2 =0.501823 cAL =0.015858 cAL *cAL =0.000251 err_C =0.000005
 sAL2 =0.498177 sAL =-0.040974 sAL *sAL =0.001679 err_S =0.000005
@@ -23788,17 +23811,17 @@ kernel2 : localSize2 = 200
 Enqueue Kernel2 done ....
   Define profiling event
   Get profiling data from kernel 2
-Execution timekernel2 : 118.120 ms
+Execution timekernel2 : 117.931 ms
   Read Back from gpu arrays VECT16FC, VECT8FC and VECT1FC
 .. On a fini avec le kernel 2 
----cumulated-time-kernel2 [ms]=2033.200288
+---cumulated-time-kernel2 [ms]=2005.038656
 
 STEP 09
 Np      = 200000
 Np-good = 164207
 
 --------
-time-reduction [s]= 2.991000e-03
+time-reduction [s]= 3.161000e-03
 coeff = 1/Np= 0.000006
 cAL2 =0.504267 cAL =0.022733 cAL *cAL =0.000517 err_C =0.000005
 sAL2 =0.495733 sAL =-0.037158 sAL *sAL =0.001381 err_S =0.000005
@@ -23821,17 +23844,17 @@ kernel2 : localSize2 = 200
 Enqueue Kernel2 done ....
   Define profiling event
   Get profiling data from kernel 2
-Execution timekernel2 : 120.501 ms
+Execution timekernel2 : 117.925 ms
   Read Back from gpu arrays VECT16FC, VECT8FC and VECT1FC
 .. On a fini avec le kernel 2 
----cumulated-time-kernel2 [ms]=2153.701088
+---cumulated-time-kernel2 [ms]=2122.963712
 
 STEP 09
 Np      = 200000
 Np-good = 164588
 
 --------
-time-reduction [s]= 2.986000e-03
+time-reduction [s]= 3.152000e-03
 coeff = 1/Np= 0.000006
 cAL2 =0.503026 cAL =0.026587 cAL *cAL =0.000707 err_C =0.000005
 sAL2 =0.496974 sAL =-0.031362 sAL *sAL =0.000984 err_S =0.000005
@@ -23854,17 +23877,17 @@ kernel2 : localSize2 = 200
 Enqueue Kernel2 done ....
   Define profiling event
   Get profiling data from kernel 2
-Execution timekernel2 : 118.125 ms
+Execution timekernel2 : 117.902 ms
   Read Back from gpu arrays VECT16FC, VECT8FC and VECT1FC
 .. On a fini avec le kernel 2 
----cumulated-time-kernel2 [ms]=2271.826496
+---cumulated-time-kernel2 [ms]=2240.866016
 
 STEP 09
 Np      = 200000
 Np-good = 164934
 
 --------
-time-reduction [s]= 2.969000e-03
+time-reduction [s]= 3.153000e-03
 coeff = 1/Np= 0.000006
 cAL2 =0.498854 cAL =0.027689 cAL *cAL =0.000767 err_C =0.000005
 sAL2 =0.501146 sAL =-0.024161 sAL *sAL =0.000584 err_S =0.000005
@@ -23887,17 +23910,17 @@ kernel2 : localSize2 = 200
 Enqueue Kernel2 done ....
   Define profiling event
   Get profiling data from kernel 2
-Execution timekernel2 : 118.106 ms
+Execution timekernel2 : 117.906 ms
   Read Back from gpu arrays VECT16FC, VECT8FC and VECT1FC
 .. On a fini avec le kernel 2 
----cumulated-time-kernel2 [ms]=2389.932000
+---cumulated-time-kernel2 [ms]=2358.772128
 
 STEP 09
 Np      = 200000
 Np-good = 165285
 
 --------
-time-reduction [s]= 3.010000e-03
+time-reduction [s]= 3.164000e-03
 coeff = 1/Np= 0.000006
 cAL2 =0.492789 cAL =0.025960 cAL *cAL =0.000674 err_C =0.000005
 sAL2 =0.507211 sAL =-0.017165 sAL *sAL =0.000295 err_S =0.000005
@@ -23920,17 +23943,17 @@ kernel2 : localSize2 = 200
 Enqueue Kernel2 done ....
   Define profiling event
   Get profiling data from kernel 2
-Execution timekernel2 : 120.411 ms
+Execution timekernel2 : 117.946 ms
   Read Back from gpu arrays VECT16FC, VECT8FC and VECT1FC
 .. On a fini avec le kernel 2 
----cumulated-time-kernel2 [ms]=2510.342848
+---cumulated-time-kernel2 [ms]=2476.718400
 
 STEP 09
 Np      = 200000
 Np-good = 165666
 
 --------
-time-reduction [s]= 2.975000e-03
+time-reduction [s]= 3.146000e-03
 coeff = 1/Np= 0.000006
 cAL2 =0.487406 cAL =0.021170 cAL *cAL =0.000448 err_C =0.000005
 sAL2 =0.512594 sAL =-0.011358 sAL *sAL =0.000129 err_S =0.000005
@@ -23953,17 +23976,17 @@ kernel2 : localSize2 = 200
 Enqueue Kernel2 done ....
   Define profiling event
   Get profiling data from kernel 2
-Execution timekernel2 : 120.487 ms
+Execution timekernel2 : 117.874 ms
   Read Back from gpu arrays VECT16FC, VECT8FC and VECT1FC
 .. On a fini avec le kernel 2 
----cumulated-time-kernel2 [ms]=2630.829376
+---cumulated-time-kernel2 [ms]=2594.592640
 
 STEP 09
 Np      = 200000
 Np-good = 166008
 
 --------
-time-reduction [s]= 2.986000e-03
+time-reduction [s]= 3.145000e-03
 coeff = 1/Np= 0.000006
 cAL2 =0.484054 cAL =0.015225 cAL *cAL =0.000232 err_C =0.000005
 sAL2 =0.515946 sAL =-0.006980 sAL *sAL =0.000049 err_S =0.000005
@@ -23986,17 +24009,17 @@ kernel2 : localSize2 = 200
 Enqueue Kernel2 done ....
   Define profiling event
   Get profiling data from kernel 2
-Execution timekernel2 : 120.537 ms
+Execution timekernel2 : 117.884 ms
   Read Back from gpu arrays VECT16FC, VECT8FC and VECT1FC
 .. On a fini avec le kernel 2 
----cumulated-time-kernel2 [ms]=2751.366016
+---cumulated-time-kernel2 [ms]=2712.476224
 
 STEP 09
 Np      = 200000
 Np-good = 166325
 
 --------
-time-reduction [s]= 3.000000e-03
+time-reduction [s]= 3.136000e-03
 coeff = 1/Np= 0.000006
 cAL2 =0.481983 cAL =0.008926 cAL *cAL =0.000080 err_C =0.000005
 sAL2 =0.518017 sAL =-0.004743 sAL *sAL =0.000022 err_S =0.000005
@@ -24019,17 +24042,17 @@ kernel2 : localSize2 = 200
 Enqueue Kernel2 done ....
   Define profiling event
   Get profiling data from kernel 2
-Execution timekernel2 : 118.149 ms
+Execution timekernel2 : 117.835 ms
   Read Back from gpu arrays VECT16FC, VECT8FC and VECT1FC
 .. On a fini avec le kernel 2 
----cumulated-time-kernel2 [ms]=2869.515488
+---cumulated-time-kernel2 [ms]=2830.311712
 
 STEP 09
 Np      = 200000
 Np-good = 166631
 
 --------
-time-reduction [s]= 2.968000e-03
+time-reduction [s]= 3.149000e-03
 coeff = 1/Np= 0.000006
 cAL2 =0.481095 cAL =0.002867 cAL *cAL =0.000008 err_C =0.000005
 sAL2 =0.518905 sAL =-0.004299 sAL *sAL =0.000018 err_S =0.000005
@@ -24052,17 +24075,17 @@ kernel2 : localSize2 = 200
 Enqueue Kernel2 done ....
   Define profiling event
   Get profiling data from kernel 2
-Execution timekernel2 : 120.478 ms
+Execution timekernel2 : 117.903 ms
   Read Back from gpu arrays VECT16FC, VECT8FC and VECT1FC
 .. On a fini avec le kernel 2 
----cumulated-time-kernel2 [ms]=2989.993952
+---cumulated-time-kernel2 [ms]=2948.214304
 
 STEP 09
 Np      = 200000
 Np-good = 166955
 
 --------
-time-reduction [s]= 2.976000e-03
+time-reduction [s]= 3.148000e-03
 coeff = 1/Np= 0.000006
 cAL2 =0.481514 cAL =-0.002426 cAL *cAL =0.000006 err_C =0.000005
 sAL2 =0.518486 sAL =-0.005568 sAL *sAL =0.000031 err_S =0.000005
@@ -24085,17 +24108,17 @@ kernel2 : localSize2 = 200
 Enqueue Kernel2 done ....
   Define profiling event
   Get profiling data from kernel 2
-Execution timekernel2 : 118.113 ms
+Execution timekernel2 : 117.841 ms
   Read Back from gpu arrays VECT16FC, VECT8FC and VECT1FC
 .. On a fini avec le kernel 2 
----cumulated-time-kernel2 [ms]=3108.107264
+---cumulated-time-kernel2 [ms]=3066.054880
 
 STEP 09
 Np      = 200000
 Np-good = 167299
 
 --------
-time-reduction [s]= 3.000000e-03
+time-reduction [s]= 3.160000e-03
 coeff = 1/Np= 0.000006
 cAL2 =0.485359 cAL =-0.005223 cAL *cAL =0.000027 err_C =0.000005
 sAL2 =0.514641 sAL =-0.007583 sAL *sAL =0.000057 err_S =0.000005
@@ -24118,17 +24141,17 @@ kernel2 : localSize2 = 200
 Enqueue Kernel2 done ....
   Define profiling event
   Get profiling data from kernel 2
-Execution timekernel2 : 118.115 ms
+Execution timekernel2 : 117.929 ms
   Read Back from gpu arrays VECT16FC, VECT8FC and VECT1FC
 .. On a fini avec le kernel 2 
----cumulated-time-kernel2 [ms]=3226.222624
+---cumulated-time-kernel2 [ms]=3183.983424
 
 STEP 09
 Np      = 200000
 Np-good = 167655
 
 --------
-time-reduction [s]= 2.987000e-03
+time-reduction [s]= 3.146000e-03
 coeff = 1/Np= 0.000006
 cAL2 =0.490963 cAL =-0.005431 cAL *cAL =0.000030 err_C =0.000005
 sAL2 =0.509037 sAL =-0.010404 sAL *sAL =0.000108 err_S =0.000005
@@ -24151,17 +24174,17 @@ kernel2 : localSize2 = 200
 Enqueue Kernel2 done ....
   Define profiling event
   Get profiling data from kernel 2
-Execution timekernel2 : 118.136 ms
+Execution timekernel2 : 117.856 ms
   Read Back from gpu arrays VECT16FC, VECT8FC and VECT1FC
 .. On a fini avec le kernel 2 
----cumulated-time-kernel2 [ms]=3344.358848
+---cumulated-time-kernel2 [ms]=3301.839072
 
 STEP 09
 Np      = 200000
 Np-good = 167999
 
 --------
-time-reduction [s]= 2.992000e-03
+time-reduction [s]= 3.137000e-03
 coeff = 1/Np= 0.000006
 cAL2 =0.496648 cAL =-0.003190 cAL *cAL =0.000010 err_C =0.000005
 sAL2 =0.503352 sAL =-0.013485 sAL *sAL =0.000182 err_S =0.000005
@@ -24184,17 +24207,17 @@ kernel2 : localSize2 = 200
 Enqueue Kernel2 done ....
   Define profiling event
   Get profiling data from kernel 2
-Execution timekernel2 : 118.135 ms
+Execution timekernel2 : 117.812 ms
   Read Back from gpu arrays VECT16FC, VECT8FC and VECT1FC
 .. On a fini avec le kernel 2 
----cumulated-time-kernel2 [ms]=3462.493792
+---cumulated-time-kernel2 [ms]=3419.651424
 
 STEP 09
 Np      = 200000
 Np-good = 168315
 
 --------
-time-reduction [s]= 2.987000e-03
+time-reduction [s]= 3.158000e-03
 coeff = 1/Np= 0.000006
 cAL2 =0.501017 cAL =0.000183 cAL *cAL =0.000000 err_C =0.000005
 sAL2 =0.498983 sAL =-0.014984 sAL *sAL =0.000225 err_S =0.000005
@@ -24217,17 +24240,17 @@ kernel2 : localSize2 = 200
 Enqueue Kernel2 done ....
   Define profiling event
   Get profiling data from kernel 2
-Execution timekernel2 : 118.151 ms
+Execution timekernel2 : 117.759 ms
   Read Back from gpu arrays VECT16FC, VECT8FC and VECT1FC
 .. On a fini avec le kernel 2 
----cumulated-time-kernel2 [ms]=3580.644864
+---cumulated-time-kernel2 [ms]=3537.410560
 
 STEP 09
 Np      = 200000
 Np-good = 168612
 
 --------
-time-reduction [s]= 2.976000e-03
+time-reduction [s]= 3.139000e-03
 coeff = 1/Np= 0.000006
 cAL2 =0.502684 cAL =0.004451 cAL *cAL =0.000020 err_C =0.000005
 sAL2 =0.497316 sAL =-0.015216 sAL *sAL =0.000232 err_S =0.000005
@@ -24250,17 +24273,17 @@ kernel2 : localSize2 = 200
 Enqueue Kernel2 done ....
   Define profiling event
   Get profiling data from kernel 2
-Execution timekernel2 : 120.544 ms
+Execution timekernel2 : 117.738 ms
   Read Back from gpu arrays VECT16FC, VECT8FC and VECT1FC
 .. On a fini avec le kernel 2 
----cumulated-time-kernel2 [ms]=3701.189088
+---cumulated-time-kernel2 [ms]=3655.148800
 
 STEP 09
 Np      = 200000
 Np-good = 168910
 
 --------
-time-reduction [s]= 2.993000e-03
+time-reduction [s]= 3.151000e-03
 coeff = 1/Np= 0.000006
 cAL2 =0.502768 cAL =0.008909 cAL *cAL =0.000079 err_C =0.000005
 sAL2 =0.497232 sAL =-0.012823 sAL *sAL =0.000164 err_S =0.000005
@@ -24283,17 +24306,17 @@ kernel2 : localSize2 = 200
 Enqueue Kernel2 done ....
   Define profiling event
   Get profiling data from kernel 2
-Execution timekernel2 : 118.127 ms
+Execution timekernel2 : 117.649 ms
   Read Back from gpu arrays VECT16FC, VECT8FC and VECT1FC
 .. On a fini avec le kernel 2 
----cumulated-time-kernel2 [ms]=3819.315616
+---cumulated-time-kernel2 [ms]=3772.797728
 
 STEP 09
 Np      = 200000
 Np-good = 169239
 
 --------
-time-reduction [s]= 2.991000e-03
+time-reduction [s]= 3.150000e-03
 coeff = 1/Np= 0.000006
 cAL2 =0.501294 cAL =0.011694 cAL *cAL =0.000137 err_C =0.000005
 sAL2 =0.498706 sAL =-0.007732 sAL *sAL =0.000060 err_S =0.000005
@@ -24316,17 +24339,17 @@ kernel2 : localSize2 = 200
 Enqueue Kernel2 done ....
   Define profiling event
   Get profiling data from kernel 2
-Execution timekernel2 : 118.146 ms
+Execution timekernel2 : 117.619 ms
   Read Back from gpu arrays VECT16FC, VECT8FC and VECT1FC
 .. On a fini avec le kernel 2 
----cumulated-time-kernel2 [ms]=3937.461792
+---cumulated-time-kernel2 [ms]=3890.416320
 
 STEP 09
 Np      = 200000
 Np-good = 169592
 
 --------
-time-reduction [s]= 2.976000e-03
+time-reduction [s]= 3.153000e-03
 coeff = 1/Np= 0.000006
 cAL2 =0.499951 cAL =0.012604 cAL *cAL =0.000159 err_C =0.000005
 sAL2 =0.500049 sAL =-0.001038 sAL *sAL =0.000001 err_S =0.000005
@@ -24349,17 +24372,17 @@ kernel2 : localSize2 = 200
 Enqueue Kernel2 done ....
   Define profiling event
   Get profiling data from kernel 2
-Execution timekernel2 : 120.504 ms
+Execution timekernel2 : 117.661 ms
   Read Back from gpu arrays VECT16FC, VECT8FC and VECT1FC
 .. On a fini avec le kernel 2 
----cumulated-time-kernel2 [ms]=4057.965344
+---cumulated-time-kernel2 [ms]=4008.077760
 
 STEP 09
 Np      = 200000
 Np-good = 169906
 
 --------
-time-reduction [s]= 2.992000e-03
+time-reduction [s]= 3.141000e-03
 coeff = 1/Np= 0.000006
 cAL2 =0.499592 cAL =0.011160 cAL *cAL =0.000125 err_C =0.000005
 sAL2 =0.500408 sAL =0.006566 sAL *sAL =0.000043 err_S =0.000005
@@ -24382,17 +24405,17 @@ kernel2 : localSize2 = 200
 Enqueue Kernel2 done ....
   Define profiling event
   Get profiling data from kernel 2
-Execution timekernel2 : 120.425 ms
+Execution timekernel2 : 117.565 ms
   Read Back from gpu arrays VECT16FC, VECT8FC and VECT1FC
 .. On a fini avec le kernel 2 
----cumulated-time-kernel2 [ms]=4178.389920
+---cumulated-time-kernel2 [ms]=4125.642784
 
 STEP 09
 Np      = 200000
 Np-good = 170221
 
 --------
-time-reduction [s]= 2.998000e-03
+time-reduction [s]= 3.148000e-03
 coeff = 1/Np= 0.000006
 cAL2 =0.500311 cAL =0.008063 cAL *cAL =0.000065 err_C =0.000005
 sAL2 =0.499689 sAL =0.013655 sAL *sAL =0.000186 err_S =0.000005
@@ -24415,17 +24438,17 @@ kernel2 : localSize2 = 200
 Enqueue Kernel2 done ....
   Define profiling event
   Get profiling data from kernel 2
-Execution timekernel2 : 120.489 ms
+Execution timekernel2 : 117.468 ms
   Read Back from gpu arrays VECT16FC, VECT8FC and VECT1FC
 .. On a fini avec le kernel 2 
----cumulated-time-kernel2 [ms]=4298.879136
+---cumulated-time-kernel2 [ms]=4243.110752
 
 STEP 09
 Np      = 200000
 Np-good = 170533
 
 --------
-time-reduction [s]= 3.001000e-03
+time-reduction [s]= 3.143000e-03
 coeff = 1/Np= 0.000006
 cAL2 =0.500984 cAL =0.003286 cAL *cAL =0.000011 err_C =0.000005
 sAL2 =0.499016 sAL =0.019216 sAL *sAL =0.000369 err_S =0.000005
@@ -24448,17 +24471,17 @@ kernel2 : localSize2 = 200
 Enqueue Kernel2 done ....
   Define profiling event
   Get profiling data from kernel 2
-Execution timekernel2 : 118.095 ms
+Execution timekernel2 : 117.509 ms
   Read Back from gpu arrays VECT16FC, VECT8FC and VECT1FC
 .. On a fini avec le kernel 2 
----cumulated-time-kernel2 [ms]=4416.974240
+---cumulated-time-kernel2 [ms]=4360.619616
 
 STEP 09
 Np      = 200000
 Np-good = 170829
 
 --------
-time-reduction [s]= 2.999000e-03
+time-reduction [s]= 3.138000e-03
 coeff = 1/Np= 0.000006
 cAL2 =0.501523 cAL =-0.002300 cAL *cAL =0.000005 err_C =0.000005
 sAL2 =0.498477 sAL =0.023696 sAL *sAL =0.000562 err_S =0.000005
@@ -24481,17 +24504,17 @@ kernel2 : localSize2 = 200
 Enqueue Kernel2 done ....
   Define profiling event
   Get profiling data from kernel 2
-Execution timekernel2 : 118.083 ms
+Execution timekernel2 : 117.453 ms
   Read Back from gpu arrays VECT16FC, VECT8FC and VECT1FC
 .. On a fini avec le kernel 2 
----cumulated-time-kernel2 [ms]=4535.056864
+---cumulated-time-kernel2 [ms]=4478.072160
 
 STEP 09
 Np      = 200000
 Np-good = 171135
 
 --------
-time-reduction [s]= 2.996000e-03
+time-reduction [s]= 3.140000e-03
 coeff = 1/Np= 0.000006
 cAL2 =0.501775 cAL =-0.008317 cAL *cAL =0.000069 err_C =0.000005
 sAL2 =0.498225 sAL =0.026848 sAL *sAL =0.000721 err_S =0.000005
@@ -24514,17 +24537,17 @@ kernel2 : localSize2 = 200
 Enqueue Kernel2 done ....
   Define profiling event
   Get profiling data from kernel 2
-Execution timekernel2 : 120.362 ms
+Execution timekernel2 : 119.866 ms
   Read Back from gpu arrays VECT16FC, VECT8FC and VECT1FC
 .. On a fini avec le kernel 2 
----cumulated-time-kernel2 [ms]=4655.418784
+---cumulated-time-kernel2 [ms]=4597.938304
 
 STEP 09
 Np      = 200000
 Np-good = 171425
 
 --------
-time-reduction [s]= 2.991000e-03
+time-reduction [s]= 3.153000e-03
 coeff = 1/Np= 0.000006
 cAL2 =0.501007 cAL =-0.014808 cAL *cAL =0.000219 err_C =0.000005
 sAL2 =0.498993 sAL =0.028854 sAL *sAL =0.000833 err_S =0.000005
@@ -24547,17 +24570,17 @@ kernel2 : localSize2 = 200
 Enqueue Kernel2 done ....
   Define profiling event
   Get profiling data from kernel 2
-Execution timekernel2 : 120.398 ms
+Execution timekernel2 : 117.451 ms
   Read Back from gpu arrays VECT16FC, VECT8FC and VECT1FC
 .. On a fini avec le kernel 2 
----cumulated-time-kernel2 [ms]=4775.817024
+---cumulated-time-kernel2 [ms]=4715.389344
 
 STEP 09
 Np      = 200000
 Np-good = 171715
 
 --------
-time-reduction [s]= 2.993000e-03
+time-reduction [s]= 3.149000e-03
 coeff = 1/Np= 0.000006
 cAL2 =0.498592 cAL =-0.021389 cAL *cAL =0.000458 err_C =0.000005
 sAL2 =0.501408 sAL =0.029005 sAL *sAL =0.000841 err_S =0.000005
@@ -24580,17 +24603,17 @@ kernel2 : localSize2 = 200
 Enqueue Kernel2 done ....
   Define profiling event
   Get profiling data from kernel 2
-Execution timekernel2 : 120.445 ms
+Execution timekernel2 : 117.437 ms
   Read Back from gpu arrays VECT16FC, VECT8FC and VECT1FC
 .. On a fini avec le kernel 2 
----cumulated-time-kernel2 [ms]=4896.262240
+---cumulated-time-kernel2 [ms]=4832.826336
 
 STEP 09
 Np      = 200000
 Np-good = 172015
 
 --------
-time-reduction [s]= 3.000000e-03
+time-reduction [s]= 3.143000e-03
 coeff = 1/Np= 0.000006
 cAL2 =0.495577 cAL =-0.027219 cAL *cAL =0.000741 err_C =0.000005
 sAL2 =0.504423 sAL =0.027719 sAL *sAL =0.000768 err_S =0.000005
@@ -24613,17 +24636,17 @@ kernel2 : localSize2 = 200
 Enqueue Kernel2 done ....
   Define profiling event
   Get profiling data from kernel 2
-Execution timekernel2 : 118.023 ms
+Execution timekernel2 : 117.441 ms
   Read Back from gpu arrays VECT16FC, VECT8FC and VECT1FC
 .. On a fini avec le kernel 2 
----cumulated-time-kernel2 [ms]=5014.284800
+---cumulated-time-kernel2 [ms]=4950.267808
 
 STEP 09
 Np      = 200000
 Np-good = 172276
 
 --------
-time-reduction [s]= 2.989000e-03
+time-reduction [s]= 3.141000e-03
 coeff = 1/Np= 0.000006
 cAL2 =0.494346 cAL =-0.031362 cAL *cAL =0.000984 err_C =0.000005
 sAL2 =0.505654 sAL =0.024822 sAL *sAL =0.000616 err_S =0.000005
@@ -24646,17 +24669,17 @@ kernel2 : localSize2 = 200
 Enqueue Kernel2 done ....
   Define profiling event
   Get profiling data from kernel 2
-Execution timekernel2 : 118.053 ms
+Execution timekernel2 : 117.497 ms
   Read Back from gpu arrays VECT16FC, VECT8FC and VECT1FC
 .. On a fini avec le kernel 2 
----cumulated-time-kernel2 [ms]=5132.337632
+---cumulated-time-kernel2 [ms]=5067.764384
 
 STEP 09
 Np      = 200000
 Np-good = 172548
 
 --------
-time-reduction [s]= 2.995000e-03
+time-reduction [s]= 3.148000e-03
 coeff = 1/Np= 0.000006
 cAL2 =0.494344 cAL =-0.034646 cAL *cAL =0.001200 err_C =0.000005
 sAL2 =0.505656 sAL =0.021233 sAL *sAL =0.000451 err_S =0.000005
@@ -24679,17 +24702,17 @@ kernel2 : localSize2 = 200
 Enqueue Kernel2 done ....
   Define profiling event
   Get profiling data from kernel 2
-Execution timekernel2 : 118.047 ms
+Execution timekernel2 : 117.463 ms
   Read Back from gpu arrays VECT16FC, VECT8FC and VECT1FC
 .. On a fini avec le kernel 2 
----cumulated-time-kernel2 [ms]=5250.385056
+---cumulated-time-kernel2 [ms]=5185.227072
 
 STEP 09
 Np      = 200000
 Np-good = 172811
 
 --------
-time-reduction [s]= 3.005000e-03
+time-reduction [s]= 3.146000e-03
 coeff = 1/Np= 0.000006
 cAL2 =0.495076 cAL =-0.036425 cAL *cAL =0.001327 err_C =0.000005
 sAL2 =0.504924 sAL =0.017696 sAL *sAL =0.000313 err_S =0.000005
@@ -24712,17 +24735,17 @@ kernel2 : localSize2 = 200
 Enqueue Kernel2 done ....
   Define profiling event
   Get profiling data from kernel 2
-Execution timekernel2 : 118.054 ms
+Execution timekernel2 : 117.443 ms
   Read Back from gpu arrays VECT16FC, VECT8FC and VECT1FC
 .. On a fini avec le kernel 2 
----cumulated-time-kernel2 [ms]=5368.438944
+---cumulated-time-kernel2 [ms]=5302.670144
 
 STEP 09
 Np      = 200000
 Np-good = 173088
 
 --------
-time-reduction [s]= 2.998000e-03
+time-reduction [s]= 3.151000e-03
 coeff = 1/Np= 0.000006
 cAL2 =0.495396 cAL =-0.036721 cAL *cAL =0.001348 err_C =0.000005
 sAL2 =0.504604 sAL =0.013357 sAL *sAL =0.000178 err_S =0.000005
@@ -24745,17 +24768,17 @@ kernel2 : localSize2 = 200
 Enqueue Kernel2 done ....
   Define profiling event
   Get profiling data from kernel 2
-Execution timekernel2 : 118.071 ms
+Execution timekernel2 : 117.429 ms
   Read Back from gpu arrays VECT16FC, VECT8FC and VECT1FC
 .. On a fini avec le kernel 2 
----cumulated-time-kernel2 [ms]=5486.510432
+---cumulated-time-kernel2 [ms]=5420.098848
 
 STEP 09
 Np      = 200000
 Np-good = 173386
 
 --------
-time-reduction [s]= 3.001000e-03
+time-reduction [s]= 3.151000e-03
 coeff = 1/Np= 0.000006
 cAL2 =0.495172 cAL =-0.034678 cAL *cAL =0.001203 err_C =0.000005
 sAL2 =0.504828 sAL =0.009128 sAL *sAL =0.000083 err_S =0.000005
@@ -24778,17 +24801,17 @@ kernel2 : localSize2 = 200
 Enqueue Kernel2 done ....
   Define profiling event
   Get profiling data from kernel 2
-Execution timekernel2 : 118.066 ms
+Execution timekernel2 : 117.416 ms
   Read Back from gpu arrays VECT16FC, VECT8FC and VECT1FC
 .. On a fini avec le kernel 2 
----cumulated-time-kernel2 [ms]=5604.576768
+---cumulated-time-kernel2 [ms]=5537.515136
 
 STEP 09
 Np      = 200000
 Np-good = 173684
 
 --------
-time-reduction [s]= 2.982000e-03
+time-reduction [s]= 3.154000e-03
 coeff = 1/Np= 0.000006
 cAL2 =0.495705 cAL =-0.031147 cAL *cAL =0.000970 err_C =0.000005
 sAL2 =0.504295 sAL =0.005436 sAL *sAL =0.000030 err_S =0.000005
@@ -24811,17 +24834,17 @@ kernel2 : localSize2 = 200
 Enqueue Kernel2 done ....
   Define profiling event
   Get profiling data from kernel 2
-Execution timekernel2 : 118.061 ms
+Execution timekernel2 : 117.401 ms
   Read Back from gpu arrays VECT16FC, VECT8FC and VECT1FC
 .. On a fini avec le kernel 2 
----cumulated-time-kernel2 [ms]=5722.637600
+---cumulated-time-kernel2 [ms]=5654.916416
 
 STEP 09
 Np      = 200000
 Np-good = 173952
 
 --------
-time-reduction [s]= 3.001000e-03
+time-reduction [s]= 3.143000e-03
 coeff = 1/Np= 0.000006
 cAL2 =0.497117 cAL =-0.026614 cAL *cAL =0.000708 err_C =0.000005
 sAL2 =0.502883 sAL =0.002487 sAL *sAL =0.000006 err_S =0.000005
@@ -24844,17 +24867,17 @@ kernel2 : localSize2 = 200
 Enqueue Kernel2 done ....
   Define profiling event
   Get profiling data from kernel 2
-Execution timekernel2 : 120.496 ms
+Execution timekernel2 : 117.345 ms
   Read Back from gpu arrays VECT16FC, VECT8FC and VECT1FC
 .. On a fini avec le kernel 2 
----cumulated-time-kernel2 [ms]=5843.133248
+---cumulated-time-kernel2 [ms]=5772.260992
 
 STEP 09
 Np      = 200000
 Np-good = 174229
 
 --------
-time-reduction [s]= 3.007000e-03
+time-reduction [s]= 3.146000e-03
 coeff = 1/Np= 0.000006
 cAL2 =0.499127 cAL =-0.021040 cAL *cAL =0.000443 err_C =0.000005
 sAL2 =0.500873 sAL =0.000793 sAL *sAL =0.000001 err_S =0.000005
@@ -24877,17 +24900,17 @@ kernel2 : localSize2 = 200
 Enqueue Kernel2 done ....
   Define profiling event
   Get profiling data from kernel 2
-Execution timekernel2 : 118.081 ms
+Execution timekernel2 : 117.315 ms
   Read Back from gpu arrays VECT16FC, VECT8FC and VECT1FC
 .. On a fini avec le kernel 2 
----cumulated-time-kernel2 [ms]=5961.214592
+---cumulated-time-kernel2 [ms]=5889.576256
 
 STEP 09
 Np      = 200000
 Np-good = 174504
 
 --------
-time-reduction [s]= 2.990000e-03
+time-reduction [s]= 3.157000e-03
 coeff = 1/Np= 0.000006
 cAL2 =0.502293 cAL =-0.015160 cAL *cAL =0.000230 err_C =0.000005
 sAL2 =0.497707 sAL =0.000054 sAL *sAL =0.000000 err_S =0.000005
@@ -24910,10 +24933,10 @@ Free memory references from host
 
 STEP 11
 double-kernel1= 1.843240e+10
-GflopsKernel1 = 156.166759
-200000 1.180302e-01
+GflopsKernel1 = 156.328493
+200000 1.179081e-01
 double-kernel2= 3.778580e+10
-GflopsKernel2 = 319.998052
----cumulated-time-kernel2 [ms]=5961.214592 for computation of all Fourier Coefficients
+GflopsKernel2 = 322.087670
+---cumulated-time-kernel2 [ms]=5889.576256 for computation of all Fourier Coefficients
 ---program ended successfully-------------
 ...version 28th june 2021 : compute 3rd, 4th, 5th Harmonic of Fourier Coefficient
