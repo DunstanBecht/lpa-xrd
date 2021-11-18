@@ -43,7 +43,7 @@ for (mm=0; mm<Np; mm++) {
 // variables on device (GPU)
 
 cl_mem d_Vect16FC = clCreateBuffer(context, CL_MEM_READ_WRITE|CL_MEM_ALLOC_HOST_PTR, bytes_Vect16FC, NULL, NULL);
-cl_mem   d_inout=clCreateBuffer(context, CL_MEM_READ_WRITE|CL_MEM_ALLOC_HOST_PTR, bytes_inout, NULL, NULL);
+cl_mem d_inout = clCreateBuffer(context, CL_MEM_READ_WRITE|CL_MEM_ALLOC_HOST_PTR, bytes_inout, NULL, NULL);
 
 // copy data from CPU to GPU for kernel 2
 
