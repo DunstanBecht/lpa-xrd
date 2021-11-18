@@ -2,12 +2,12 @@
 /* single version of the program: handles both cylindrical and square based geometry */
 /* uses a moidified version of the input file  with keyword square or cylindrical */
 /* square-cyl-ocl-mt-double-alldislo.c */
-/* 
-opencl version of the algorithm 
+/*
+opencl version of the algorithm
 */
 /*
 ------------------------
-DEFINITION OF HEADER FILES 
+DEFINITION OF HEADER FILES
 ------------------------
 */
 #include<stdlib.h>
@@ -27,7 +27,7 @@ DEFINITION OF IMPORTANTS GLOBAL VARIABLES
 */
 int FLAG_SQUARE=0;
 int FLAG_CYLINDER=1;
-int D_REPLICATION=0; 
+int D_REPLICATION=0;
 /* The number of replications ranges from -D to D in each direction */
 /* a total of (2D+1)*(2D+1) cells is then constructed*/
 
@@ -36,14 +36,14 @@ int D_REPLICATION=0;
 CONSTANTS FOR MERSENNE TWISTER
 ------------------------
 */
-/* Period parameters */  
+/* Period parameters */
 #define N 624
 #define M 397
 #define MATRIX_A 0x9908b0df   /* constant vector a */
 #define UPPER_MASK 0x80000000 /* most significant w-r bits */
 #define LOWER_MASK 0x7fffffff /* least significant r bits */
 
-/* Tempering parameters */   
+/* Tempering parameters */
 #define TEMPERING_MASK_B 0x9d2c5680
 #define TEMPERING_MASK_C 0xefc60000
 #define TEMPERING_SHIFT_U(y)  (y >> 11)
@@ -53,7 +53,7 @@ CONSTANTS FOR MERSENNE TWISTER
 
 /*
 ------------------------
-DEFINITION OF CONSTANTS 
+DEFINITION OF CONSTANTS
 ------------------------
 */
 /* Size of the buffer for name */
@@ -62,10 +62,10 @@ DEFINITION OF CONSTANTS
 #define EPS       1.0e-10
 /* 16^5=1048576 Number of lines of .cl file */
 #define MAX_SOURCE_SIZE (0x100000)
- 
+
 /*
 ------------------------
-PROTOTYPES OF FUNCTIONS 
+PROTOTYPES OF FUNCTIONS
 ------------------------
 */
 cl_double length3(cl_double3 v);
@@ -89,7 +89,7 @@ C CODE FOR MERSENNE TWISTER
 /* Initializing the array with a seed */
 void
 sgenrand(seed)
-    unsigned long seed;	
+    unsigned long seed;
 {
     int i;
 
@@ -107,7 +107,7 @@ sgenrand(seed)
 /* This function allows to choose any of 2^19937-1 ones.             */
 /* Essential bits in "seed_array[]" is following 19937 bits:         */
 /*  (seed_array[0]&UPPER_MASK), seed_array[1], ..., seed_array[N-1]. */
-/* (seed_array[0]&LOWER_MASK) is discarded.                          */ 
+/* (seed_array[0]&LOWER_MASK) is discarded.                          */
 /* Theoretically,                                                    */
 /*  (seed_array[0]&UPPER_MASK), seed_array[1], ..., seed_array[N-1]  */
 /* can take any values except all zeros.                             */
@@ -118,7 +118,7 @@ lsgenrand(seed_array)
 {
     int i;
 
-    for (i=0;i<N;i++) 
+    for (i=0;i<N;i++)
       mt[i] = seed_array[i];
     mti=N;
 }
@@ -150,7 +150,7 @@ genrand()
 
         mti = 0;
     }
-  
+
     y = mt[mti++];
     y ^= TEMPERING_SHIFT_U(y);
     y ^= TEMPERING_SHIFT_S(y) & TEMPERING_MASK_B;
@@ -208,7 +208,7 @@ int output_device_info(cl_device_id device_id)
     else if (device_type == CL_DEVICE_TYPE_CPU)
        printf("\n CPU from ");
 
-    else 
+    else
        printf("\n non  CPU or GPU processor from ");
 
 
@@ -228,27 +228,27 @@ int output_device_info(cl_device_id device_id)
     }
     printf(" with a max of %d compute units \n",comp_units);
 
-    err = clGetDeviceInfo( device_id, CL_DEVICE_MAX_WORK_ITEM_DIMENSIONS, sizeof(cl_uint), 
+    err = clGetDeviceInfo( device_id, CL_DEVICE_MAX_WORK_ITEM_DIMENSIONS, sizeof(cl_uint),
                                &max_work_itm_dims, NULL);
     if (err != CL_SUCCESS)
     {
         printf("Error: Failed to get device Info (CL_DEVICE_MAX_WORK_ITEM_DIMENSIONS)!\n");
         return EXIT_FAILURE;
     }
-    
+
     max_loc_size = (size_t*)malloc(max_work_itm_dims * sizeof(size_t));
     if(max_loc_size == NULL){
        printf(" malloc failed\n");
        return EXIT_FAILURE;
     }
-    err = clGetDeviceInfo( device_id, CL_DEVICE_MAX_WORK_ITEM_SIZES, max_work_itm_dims* sizeof(size_t), 
+    err = clGetDeviceInfo( device_id, CL_DEVICE_MAX_WORK_ITEM_SIZES, max_work_itm_dims* sizeof(size_t),
                                max_loc_size, NULL);
     if (err != CL_SUCCESS)
     {
         printf("Error: Failed to get device Info (CL_DEVICE_MAX_WORK_ITEM_SIZES)!\n");
         return EXIT_FAILURE;
     }
-    err = clGetDeviceInfo( device_id, CL_DEVICE_MAX_WORK_GROUP_SIZE, sizeof(size_t), 
+    err = clGetDeviceInfo( device_id, CL_DEVICE_MAX_WORK_GROUP_SIZE, sizeof(size_t),
                                &max_wrkgrp_size, NULL);
     if (err != CL_SUCCESS)
     {
@@ -281,4 +281,3 @@ cl_double length3(cl_double3 v)
   cl_double longueur=sqrt(v.x*v.x+v.y*v.y+v.z*v.z);
   return longueur;
 }
-
