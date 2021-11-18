@@ -46,7 +46,7 @@ for (IndexFourier=1; IndexFourier<=NoFC; IndexFourier++) {
   //printf("IndexFourier: %d\n", IndexFourier);
 
   // define kernel 2 arguments
-  err = clSetKernelArg(kernel2,  0, sizeof(cl_mem), &d_Vect16FC);
+  err = clSetKernelArg(kernel2, 0, sizeof(cl_mem), &d_Vect16FC);
   err |= clSetKernelArg(kernel2, 1, sizeof(cl_mem), &d_rd0);
   err |= clSetKernelArg(kernel2, 2, sizeof(cl_mem), &d_r1);
   err |= clSetKernelArg(kernel2, 3, sizeof(cl_mem), &d_u1);
@@ -61,8 +61,9 @@ for (IndexFourier=1; IndexFourier<=NoFC; IndexFourier++) {
   err |= clSetKernelArg(kernel2, 12, sizeof(cl_double2), &a3vd);
   err |= clSetKernelArg(kernel2, 13, sizeof(cl_double), &a3);
   err |= clSetKernelArg(kernel2, 14, sizeof(cl_int), &Nd);
-  err |= clSetKernelArg(kernel2, 15, sizeof(cl_mem), &d_inout);
-  err |= clSetKernelArg(kernel2, 16, shared_size_kernel1, NULL);
+  err |= clSetKernelArg(kernel2, 15, sizeof(cl_int), &FLAG_SQUARE);
+  err |= clSetKernelArg(kernel2, 16, sizeof(cl_mem), &d_inout);
+  err |= clSetKernelArg(kernel2, 17, shared_size_kernel1, NULL);
 
   if (err != CL_SUCCESS) {
     printf("clSetKernelArg error for kernel 2\n");
