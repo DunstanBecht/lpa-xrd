@@ -18,6 +18,15 @@ print("$ "+cmd)
 print(res)
 print()
 
+cmd, res = run.sample(
+    '10_rho5e13m-2_square_3200nm_RDD_d5e-5nm-2_screw_S0_PBC1',
+    impdir='input',
+    #expdir='output',
+)
+print("$ "+cmd)
+print(res)
+print()
+
 cmd, res = run.distribution(
     'rho5e13m-2_square_3200nm_RDD_d5e-5nm-2_screw_PBC1_S0',
     impdir='input',
@@ -27,8 +36,17 @@ print("$ "+cmd)
 print(res)
 print()
 
-cmd, res = run.sample(
-    '10_rho5e13m-2_square_3200nm_RDD_d5e-5nm-2_screw_S0_PBC1',
+cmd, res = run.distribution(
+    'rho5e13m-2_circle_1600nm_RDD_d5e-5nm-2_screw_ISD_S0',
+    impdir='input',
+    #expdir='output',
+)
+print("$ "+cmd)
+print(res)
+print()
+
+cmd, res = run.distribution(
+    'rho5e13m-2_circle_1600nm_RDD_d5e-5nm-2_screw_S0',
     impdir='input',
     #expdir='output',
 )

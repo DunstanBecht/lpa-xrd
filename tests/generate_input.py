@@ -21,4 +21,14 @@ data.export(
     expdir='input',
 )
 
+data.export(
+    sets.Distribution('circle', 1600, *rdd, S=0),
+    expdir='input',
+)
+
+data.export(
+    sets.Distribution('circle', 1600, *rdd, S=0, c='ISD'),
+    expdir='input',
+)
+
 input("OK")
