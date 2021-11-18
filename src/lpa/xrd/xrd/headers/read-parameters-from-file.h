@@ -35,9 +35,6 @@ cl_int *sd0_all;
 cl_int Nd; // total number of dislocations
 cl_double *be;
 cl_double *bs;
-cl_double uaux;
-cl_double uaux1;
-cl_double uaux2;
 cl_double *RandRadius; // random numbers for radius in polar coordinates
 cl_double *RandAngle; // random numbers for angle in polar coordinates
 cl_double *RandX; // random numbers for X in cartesian coordinates
@@ -306,11 +303,3 @@ printf("total number of dislocations: %d\n", Nd);
 rd0_all = (cl_double3 *)malloc(sizeof(cl_double3)*Nd);
 size_t ird0_all = sizeof(cl_int) * Nd;
 printf("memory space for positions and Burgers vectors: %lu Bytes\n", ird0_all);
-
-uaux  = 1-nu;
-uaux1 = 2*uaux;
-uaux2 = 1 - 2.0*nu;
-printf("nu = %lf\n", nu);
-printf("uaux = %lf\n", uaux);
-printf("uaux1 = %lf\n", uaux1);
-printf("uaux2 = %lf\n\n", uaux2);
