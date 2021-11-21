@@ -7,7 +7,7 @@ if (DUMP == 1){
     fprintf(fr, "%lf %lf\n", h_r1[i].x, h_r1[i].y);
   }
   fclose(fr);
-  printf("dump 2d field r\n");
+  printf("dump 2d position field\n");
 
   FILE *fu;
   fu = fopen("u.res", "w");
@@ -15,6 +15,6 @@ if (DUMP == 1){
     fprintf(fu, "%lf %lf %lf\n", h_u1[i].x, h_u1[i].y, h_u1[i].z);
   }
   fclose(fu);
-  printf("dump 3d field u\n");
+  printf("dump 3d displacement field\n");
 
 }

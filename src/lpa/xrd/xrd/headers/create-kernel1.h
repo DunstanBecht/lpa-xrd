@@ -48,10 +48,10 @@ printf("create input and output device buffers for Kernel 1\n");
 err = clEnqueueWriteBuffer(queue, d_rd0, CL_TRUE, 0, bytes_rd0, rd0_all, 0, NULL, NULL);
 
 if (FLAG_SQUARE == 1){
-  err |= clEnqueueWriteBuffer(queue,d_ranx, CL_TRUE, 0, bytes_ran, RandX, 0, NULL, NULL);
-  err |= clEnqueueWriteBuffer(queue,d_rany, CL_TRUE, 0, bytes_ran,RandY, 0, NULL, NULL);
+  err |= clEnqueueWriteBuffer(queue, d_ranx, CL_TRUE, 0, bytes_ran, RandX, 0, NULL, NULL);
+  err |= clEnqueueWriteBuffer(queue, d_rany, CL_TRUE, 0, bytes_ran, RandY, 0, NULL, NULL);
 } else {
-  err |= clEnqueueWriteBuffer(queue,d_ranradius, CL_TRUE, 0, bytes_ran,RandRadius, 0, NULL, NULL);
+  err |= clEnqueueWriteBuffer(queue, d_ranradius, CL_TRUE, 0, bytes_ran, RandRadius, 0, NULL, NULL);
   err |= clEnqueueWriteBuffer(queue, d_ranangle, CL_TRUE, 0, bytes_ran, RandAngle, 0, NULL, NULL);
 }
 
@@ -87,7 +87,7 @@ err |= clSetKernelArg(kernel1, 3, sizeof(cl_mem), &d_r1);
 err |= clSetKernelArg(kernel1, 4, sizeof(cl_mem), &d_u1);
 err |= clSetKernelArg(kernel1, 5, sizeof(cl_double), &be_len);
 err |= clSetKernelArg(kernel1, 6, sizeof(cl_double), &bs_len);
-err |= clSetKernelArg(kernel1, 7, sizeof(cl_double), &Radius);
+err |= clSetKernelArg(kernel1, 7, sizeof(cl_double), &size);
 err |= clSetKernelArg(kernel1, 8, sizeof(cl_double), &nu);
 err |= clSetKernelArg(kernel1, 9, sizeof(cl_int), &Np);
 err |= clSetKernelArg(kernel1, 10, sizeof(cl_int), &Nd);

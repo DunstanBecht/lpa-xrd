@@ -6,8 +6,8 @@ int main(int argc, char **argv) {
 
   if (argc != 7) {
     printf("%d arguments detected but 7 were expected.\n", argc);
-    printf("Mode d'emploi : ./a.out <type> <block> <input> <nrp> <nfv> <output>\n");
-    printf("type (int): hardware execution support (CPU:0 GPU:1)\n");
+    printf("Example: './a.out <type> <block> <input> <nrp> <nfv> <output>' with:\n");
+    printf("type (int): hardware execution support (CPU:0 / GPU:1)\n");
     printf("block (int): block size for the GPU block (from 2 to 256 depending on the GPU)\n");
     printf("input (string): path to the input data file\n");
     printf("nrp (int): number of random points for the Monte Carlo method\n");

@@ -13,7 +13,7 @@ __kernel void udislo(__global double *RandA,
                      __global double3 *u1,
                      const double be_len,
                      const double bs_len,
-                     const double Radius,
+                     const double size,
                      const double nu,
                      const int Np,
                      const int Nd,
@@ -32,10 +32,10 @@ __kernel void udislo(__global double *RandA,
   if (k < Np) {
     double2 r11 = (double2)(0.0f, 0.0f);
     if (Flag_Square == 1) {
-      r11.x = RandA[k] * Radius;
-      r11.y = RandB[k] * Radius;
+      r11.x = RandA[k] * size;
+      r11.y = RandB[k] * size;
     } else {
-      double r = RandA[k]*Radius;
+      double r = RandA[k]*size;
       double phi = RandB[k] * 2.0f * pi;
       r11.x = r * cos(phi);
       r11.y = r * sin(phi);
@@ -99,7 +99,7 @@ __kernel void comptf(__global double16 *Vect16FC,
                      __global double3 *u1,
                      const double be_len,
                      const double bs_len,
-                     double Radius,
+                     double size,
                      double nu,
                      const int Np,
                      const int IndexFourier,
@@ -168,18 +168,18 @@ __kernel void comptf(__global double16 *Vect16FC,
     bb = (double)(IndexFourier)*a3vd;
     r2 = r1[k] + bb;
     if (Flag_Square == 0) {
-      if (length(r2) > Radius) {
+      if (length(r2) > size) {
         r2 = r1[k] - bb;
-        if (length(r2) > Radius) {
+        if (length(r2) > size) {
           inout[k] = 0; // translated point outside the region of interest
         } else {
           flag_outside = 1;
         }
       }
     } else {
-      if ((r2.x<0) || (r2.x>Radius) || (r2.y<0) || (r2.y>Radius)) {
+      if ((r2.x<0) || (r2.x>size) || (r2.y<0) || (r2.y>size)) {
         r2 = r1[k] - bb;
-        if ((r2.x<0) || (r2.x>Radius) || (r2.y<0) || (r2.y>Radius)) {
+        if ((r2.x<0) || (r2.x>size) || (r2.y<0) || (r2.y>size)) {
           inout[k] = 0; // translated point outside the region of interest
         } else {
           flag_outside = 1;

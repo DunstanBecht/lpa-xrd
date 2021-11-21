@@ -17,13 +17,13 @@ fprintf(FileFC, "%2.0f %2.0f %2.0f # g: diffraction vector direction (hkl)\n", g
 fprintf(FileFC, "%8f # C: contrast coefficient [1]\n", cfact_str);
 fprintf(FileFC, "%8f # a: cell parameter [nm]\n", a_cell_param);
 if (FLAG_SQUARE==1) {
-  fprintf(FileFC, "%8.0f # s: side of the region of interest [nm]", Radius);
+  fprintf(FileFC, "%8.0f # s: side of the region of interest [nm]", size);
   if (D_REPLICATION>0) {
     fprintf(FileFC, " PBC%d", D_REPLICATION);
   }
   fprintf(FileFC, "\n");
 } else {
-  fprintf(FileFC, "%8.0f # s: radius of the region of interest [nm]\n", Radius);
+  fprintf(FileFC, "%8.0f # s: radius of the region of interest [nm]\n", size);
 }
 fprintf(FileFC, "%8f # nu: Poisson's number [1]\n", nu);
 fprintf(FileFC, "%8d # nd: number of dislocations in the input file\n", Nd0);
@@ -52,7 +52,7 @@ for (IndexFourier=1; IndexFourier<=NoFC; IndexFourier++) {
   err |= clSetKernelArg(kernel2, 3, sizeof(cl_mem), &d_u1);
   err |= clSetKernelArg(kernel2, 4, sizeof(cl_double), &be_len);
   err |= clSetKernelArg(kernel2, 5, sizeof(cl_double), &bs_len);
-  err |= clSetKernelArg(kernel2, 6, sizeof(cl_double), &Radius);
+  err |= clSetKernelArg(kernel2, 6, sizeof(cl_double), &size);
   err |= clSetKernelArg(kernel2, 7, sizeof(cl_double), &nu);
   err |= clSetKernelArg(kernel2, 8, sizeof(cl_int), &Np);
   err |= clSetKernelArg(kernel2, 9, sizeof(cl_int), &IndexFourier);
