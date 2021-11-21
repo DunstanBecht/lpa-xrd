@@ -1,14 +1,12 @@
-int index_all=-1;
-int ii,jj;
-int idislo=0;
+int index_all = -1;
 
-for (ii=-D_REPLICATION; ii<=D_REPLICATION; ii++) {
-  for (jj=-D_REPLICATION; jj<=D_REPLICATION; jj++) {
-    for (idislo=0; idislo< Nd0 ; idislo++) {
-      index_all = index_all + 1;
-      rd0_all[index_all].x = rd0[idislo].x + ii*size;
-      rd0_all[index_all].y = rd0[idislo].y + jj*size;
-      rd0_all[index_all].z = (double)(sd0[idislo]);
+for (i=-D_REPLICATION; i<=D_REPLICATION; i++) {
+  for (j=-D_REPLICATION; j<=D_REPLICATION; j++) {
+    for (k=0; k<Nd0; k++) {
+      index_all += 1;
+      rd0_all[index_all].x = rd0[k].x + i*size;
+      rd0_all[index_all].y = rd0[k].y + j*size;
+      rd0_all[index_all].z = (double)(sd0[k]);
     }
   }
 }

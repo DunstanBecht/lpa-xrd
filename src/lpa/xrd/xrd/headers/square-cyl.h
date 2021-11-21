@@ -1,10 +1,3 @@
-/* november 2021 */
-/* single version of the program: handles both cylindrical and square based geometry */
-/* uses a moidified version of the input file  with keyword square or cylindrical */
-/* square-cyl-ocl-mt-double-alldislo.c */
-/*
-opencl version of the algorithm
-*/
 /*
 ------------------------
 DEFINITION OF HEADER FILES

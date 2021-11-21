@@ -48,11 +48,11 @@ printf("create input and output device buffers for Kernel 1\n");
 err = clEnqueueWriteBuffer(queue, d_rd0, CL_TRUE, 0, bytes_rd0, rd0_all, 0, NULL, NULL);
 
 if (FLAG_SQUARE == 1){
-  err |= clEnqueueWriteBuffer(queue, d_ranx, CL_TRUE, 0, bytes_ran, RandX, 0, NULL, NULL);
-  err |= clEnqueueWriteBuffer(queue, d_rany, CL_TRUE, 0, bytes_ran, RandY, 0, NULL, NULL);
+  err |= clEnqueueWriteBuffer(queue, d_ranx, CL_TRUE, 0, bytes_ran, random1, 0, NULL, NULL);
+  err |= clEnqueueWriteBuffer(queue, d_rany, CL_TRUE, 0, bytes_ran, random2, 0, NULL, NULL);
 } else {
-  err |= clEnqueueWriteBuffer(queue, d_ranradius, CL_TRUE, 0, bytes_ran, RandRadius, 0, NULL, NULL);
-  err |= clEnqueueWriteBuffer(queue, d_ranangle, CL_TRUE, 0, bytes_ran, RandAngle, 0, NULL, NULL);
+  err |= clEnqueueWriteBuffer(queue, d_ranradius, CL_TRUE, 0, bytes_ran, random1, 0, NULL, NULL);
+  err |= clEnqueueWriteBuffer(queue, d_ranangle, CL_TRUE, 0, bytes_ran, random2, 0, NULL, NULL);
 }
 
 err |= clEnqueueWriteBuffer(queue, d_r1, CL_TRUE, 0, bytes_r1, h_r1, 0, NULL, NULL);

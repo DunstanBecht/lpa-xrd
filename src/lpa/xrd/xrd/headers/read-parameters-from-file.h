@@ -48,10 +48,8 @@ cl_double3 *rd0; // (x,y) dislocations coordinates [nm]
 cl_int *sd0; // Burgers vector senses [1]
 cl_double3 *rd0_all; // (x,y) dislocations coordinates [nm] and Burgers vector senses [1]
 
-cl_double *RandRadius; // random numbers for radius in polar coordinates
-cl_double *RandAngle; // random numbers for angle in polar coordinates
-cl_double *RandX; // random numbers for X in cartesian coordinates
-cl_double *RandY; // random numbers for Y in cartesian coordinates
+cl_double *random1; // random numbers
+cl_double *random2; // random numbers 
 
 Np = atoi(argv[4]);
 printf("number of random points for the Monte Carlo method: %ld\n", Np);

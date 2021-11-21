@@ -12,7 +12,7 @@ err = clGetPlatformIDs(1, platforms, &nPlats);
 
 printf("platforms IDs = %d\n", nPlats);
 
-// Load the kernel source code into the array source_str
+// load the kernel source code into the array source_str
 FILE *fp;
 char *source_str;
 size_t source_size;
@@ -26,7 +26,7 @@ source_size = fread(source_str, 1, MAX_SOURCE_SIZE, fp);
 fclose(fp);
 printf("kernel code size = %d Bytes\n", (int)(source_size));
 
-// Get platform and device information
+// get platform and device information
 cl_platform_id platform_id = NULL;
 cl_device_id device_id = NULL;
 cl_uint ret_num_devices;

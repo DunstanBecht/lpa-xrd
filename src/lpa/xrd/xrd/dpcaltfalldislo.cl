@@ -1,13 +1,7 @@
 #pragma OPENCL EXTENSION cl_khr_fp64 : enable
-/* Pour chaque point aleatoire on associe un entier qui vaut 0 ou 1
-   0 : le point n'est pas a l'interieur de la sphere
-   1 : le point est a l'interieur de la sphere
-   On sommera ensuite ces valeurs pour obtenir le nombre total de points
-   qio ont été utilisés
-   Ce nombre servira dans le calcul de moyenne
-*/
-__kernel void udislo(__global double *RandA,
-                     __global double *RandB,
+
+__kernel void udislo(__global double *random1,
+                     __global double *random2,
                      __global double3 *rd0,
                      __global double2 *r1,
                      __global double3 *u1,
@@ -32,11 +26,11 @@ __kernel void udislo(__global double *RandA,
   if (k < Np) {
     double2 r11 = (double2)(0.0f, 0.0f);
     if (Flag_Square == 1) {
-      r11.x = RandA[k] * size;
-      r11.y = RandB[k] * size;
+      r11.x = random1[k] * size;
+      r11.y = random2[k] * size;
     } else {
-      double r = RandA[k]*size;
-      double phi = RandB[k] * 2.0f * pi;
+      double r = random1[k]*size;
+      double phi = random2[k] * 2.0f * pi;
       r11.x = r * cos(phi);
       r11.y = r * sin(phi);
     }

@@ -6,26 +6,26 @@ sgenrand(4357);
 
 if (FLAG_CYLINDER == 1) {
 
-    RandRadius = (cl_double *)malloc(irand);
+    random1 = (cl_double *)malloc(irand);
     for (i=0; i<Np; i++) {
-      RandRadius[i] = sqrt((double)(genrand()));
+      random1[i] = sqrt((double)(genrand()));
     }
 
-    RandAngle = (cl_double *)malloc(irand);
+    random2 = (cl_double *)malloc(irand);
     for (i=0; i<Np; i++) {
-      RandAngle[i] = (double)(genrand());
+      random2[i] = (double)(genrand());
     }
 
 } else {
 
-  RandX = (cl_double *)malloc(irand);
+  random1 = (cl_double *)malloc(irand);
   for (i=0; i<Np; i++) {
-    RandX[i] = (double)(genrand());
+    random1[i] = (double)(genrand());
   }
 
-  RandY = (cl_double *)malloc(irand);
+  random2 = (cl_double *)malloc(irand);
   for (i=0; i<Np; i++) {
-    RandY[i] = (double)(genrand());
+    random2[i] = (double)(genrand());
   }
 
 }
