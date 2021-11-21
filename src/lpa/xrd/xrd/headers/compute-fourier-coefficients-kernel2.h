@@ -3,44 +3,41 @@ double time_kernel2 = 0.0f;
 double cumulated_time_kernel2 = 0.0f;
 size_t globalSize2[] = {Np};
 size_t localSize2[] = {64};
-int jind = 0;
 
-FILE *FileFC;
-FileFC = fopen(argv[6], "w");
+output = fopen(argv[6], "w");
 printf("output file: %s\n", argv[6]);
 
-fprintf(FileFC, "%8s # v: lpa-xrd version\n", "!VERSION");
-fprintf(FileFC, "%8.2e # d: dislocation density [m^-2]\n", density);
-fprintf(FileFC, "%2.0f %2.0f %2.0f # z: direction of 'l' (line vector) [uvw]\n", l_uvw.x, l_uvw.y, l_uvw.z);
-fprintf(FileFC, "%2.0f %2.0f %2.0f # b: Burgers vector direction [uvw]\n", b_uvw.x, b_uvw.y, b_uvw.z);
-fprintf(FileFC, "%2.0f %2.0f %2.0f # g: diffraction vector direction (hkl)\n", g_hkl.x, g_hkl.y, g_hkl.z);
-fprintf(FileFC, "%8f # C: contrast coefficient [1]\n", cfact_str);
-fprintf(FileFC, "%8f # a: cell parameter [nm]\n", a_cell_param);
+fprintf(output, "%8s # v: lpa-xrd version\n", "!VERSION");
+fprintf(output, "%8.2e # d: dislocation density [m^-2]\n", density);
+fprintf(output, "%2.0f %2.0f %2.0f # z: direction of 'l' (line vector) [uvw]\n", l_uvw.x, l_uvw.y, l_uvw.z);
+fprintf(output, "%2.0f %2.0f %2.0f # b: Burgers vector direction [uvw]\n", b_uvw.x, b_uvw.y, b_uvw.z);
+fprintf(output, "%2.0f %2.0f %2.0f # g: diffraction vector direction (hkl)\n", g_hkl.x, g_hkl.y, g_hkl.z);
+fprintf(output, "%8f # C: contrast coefficient [1]\n", cfact_str);
+fprintf(output, "%8f # a: cell parameter [nm]\n", a_cell_param);
 if (FLAG_SQUARE==1) {
-  fprintf(FileFC, "%8.0f # s: side of the region of interest [nm]", size);
+  fprintf(output, "%8.0f # s: side of the region of interest [nm]", size);
   if (D_REPLICATION>0) {
-    fprintf(FileFC, " PBC%d", D_REPLICATION);
+    fprintf(output, " PBC%d", D_REPLICATION);
   }
-  fprintf(FileFC, "\n");
+  fprintf(output, "\n");
 } else {
-  fprintf(FileFC, "%8.0f # s: radius of the region of interest [nm]\n", size);
+  fprintf(output, "%8.0f # s: radius of the region of interest [nm]\n", size);
 }
-fprintf(FileFC, "%8f # nu: Poisson's number [1]\n", nu);
-fprintf(FileFC, "%8d # nd: number of dislocations in the input file\n", Nd0);
-fprintf(FileFC, "%8d # np: number of random points\n", Np);
-fprintf(FileFC, "# %4s", "L");
+fprintf(output, "%8f # nu: Poisson's number [1]\n", nu);
+fprintf(output, "%8d # nd: number of dislocations in the input file\n", Nd0);
+fprintf(output, "%8d # np: number of random points\n", Np);
+fprintf(output, "# %4s", "L");
 
-for (jind=1; jind<6; jind++){
-  fprintf(FileFC, " %9s%d %9s%d %9s%d %9s%d", "cos", jind, "err_cos", jind, "sin", jind, "err_sin", jind);
+for (i=1; i<6; i++){
+  fprintf(output, " %9s%d %9s%d %9s%d %9s%d", "cos", i, "err_cos", i, "sin", i, "err_sin", i);
 }
-fprintf(FileFC, " %10s %10s\n", "<eps^2>", "bad_points");
+fprintf(output, " %10s %10s\n", "<eps^2>", "bad_points");
 
 printf("loop over Fourier coefficients\n");
 
 cumulated_time_kernel2 = 0.0f;
 
-cl_double gs = length3(g_vec);
-//printf("gs: %lf\n", gs);
+g_vec_len = length3(g_vec);
 
 for (IndexFourier=1; IndexFourier<=NoFC; IndexFourier++) {
   //printf("IndexFourier: %d\n", IndexFourier);
@@ -56,7 +53,7 @@ for (IndexFourier=1; IndexFourier<=NoFC; IndexFourier++) {
   err |= clSetKernelArg(kernel2, 7, sizeof(cl_double), &nu);
   err |= clSetKernelArg(kernel2, 8, sizeof(cl_int), &Np);
   err |= clSetKernelArg(kernel2, 9, sizeof(cl_int), &IndexFourier);
-  err |= clSetKernelArg(kernel2, 10, sizeof(cl_double), &gs);
+  err |= clSetKernelArg(kernel2, 10, sizeof(cl_double), &g_vec_len);
   err |= clSetKernelArg(kernel2, 11, sizeof(cl_double3), &gd_vec);
   err |= clSetKernelArg(kernel2, 12, sizeof(cl_double2), &a3vd);
   err |= clSetKernelArg(kernel2, 13, sizeof(cl_double), &a3);
@@ -99,7 +96,7 @@ for (IndexFourier=1; IndexFourier<=NoFC; IndexFourier++) {
 
   double time_reduction = wtime();
 
-  /* === compute the total number of useful points === */
+  // compute the total number of useful points
   cl_int Np_good = Np;
   for(i=0; i<Np; i++) {
     Np_good -= (h_inout[i]==0)? 1:0;
@@ -204,8 +201,8 @@ for (IndexFourier=1; IndexFourier<=NoFC; IndexFourier++) {
   printf("c5AL=%9.6f err_C5=%9.6f\n", c5AL, err_C5);
   printf("s5AL=%9.6f err_S5=%9.6f\n", s5AL, err_S5);
 
-  /*== Dump to File the Fourier coefficients ==*/
-  fprintf(FileFC,
+  // dump the Fourier coefficients to file
+  fprintf(output,
     "%6.1lf %10.7f %10.7f %10.7f %10.7f %10.7f %10.7f %10.7f %10.7f %10.7f %10.7f %10.7f %10.7f %10.7f %10.7f %10.7f %10.7f %10.7f %10.7f %10.7f %10.7f %10.7f %10d\n",
     IndexFourier*a3,
     c1AL, err_C1, s1AL, err_S1,

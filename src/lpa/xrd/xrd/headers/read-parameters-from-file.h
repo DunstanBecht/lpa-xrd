@@ -1,7 +1,7 @@
-FILE *fbe; // input data file
+FILE *input; // input data file
+FILE *output; // output data file
 char buff[BUZZ_SIZE]; // buffer
 int i, j, k; // general pupose index
-cl_int IndexFourier; // entier entre 0 et NoFC-1 pour le calcul de la distance
 
 char version[8]; // lpa-input version
 float density; // real density [m^-2]
@@ -24,9 +24,10 @@ cl_double3 gd_vec; // diffraction vector in slip frame [nm^-1]
 cl_double3 a3_vec; // step vector of 'L' (Fourier variable) [nm]
 cl_double2 a3vd; // step vector projection of 'L' (Fourier variable) [nm]
 
-cl_double l_len; // line vector direction norm [1]
-cl_double b_len; // Burgers vector norm [nm]
-cl_double g_len; // diffraction vector direction norm [1]
+cl_double l_uvw_len; // line vector direction norm [1]
+cl_double b_vec_len; // Burgers vector norm [nm]
+cl_double g_hkl_len; // diffraction vector direction norm [1]
+cl_double g_vec_len; // diffraction vector norm [nm^-1]
 cl_double bs_len; // Burgers vector screw part norm [nm]
 cl_double be_len; // Burgers vector edge part norm [nm]
 
@@ -40,6 +41,7 @@ cl_int Np; // number of random points for the Monte Carlo method
 cl_int Nd0; // number of dislocations in the input file
 cl_int Nd; // total number of dislocations
 cl_int NoFC; // number of values taken by the Fourier variable
+cl_int IndexFourier; // integer between 0 and NoFC-1
 
 cl_double size; // radius or side of the region of interest [nm]
 cl_double3 *rd0; // (x,y) dislocations coordinates [nm]
@@ -58,54 +60,54 @@ NoFC = atoi(argv[5]);
 printf("number of values taken by the Fourier variable: %ld\n", NoFC);
 
 printf("input data file: %s\n", argv[3]);
-fbe = fopen(argv[3], "r");
+input = fopen(argv[3], "r");
 
-if (fbe == NULL) {
+if (input == NULL) {
   printf("error while reading the input datafile\n");
   exit(1);
 }
 
-fscanf(fbe, "%s", &version);
+fscanf(input, "%s", &version);
 printf("lpa-input version: %s\n", version);
 
-fgets(buff, BUZZ_SIZE, fbe);
-fscanf(fbe, "%e", &density);
+fgets(buff, BUZZ_SIZE, input);
+fscanf(input, "%e", &density);
 printf("density: %1.2e m^-2\n", density);
 
-fgets(buff, BUZZ_SIZE, fbe);
-fscanf(fbe, "%lf %lf %lf", &l_uvw.x, &l_uvw.y, &l_uvw.z);
+fgets(buff, BUZZ_SIZE, input);
+fscanf(input, "%lf %lf %lf", &l_uvw.x, &l_uvw.y, &l_uvw.z);
 printf("direction of 'l' (line vector): %1.0f %1.0f %1.0f [uvw]\n", l_uvw.x, l_uvw.y, l_uvw.z);
 
-fgets(buff, BUZZ_SIZE, fbe);
-fscanf(fbe, "%lf %lf %lf", &L_uvw.x, &L_uvw.y, &L_uvw.z);
+fgets(buff, BUZZ_SIZE, input);
+fscanf(input, "%lf %lf %lf", &L_uvw.x, &L_uvw.y, &L_uvw.z);
 printf("direction of 'L' (Fourier variable): %1.0f %1.0f %1.0f [uvw]\n", L_uvw.x, L_uvw.y, L_uvw.z);
 
-fgets(buff, BUZZ_SIZE, fbe);
-fscanf(fbe, "%lf %lf %lf", &b_uvw.x, &b_uvw.y, &b_uvw.z);
+fgets(buff, BUZZ_SIZE, input);
+fscanf(input, "%lf %lf %lf", &b_uvw.x, &b_uvw.y, &b_uvw.z);
 printf("Burgers vector direction: %1.0f %1.0f %1.0f [uvw]\n", b_uvw.x, b_uvw.y, b_uvw.z);
 
-l_len = length3(l_uvw);
-l_uni.x = l_uvw.x/l_len;
-l_uni.y = l_uvw.y/l_len;
-l_uni.z = l_uvw.z/l_len;
+l_uvw_len = length3(l_uvw);
+l_uni.x = l_uvw.x/l_uvw_len;
+l_uni.y = l_uvw.y/l_uvw_len;
+l_uni.z = l_uvw.z/l_uvw_len;
 printf("normalized line vector: %f %f %f\n", l_uni.x, l_uni.y, l_uni.z);
 
-fgets(buff, BUZZ_SIZE, fbe);
-fscanf(fbe, "%lf %lf %lf", &g_hkl.x, &g_hkl.y, &g_hkl.z);
+fgets(buff, BUZZ_SIZE, input);
+fscanf(input, "%lf %lf %lf", &g_hkl.x, &g_hkl.y, &g_hkl.z);
 printf("diffraction vector direction: %1.0f %1.0f %1.0f (hkl)\n", g_hkl.x, g_hkl.y, g_hkl.z);
 
-g_len = length3(g_hkl);
-g_uni.x = g_hkl.x/g_len;
-g_uni.y = g_hkl.y/g_len;
-g_uni.z = g_hkl.z/g_len;
+g_hkl_len = length3(g_hkl);
+g_uni.x = g_hkl.x/g_hkl_len;
+g_uni.y = g_hkl.y/g_hkl_len;
+g_uni.z = g_hkl.z/g_hkl_len;
 printf("normalized diffraction vector: %f %f %f\n", g_uni.x, g_uni.y, g_uni.z);
 
-fgets(buff, BUZZ_SIZE, fbe);
-fscanf(fbe, "%lf", &cfact_str);
+fgets(buff, BUZZ_SIZE, input);
+fscanf(input, "%lf", &cfact_str);
 printf("contrast coefficient: %lf\n", cfact_str);
 
-fgets(buff, BUZZ_SIZE, fbe);
-fscanf(fbe, "%lf", &a_cell_param);
+fgets(buff, BUZZ_SIZE, input);
+fscanf(input, "%lf", &a_cell_param);
 printf("cell parameter: %lf nm\n", a_cell_param);
 
 b_vec.x = b_uvw.x * a_cell_param/2;
@@ -113,7 +115,7 @@ b_vec.y = b_uvw.y * a_cell_param/2;
 b_vec.z = b_uvw.z * a_cell_param/2;
 printf("Burgers vector: %f %f %f nm\n", b_vec.x, b_vec.y, b_vec.z);
 
-b_len = length3(b_vec);
+b_vec_len = length3(b_vec);
 
 bs_len = l_uni.x*b_vec.x + l_uni.y*b_vec.y + l_uni.z*b_vec.z;
 printf("Burgers vector screw part norm: %lf nm\n", bs_len);
@@ -134,10 +136,10 @@ printf("Burgers vector edge part norm: %lf nm\n", be_len);
 if (bs_len < EPS) {
   printf("edge dislocations detected\n");
   bs_len = 0.0;
-  be_len = b_len;
+  be_len = b_vec_len;
 } else if (be_len < EPS) {
   printf("screw dislocations detected\n");
-  bs_len = b_len;
+  bs_len = b_vec_len;
   be_len = 0.0;
 } else {
   printf("mixed dislocations detected\n");
@@ -192,11 +194,11 @@ gd_uni.z = gd_vec.z/gd_len;
 
 // region of interest geometry
 
-fgets(buff, BUZZ_SIZE, fbe);
-fscanf(fbe, "%lf", &size);
+fgets(buff, BUZZ_SIZE, input);
+fscanf(input, "%lf", &size);
 printf("characteristic size of the region of interest: %lf nm\n", size);
 
-fgets(buff, BUZZ_SIZE, fbe);
+fgets(buff, BUZZ_SIZE, input);
 
 char *resucyl = strstr(buff, "radius");
 if (resucyl != NULL) {
@@ -229,7 +231,7 @@ if (resusquare != NULL) {
   D_REPLICATION = rep;
 }
 
-fscanf(fbe, "%lf", &a3);
+fscanf(input, "%lf", &a3);
 printf("Fourier variable step size: %lf nm\n", a3);
 
 a3_vec.x = a3 * gd_uni.x;
@@ -241,12 +243,12 @@ a3vd.x = a3_vec.x;
 a3vd.y = a3_vec.y;
 printf("Fourier variable step vector projection: %lf %lf nm\n", a3vd.x, a3vd.y);
 
-fgets(buff, BUZZ_SIZE, fbe);
-fscanf(fbe, "%lf", &nu);
+fgets(buff, BUZZ_SIZE, input);
+fscanf(input, "%lf", &nu);
 printf("Poisson's number: %lf\n", nu);
 
-fgets(buff, BUZZ_SIZE, fbe);
-fscanf(fbe, "%d", &Nd0);
+fgets(buff, BUZZ_SIZE, input);
+fscanf(input, "%d", &Nd0);
 printf("number of dislocations in the input file: %d\n", Nd0);
 
 size_t ird0 = sizeof(cl_double3) * Nd0;
@@ -257,15 +259,15 @@ size_t isd0 = sizeof(cl_int) * Nd0;
 printf("memory space for Burgers vectors: %lu Bytes\n", isd0);
 sd0 = (cl_int *)malloc(sizeof(cl_int)*Nd0);
 
-fgets(buff, BUZZ_SIZE, fbe);
-fgets(buff, BUZZ_SIZE, fbe);
+fgets(buff, BUZZ_SIZE, input);
+fgets(buff, BUZZ_SIZE, input);
 
 for(i=0; i<Nd0; i++) {
-  fscanf(fbe, "%d %le %le\n", &sd0[i], &rd0[i].x, &rd0[i].y);
+  fscanf(input, "%d %le %le\n", &sd0[i], &rd0[i].x, &rd0[i].y);
   //printf("%2d %9.6e %9.6e \n", sd0[i], rd0[i].x, rd0[i].y);
 }
 
-fclose(fbe);
+fclose(input);
 
 if (FLAG_SQUARE == 1) {
   Nd = Nd0 * (2*D_REPLICATION+1) * (2*D_REPLICATION+1);
