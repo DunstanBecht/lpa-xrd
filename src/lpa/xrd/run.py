@@ -20,7 +20,7 @@ def make(
         clndir (str): program code clone directory
     """
     clndir = os.path.abspath(clndir)
-    cmd = f"module load cuda/10.1; cd {clndir}; make"
+    cmd = f"cd {clndir}; make"
     res = executer(cmd)
     if isinstance(res, bytes):
         res = "".join([p.decode('utf-8') for p in res])
@@ -82,7 +82,7 @@ def distribution(
         os.path.join(expdir, expstm+'.'+expfmt), # output path
     ))
     cmd = (f"cd {clndir}; "
-           f"./a.out {args} >& {os.path.join(rundir, impstm)}.out")
+           f"./a.out {args} > {os.path.join(rundir, impstm)}.out 2>&1")
     res = executer(cmd)
     return cmd, str(res)
 
