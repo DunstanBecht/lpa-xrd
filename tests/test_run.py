@@ -49,7 +49,7 @@ print(res)
 print()
 
 cmd, res = run.distribution(
-    'rho5e13m-2_circle_1600nm_RDD_d5e-5nm-2_screw_S0',
+    'rho5e13m-2_circle_1600nm_RDD_d5e-5nm-2_edge_S0',
     impdir='input',
     #expdir='output',
 )

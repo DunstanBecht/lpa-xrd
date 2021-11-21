@@ -1,10 +1,10 @@
    1.2.4 # v: lpa-input version
 5.00E+13 # d: dislocation density [m^-2]
- 1  1  0 # z: direction of 'l' (line vector) [uvw]
--1  1  0 # x: direction of 'L' (Fourier variable) [uvw]
+ 1 -1 -2 # z: direction of 'l' (line vector) [uvw]
+ 1  1  0 # x: direction of 'L' (Fourier variable) [uvw]
  1  1  0 # b: Burgers vector direction [uvw]
  2  0  0 # g: diffraction vector direction (hkl)
-0.250000 # C: contrast coefficient [1]
+0.266310 # C: contrast coefficient [1]
 0.404940 # a: cell parameter [nm]
     1600 # s: radius of the region of interest [nm]
     11.8 # a3: step size of 'L' along x [nm]

@@ -22,7 +22,7 @@ data.export(
 )
 
 data.export(
-    sets.Distribution('circle', 1600, *rdd, S=0),
+    sets.Distribution('circle', 1600, *rdd, S=0, t='edge'),
     expdir='input',
 )
 
