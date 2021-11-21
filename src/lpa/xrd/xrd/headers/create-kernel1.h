@@ -85,8 +85,8 @@ if (FLAG_SQUARE == 1) {
 err |= clSetKernelArg(kernel1, 2, sizeof(cl_mem), &d_rd0);
 err |= clSetKernelArg(kernel1, 3, sizeof(cl_mem), &d_r1);
 err |= clSetKernelArg(kernel1, 4, sizeof(cl_mem), &d_u1);
-err |= clSetKernelArg(kernel1, 5, sizeof(cl_double), &bed);
-err |= clSetKernelArg(kernel1, 6, sizeof(cl_double), &bsd);
+err |= clSetKernelArg(kernel1, 5, sizeof(cl_double), &be_len);
+err |= clSetKernelArg(kernel1, 6, sizeof(cl_double), &bs_len);
 err |= clSetKernelArg(kernel1, 7, sizeof(cl_double), &Radius);
 err |= clSetKernelArg(kernel1, 8, sizeof(cl_double), &nu);
 err |= clSetKernelArg(kernel1, 9, sizeof(cl_int), &Np);

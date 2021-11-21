@@ -3,27 +3,34 @@ char buff[BUZZ_SIZE];
 int idmod;
 int i;
 
-cl_double3 ld; // direction of 'l' (line vector) [uvw]
-cl_double3 bd; // Burgers vector [nm]
-cl_double3 ex; // direction of the Fourier variable [1]
-cl_double3 ey; // cross product of ez and ex [1]
-cl_double3 ez; // normalized line vector [1]
-cl_double3 H; // diffraction vector direction (hkl)
-cl_double3 eg; // normalized diffraction vector [1]
+cl_double3 l_uvw; // direction of 'l' (line vector) [uvw]
+cl_double3 l_uni; // normalized direction of 'l' (line vector) [1]
+cl_double3 b_uvw; // Burgers vector direction [uvw]
+cl_double3 b_vec; // Burgers vector [nm]
+cl_double3 L_uvw; // direction of 'L' (Fourier variable) [uvw]
+cl_double3 L_uni; // normalized direction of 'L' (Fourier variable) [1]
+cl_double3 g_hkl; // diffraction vector direction (hkl)
+cl_double3 g_vec; // diffraction vector [nm^-1]
+cl_double3 g_uni; // normalized diffraction vector [1]
+cl_double3 d_uni; // cross product of l_uni and L_uni [1]
 cl_double a_cell_param; // lattice parameter [nm]
+cl_double bs_len; // Burgers vector screw part norm [nm]
+cl_double3 bs_vec; // Burgers vector screw part [nm]
+cl_double3 be_vec; // Burgers vector edge part [nm]
+cl_double be_len; // Burgers vector edge part norm [nm]
+cl_double3 gd_vec; // diffraction vector in slip frame [nm^-1]
+cl_double3 gd_uni; // normalized diffraction vector in slip frame [1]
+
 cl_double cfact_str;
-cl_double bsd; // Burgers vector screw part norm [nm]
-cl_double3 bscrew; // Burgers vector screw part [nm]
-cl_double3 bedge; // Burgers vector edge part [nm]
-cl_double bed; // Burgers vector edge part norm [nm]
-cl_double3 egd; // normalized Burgers vector [1]
-cl_double3 gd;
+
+cl_double a3; // Fourier variable step size [nm]
 cl_double3 a3v;
 cl_double2 a3vd;
+
 cl_double Dx;
 cl_double Dy;
 cl_int Np; // number of random points for the Monte Carlo method
-cl_double a3; // Fourier variable step size [nm]
+
 cl_int NoFC; // number of values taken by the Fourier variable
 cl_int BCtype;
 cl_double nu; // Poisson's number [1]
@@ -68,38 +75,32 @@ fscanf(fbe, "%e", &density);
 printf("density: %1.2e m^-2\n", density);
 
 fgets(buff, BUZZ_SIZE, fbe);
-fscanf(fbe, "%lf %lf %lf", &ld.x, &ld.y, &ld.z);
-printf("direction of 'l' (line vector): %1.0f %1.0f %1.0f\n", ld.x, ld.y, ld.z);
+fscanf(fbe, "%lf %lf %lf", &l_uvw.x, &l_uvw.y, &l_uvw.z);
+printf("direction of 'l' (line vector): %1.0f %1.0f %1.0f [uvw]\n", l_uvw.x, l_uvw.y, l_uvw.z);
 
 fgets(buff, BUZZ_SIZE, fbe);
-fscanf(fbe, "%lf %lf %lf" ,&ex.x, &ex.y, &ex.z);
-printf("direction of 'L' (Fourier variable): %1.0f %1.0f %1.0f\n", ex.x, ex.y, ex.z);
+fscanf(fbe, "%lf %lf %lf", &L_uvw.x, &L_uvw.y, &L_uvw.z);
+printf("direction of 'L' (Fourier variable): %1.0f %1.0f %1.0f [uvw]\n", L_uvw.x, L_uvw.y, L_uvw.z);
 
 fgets(buff, BUZZ_SIZE, fbe);
-fscanf(fbe,"%lf %lf %lf",&bd.x,&bd.y,&bd.z);
-printf("Burgers vector direction: %1.0f %1.0f %1.0f\n", bd.x, bd.y, bd.z);
+fscanf(fbe,"%lf %lf %lf", &b_uvw.x, &b_uvw.y, &b_uvw.z);
+printf("Burgers vector direction: %1.0f %1.0f %1.0f [uvw]\n", b_uvw.x, b_uvw.y, b_uvw.z);
 
-ez.x = ld.x;
-ez.y = ld.y;
-ez.z = ld.z;
-double ezl = sqrt(ez.x*ez.x+ez.y*ez.y+ez.z*ez.z);
-ez.x /= ezl;
-ez.y /= ezl;
-ez.z /= ezl;
-printf("normalized line vector: %f %f %f\n", ez.x, ez.y, ez.z);
+double l_len = length3(l_uvw);
+l_uni.x = l_uvw.x/l_len;
+l_uni.y = l_uvw.y/l_len;
+l_uni.z = l_uvw.z/l_len;
+printf("normalized line vector: %f %f %f\n", l_uni.x, l_uni.y, l_uni.z);
 
 fgets(buff, BUZZ_SIZE, fbe);
-fscanf(fbe,"%lf %lf %lf",&H.x,&H.y,&H.z);
-printf("diffraction vector direction: %1.0f %1.0f %1.0f\n", H.x, H.y, H.z);
+fscanf(fbe, "%lf %lf %lf", &g_hkl.x, &g_hkl.y, &g_hkl.z);
+printf("diffraction vector direction: %1.0f %1.0f %1.0f (hkl)\n", g_hkl.x, g_hkl.y, g_hkl.z);
 
-eg.x = H.x;
-eg.y = H.y;
-eg.z = H.z;
-double egl = sqrt(eg.x*eg.x + eg.y*eg.y + eg.z*eg.z);
-eg.x /= egl;
-eg.y /= egl;
-eg.z /= egl;
-printf("normalized diffraction vector: %f %f %f\n", eg.x, eg.y, eg.z);
+double g_len = length3(g_hkl);
+g_uni.x = g_hkl.x/g_len;
+g_uni.y = g_hkl.y/g_len;
+g_uni.z = g_hkl.z/g_len;
+printf("normalized diffraction vector: %f %f %f\n", g_uni.x, g_uni.y, g_uni.z);
 
 fgets(buff, BUZZ_SIZE, fbe);
 fscanf(fbe, "%lf", &cfact_str);
@@ -109,80 +110,80 @@ fgets(buff, BUZZ_SIZE, fbe);
 fscanf(fbe, "%lf", &a_cell_param);
 printf("cell parameter: %lf nm\n", a_cell_param);
 
-bd.x *= a_cell_param/2;
-bd.y *= a_cell_param/2;
-bd.z *= a_cell_param/2;
-printf("Burgers vector: %f %f %f nm\n", bd.x, bd.y, bd.z);
+b_vec.x = b_uvw.x * a_cell_param/2;
+b_vec.y = b_uvw.y * a_cell_param/2;
+b_vec.z = b_uvw.z * a_cell_param/2;
+printf("Burgers vector: %f %f %f nm\n", b_vec.x, b_vec.y, b_vec.z);
 
-bsd = ez.x*bd.x + ez.y*bd.y + ez.z*bd.z;
-printf("Burgers vector screw part norm: %lf\n", bsd);
+bs_len = l_uni.x*b_vec.x + l_uni.y*b_vec.y + l_uni.z*b_vec.z;
+printf("Burgers vector screw part norm: %lf\n", bs_len);
 
-bscrew.x = bsd * ez.x;
-bscrew.y = bsd * ez.y;
-bscrew.z = bsd * ez.z;
-printf("Burgers vector screw part: %f %f %f nm\n", bscrew.x, bscrew.y, bscrew.z);
+bs_vec.x = bs_len * l_uni.x;
+bs_vec.y = bs_len * l_uni.y;
+bs_vec.z = bs_len * l_uni.z;
+printf("Burgers vector screw part: %f %f %f nm\n", bs_vec.x, bs_vec.y, bs_vec.z);
 
-bedge.x = bd.x - bscrew.x;
-bedge.y = bd.y - bscrew.y;
-bedge.z = bd.z - bscrew.z;
-printf("Burgers vector edge part: %f %f %f nm\n", bscrew.x, bscrew.y, bscrew.z);
+be_vec.x = b_vec.x - bs_vec.x;
+be_vec.y = b_vec.y - bs_vec.y;
+be_vec.z = b_vec.z - bs_vec.z;
+printf("Burgers vector edge part: %f %f %f nm\n", bs_vec.x, bs_vec.y, bs_vec.z);
 
-bed = length3(bedge);
-printf("Burgers vector edge part norm: %lf\n", bed);
+be_len = length3(be_vec);
+printf("Burgers vector edge part norm: %lf\n", be_len);
 
-if (bsd < EPS) {
+if (bs_len < EPS) {
   printf("edge dislocations detected\n");
-  bed = length3(bd);
-  bsd = 0.0;
-} else if (bed < EPS) {
+  be_len = length3(b_vec);
+  bs_len = 0.0;
+} else if (be_len < EPS) {
   printf("screw dislocations detected\n");
-  bsd = length3(bd);
-  bed = 0.0;
+  bs_len = length3(b_vec);
+  be_len = 0.0;
 } else {
   printf("mixed dislocations detected\n");
-  ex.x = bedge.x;
-  ex.y = bedge.y;
-  ex.z = bedge.z;
+  L_uni.x = be_vec.x; // why ?
+  L_uni.y = be_vec.y;
+  L_uni.z = be_vec.z;
 }
 
-cl_double exl = length3(ex);
-ex.x /= exl;
-ex.y /= exl;
-ex.z /= exl;
-printf("normalized Fourier variable direction: %f %f %f\n", ex.x, ex.y, ex.z);
+cl_double L_len = length3(L_uvw);
+L_uni.x = L_uvw.x/L_len;
+L_uni.y = L_uvw.y/L_len;
+L_uni.z = L_uvw.z/L_len;
+printf("normalized Fourier variable direction: %f %f %f\n", L_uni.x, L_uni.y, L_uni.z);
 
-ey.x = ez.y*ex.z - ez.z*ex.y;
-ey.y = ez.z*ex.x - ez.x*ex.z;
-ey.z = ez.x*ex.y - ez.y*ex.x;
-printf("cross product of ez and ex: %f %f %f\n", ey.x, ey.y, ey.z);
+d_uni.x = l_uni.y*L_uni.z - l_uni.z*L_uni.y;
+d_uni.y = l_uni.z*L_uni.x - l_uni.x*L_uni.z;
+d_uni.z = l_uni.x*L_uni.y - l_uni.y*L_uni.x;
+printf("cross product of l_uni and L_uni: %f %f %f\n", d_uni.x, d_uni.y, d_uni.z);
 
 // 1: create the 3x3 matrix
 
 cl_double Om[3][3];
 
-Om[0][0] = ex.x;
-Om[0][1] = ey.x;
-Om[0][2] = ez.x;
+Om[0][0] = L_uni.x;
+Om[0][1] = d_uni.x;
+Om[0][2] = l_uni.x;
 
-Om[1][0] = ex.y;
-Om[1][1] = ey.y;
-Om[1][2] = ez.y;
+Om[1][0] = L_uni.y;
+Om[1][1] = d_uni.y;
+Om[1][2] = l_uni.y;
 
-Om[2][0] = ex.z;
-Om[2][1] = ey.z;
-Om[2][2] = ez.z;
+Om[2][0] = L_uni.z;
+Om[2][1] = d_uni.z;
+Om[2][2] = l_uni.z;
 
-Om[0][0] = ex.x;
-Om[0][1] = ex.y;
-Om[0][2] = ex.z;
+Om[0][0] = L_uni.x;
+Om[0][1] = L_uni.y;
+Om[0][2] = L_uni.z;
 
-Om[1][0] = ey.x;
-Om[1][1] = ey.y;
-Om[1][2] = ey.z;
+Om[1][0] = d_uni.x;
+Om[1][1] = d_uni.y;
+Om[1][2] = d_uni.z;
 
-Om[2][0] = ez.x;
-Om[2][1] = ez.y;
-Om[2][2] = ez.z;
+Om[2][0] = l_uni.x;
+Om[2][1] = l_uni.y;
+Om[2][2] = l_uni.z;
 
 printf("|%9.6f %9.6f %9.6f|\n", Om[0][0], Om[0][1], Om[0][2]);
 printf("|%9.6f %9.6f %9.6f|\n", Om[1][0], Om[1][1], Om[1][2]);
@@ -190,30 +191,24 @@ printf("|%9.6f %9.6f %9.6f|\n", Om[2][0], Om[2][1], Om[2][2]);
 
 // 2:
 
-cl_double coeff = length3(H)/a_cell_param;
-cl_double3 g;
-
-g.x = coeff*eg.x;
-g.y = coeff*eg.y;
-g.z = coeff*eg.z;
+g_vec.x = g_hkl.x/a_cell_param;
+g_vec.y = g_hkl.y/a_cell_param;
+g_vec.z = g_hkl.z/a_cell_param;
 
 // 3: product matrix vector Om by g: gd = Om g
 
-gd.x = Om[0][0]*g.x + Om[0][1]*g.y + Om[0][2]*g.z;
-gd.y = Om[1][0]*g.x + Om[1][1]*g.y + Om[1][2]*g.z;
-gd.z = Om[2][0]*g.x + Om[2][1]*g.y + Om[2][2]*g.z;
+gd_vec.x = Om[0][0]*g_vec.x + Om[0][1]*g_vec.y + Om[0][2]*g_vec.z;
+gd_vec.y = Om[1][0]*g_vec.x + Om[1][1]*g_vec.y + Om[1][2]*g_vec.z;
+gd_vec.z = Om[2][0]*g_vec.x + Om[2][1]*g_vec.y + Om[2][2]*g_vec.z;
 
-printf("gd.x = %lf\n", gd.x);
-printf("gd.y = %lf\n", gd.y);
-printf("gd.z = %lf\n", gd.z);
+printf("gd_vec.x = %lf\n", gd_vec.x);
+printf("gd_vec.y = %lf\n", gd_vec.y);
+printf("gd_vec.z = %lf\n", gd_vec.z);
 
-egd.x = gd.x;
-egd.y = gd.y;
-egd.z = gd.z;
-cl_double norm=length3(egd);
-egd.x /= norm;
-egd.y /= norm;
-egd.z /= norm;
+cl_double gd_len = length3(gd_vec);
+gd_uni.x = gd_vec.x/gd_len;
+gd_uni.y = gd_vec.y/gd_len;
+gd_uni.z = gd_vec.z/gd_len;
 
 // geometry:
 
@@ -257,9 +252,9 @@ if (resusquare != NULL) {
 fscanf(fbe, "%lf", &a3);
 printf("Fourier variable step size: %lf nm\n", a3);
 
-a3v.x = a3 * egd.x;
-a3v.y = a3 * egd.y;
-a3v.z = a3 * egd.z;
+a3v.x = a3 * gd_uni.x;
+a3v.y = a3 * gd_uni.y;
+a3v.z = a3 * gd_uni.z;
 printf("Fourier variable step vector: %lf %lf %lf nm\n", a3v.x, a3v.y, a3v.z);
 
 a3vd.x = a3v.x;

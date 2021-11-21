@@ -11,9 +11,9 @@ printf("output file: %s\n", argv[6]);
 
 fprintf(FileFC, "%8s # v: lpa-xrd version\n", "!VERSION");
 fprintf(FileFC, "%8.2e # d: dislocation density [m^-2]\n", density);
-fprintf(FileFC, "%2.0f %2.0f %2.0f # z: direction of 'l' (line vector) [uvw]\n", ld.x, ld.y, ld.z);
-fprintf(FileFC, "%2.0f %2.0f %2.0f # b: Burgers vector direction [uvw]\n", bd.x*2/a_cell_param, bd.y*2/a_cell_param, bd.z*2/a_cell_param);
-fprintf(FileFC, "%2.0f %2.0f %2.0f # g: diffraction vector direction (hkl)\n", H.x, H.y, H.z);
+fprintf(FileFC, "%2.0f %2.0f %2.0f # z: direction of 'l' (line vector) [uvw]\n", l_uvw.x, l_uvw.y, l_uvw.z);
+fprintf(FileFC, "%2.0f %2.0f %2.0f # b: Burgers vector direction [uvw]\n", b_uvw.x, b_uvw.y, b_uvw.z);
+fprintf(FileFC, "%2.0f %2.0f %2.0f # g: diffraction vector direction (hkl)\n", g_hkl.x, g_hkl.y, g_hkl.z);
 fprintf(FileFC, "%8f # C: contrast coefficient [1]\n", cfact_str);
 fprintf(FileFC, "%8f # a: cell parameter [nm]\n", a_cell_param);
 if (FLAG_SQUARE==1) {
@@ -39,7 +39,7 @@ printf("loop over Fourier coefficients\n");
 
 cumulated_time_kernel2 = 0.0f;
 
-cl_double gs = length3(g);
+cl_double gs = length3(g_vec);
 //printf("gs: %lf\n", gs);
 
 for (IndexFourier=1; IndexFourier<=NoFC; IndexFourier++) {
@@ -50,14 +50,14 @@ for (IndexFourier=1; IndexFourier<=NoFC; IndexFourier++) {
   err |= clSetKernelArg(kernel2, 1, sizeof(cl_mem), &d_rd0);
   err |= clSetKernelArg(kernel2, 2, sizeof(cl_mem), &d_r1);
   err |= clSetKernelArg(kernel2, 3, sizeof(cl_mem), &d_u1);
-  err |= clSetKernelArg(kernel2, 4, sizeof(cl_double), &bed);
-  err |= clSetKernelArg(kernel2, 5, sizeof(cl_double), &bsd);
+  err |= clSetKernelArg(kernel2, 4, sizeof(cl_double), &be_len);
+  err |= clSetKernelArg(kernel2, 5, sizeof(cl_double), &bs_len);
   err |= clSetKernelArg(kernel2, 6, sizeof(cl_double), &Radius);
   err |= clSetKernelArg(kernel2, 7, sizeof(cl_double), &nu);
   err |= clSetKernelArg(kernel2, 8, sizeof(cl_int), &Np);
   err |= clSetKernelArg(kernel2, 9, sizeof(cl_int), &IndexFourier);
   err |= clSetKernelArg(kernel2, 10, sizeof(cl_double), &gs);
-  err |= clSetKernelArg(kernel2, 11, sizeof(cl_double3), &gd);
+  err |= clSetKernelArg(kernel2, 11, sizeof(cl_double3), &gd_vec);
   err |= clSetKernelArg(kernel2, 12, sizeof(cl_double2), &a3vd);
   err |= clSetKernelArg(kernel2, 13, sizeof(cl_double), &a3);
   err |= clSetKernelArg(kernel2, 14, sizeof(cl_int), &Nd);

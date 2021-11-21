@@ -11,8 +11,8 @@ __kernel void udislo(__global double *RandA,
                      __global double3 *rd0,
                      __global double2 *r1,
                      __global double3 *u1,
-                     const double bed,
-                     const double bsd,
+                     const double be_len,
+                     const double bs_len,
                      const double Radius,
                      const double nu,
                      const int Np,
@@ -81,9 +81,9 @@ __kernel void udislo(__global double *RandA,
         ax2x1 = atan2(x2, x1);
 
         // components of the displacement field
-        u2.x = u2.x + bed*signe*(ax2x1+x1*x2/x1x2*uaux1);
-        u2.y = u2.y - bed*signe*(uaux2*log(x1x2)+(x1*x1-x2*x2)/x1x2)*uaux;
-        u2.z = u2.z + bsd*signe*ax2x1;
+        u2.x = u2.x + be_len*signe*(ax2x1+x1*x2/x1x2*uaux1);
+        u2.y = u2.y - be_len*signe*(uaux2*log(x1x2)+(x1*x1-x2*x2)/x1x2)*uaux;
+        u2.z = u2.z + bs_len*signe*ax2x1;
       }
       // synchronization barrier
       barrier(CLK_LOCAL_MEM_FENCE);
@@ -97,14 +97,14 @@ __kernel void comptf(__global double16 *Vect16FC,
                      __global double3 *rd0,
                      __global double2 *r1,
                      __global double3 *u1,
-                     const double bed,
-                     const double bsd,
+                     const double be_len,
+                     const double bs_len,
                      double Radius,
                      double nu,
                      const int Np,
                      const int IndexFourier,
                      const double gs,
-                     const double3 gd,
+                     const double3 gd_vec,
                      const double2 a3vd,
                      const double a3,
                      const int Nd,
@@ -215,9 +215,9 @@ __kernel void comptf(__global double16 *Vect16FC,
         x1x2 = x1*x1 + x2*x2;
         ax2x1 = atan2(x2, x1);
 
-        u2.x = u2.x + bed*signe*(ax2x1+x1*x2/x1x2*uaux1);
-        u2.y = u2.y - bed*signe*(uaux2*log(x1x2)+(x1*x1-x2*x2)/x1x2)*uaux;
-        u2.z = u2.z + bsd*signe*ax2x1;
+        u2.x = u2.x + be_len*signe*(ax2x1+x1*x2/x1x2*uaux1);
+        u2.y = u2.y - be_len*signe*(uaux2*log(x1x2)+(x1*x1-x2*x2)/x1x2)*uaux;
+        u2.z = u2.z + bs_len*signe*ax2x1;
       }
 
       // synchronization
@@ -228,7 +228,7 @@ __kernel void comptf(__global double16 *Vect16FC,
     du = (flag_outside==1) ? u2-u1[k] : u1[k]-u2;
 
     // compute data related to the Fourier Coefficients
-    sz_gu = dot(gd, du);
+    sz_gu = dot(gd_vec, du);
     eps2l = (sz_gu/gs/(a3*(double)(IndexFourier)));
     eps2l *= eps2l;
 
