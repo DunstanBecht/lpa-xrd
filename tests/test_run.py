@@ -4,11 +4,14 @@
 """
 Script to test the module run.
 
-Example of commands for testing:
-ssh compute-0-1-gpu
-cd tests
-python3 test_code.py
-python3 test_run.py
+Commands for a possible connection to a GPU host machine.
+$ ssh compute-0-1-gpu
+$ module load cuda/10.1
+$ cd <tests-directory>
+
+Commands for launching simulations:
+$ python3 test_code.py
+$ python3 test_run.py
 """
 
 from lpa.xrd import run
