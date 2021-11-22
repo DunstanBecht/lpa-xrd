@@ -31,7 +31,7 @@ pip install -U lpa-xrd
 
 ### Output data files
 ```
-   0.9.5 # v: lpa-xrd version
+   0.9.6 # v: lpa-xrd version
 5.00e+13 # d: dislocation density [m^-2]
  1 -1 -2 # z: direction of 'l' (line vector) [uvw]
  1  1  0 # b: Burgers vector direction [uvw]
