@@ -127,8 +127,6 @@ for (IndexFourier=1; IndexFourier<=NoFC; IndexFourier++) {
   double coeff = 1.0f/(double)(Np_good);
   printf("1/Np = %lf\n", coeff);
 
-  double factor = (double)coeff;
-
   eps2 *= coeff;
 
   c1AL *= coeff; s1AL *= coeff;
@@ -137,7 +135,7 @@ for (IndexFourier=1; IndexFourier<=NoFC; IndexFourier++) {
   c4AL *= coeff; s4AL *= coeff;
   c5AL *= coeff; s5AL *= coeff;
 
-  /* mean values of the harmonics */
+  // mean values of the harmonics
   double mean_c1AL = c1AL;
   double mean_s1AL = s1AL;
 
