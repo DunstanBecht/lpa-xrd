@@ -16,7 +16,7 @@ printf("platforms IDs = %d\n", nPlats);
 FILE *fp;
 char *source_str;
 size_t source_size;
-fp = fopen("dpcaltfalldislo.cl", "r");
+fp = fopen("kernels.cl", "r");
 if (!fp) {
   printf("failed to load kernel\n");
   exit(1);

@@ -49,7 +49,7 @@ cl_int *sd0; // Burgers vector senses [1]
 cl_double3 *rd0_all; // (x,y) dislocations coordinates [nm] and Burgers vector senses [1]
 
 cl_double *random1; // random numbers
-cl_double *random2; // random numbers 
+cl_double *random2; // random numbers
 
 Np = atoi(argv[4]);
 printf("number of random points for the Monte Carlo method: %ld\n", Np);
@@ -278,3 +278,16 @@ printf("total number of dislocations: %d\n", Nd);
 rd0_all = (cl_double3 *)malloc(sizeof(cl_double3)*Nd);
 size_t ird0_all = sizeof(cl_int) * Nd;
 printf("memory space for positions and Burgers vectors: %lu Bytes\n", ird0_all);
+
+int index_all = -1;
+
+for (i=-D_REPLICATION; i<=D_REPLICATION; i++) {
+  for (j=-D_REPLICATION; j<=D_REPLICATION; j++) {
+    for (k=0; k<Nd0; k++) {
+      index_all += 1;
+      rd0_all[index_all].x = rd0[k].x + i*size;
+      rd0_all[index_all].y = rd0[k].y + j*size;
+      rd0_all[index_all].z = (double)(sd0[k]);
+    }
+  }
+}
