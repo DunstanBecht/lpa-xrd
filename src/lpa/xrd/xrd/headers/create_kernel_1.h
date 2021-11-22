@@ -25,8 +25,8 @@ printf("allocation host h_u1: %lu Bytes\n", sizeof(cl_double3)*Np);
 // create input and output device buffers for kernel 1
 
 // the dislocations are stored as a 3-vector where z component is the Burgers vector sense
-size_t bytes_rd0 = sizeof(cl_double3) * Nd;
-cl_mem d_rd0 = clCreateBuffer(context, CL_MEM_READ_ONLY|CL_MEM_ALLOC_HOST_PTR, bytes_rd0, NULL, NULL);
+size_t bytes_dislocations = sizeof(cl_double3) * Nd;
+cl_mem d_dislocations = clCreateBuffer(context, CL_MEM_READ_ONLY|CL_MEM_ALLOC_HOST_PTR, bytes_dislocations, NULL, NULL);
 
 size_t bytes_ran = sizeof(cl_double) * Np;
 cl_mem d_ranradius = clCreateBuffer(context, CL_MEM_READ_ONLY|CL_MEM_ALLOC_HOST_PTR, bytes_ran, NULL, NULL);
@@ -45,7 +45,7 @@ printf("create input and output device buffers for Kernel 1\n");
 
 // copy data from host (cpu) to device (gpu) for kernel 1
 
-err = clEnqueueWriteBuffer(queue, d_rd0, CL_TRUE, 0, bytes_rd0, rd0_all, 0, NULL, NULL);
+err = clEnqueueWriteBuffer(queue, d_dislocations, CL_TRUE, 0, bytes_dislocations, dislocations, 0, NULL, NULL);
 
 if (FLAG_SQUARE == 1){
   err |= clEnqueueWriteBuffer(queue, d_ranx, CL_TRUE, 0, bytes_ran, random1, 0, NULL, NULL);
@@ -82,7 +82,7 @@ if (FLAG_SQUARE == 1) {
   err = clSetKernelArg(kernel1, 0, sizeof(cl_mem), &d_ranradius);
   err |= clSetKernelArg(kernel1, 1, sizeof(cl_mem), &d_ranangle);
 }
-err |= clSetKernelArg(kernel1, 2, sizeof(cl_mem), &d_rd0);
+err |= clSetKernelArg(kernel1, 2, sizeof(cl_mem), &d_dislocations);
 err |= clSetKernelArg(kernel1, 3, sizeof(cl_mem), &d_r1);
 err |= clSetKernelArg(kernel1, 4, sizeof(cl_mem), &d_u1);
 err |= clSetKernelArg(kernel1, 5, sizeof(cl_double), &be_len);

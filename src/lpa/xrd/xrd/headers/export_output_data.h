@@ -10,8 +10,8 @@ fprintf(output, "%8f # C: contrast coefficient [1]\n", cfact_str);
 fprintf(output, "%8f # a: cell parameter [nm]\n", a_cell_param);
 if (FLAG_SQUARE==1) {
   fprintf(output, "%8.0f # s: side of the region of interest [nm]", size);
-  if (D_REPLICATION>0) {
-    fprintf(output, " PBC%d", D_REPLICATION);
+  if (replications>0) {
+    fprintf(output, " PBC%d", replications);
   }
   fprintf(output, "\n");
 } else {
@@ -27,7 +27,7 @@ for (i=1; i<=HARMONICS; i++){
 }
 fprintf(output, " %10s %10s\n", "<eps^2>", "bad_points");
 
-for (i=0; i<NoFC; i++) {
+for (i=0; i<Nf; i++) {
   fprintf(output, "%6.1lf", (i+1)*a3);
   for (j=0; j<HARMONICS; j++){
     fprintf(output,
@@ -74,7 +74,7 @@ if (ret != CL_SUCCESS) {
   exit(1);
 }
 
-ret = clReleaseMemObject(d_rd0);
+ret = clReleaseMemObject(d_dislocations);
 ret |= clReleaseMemObject(d_ranangle);
 ret |= clReleaseMemObject(d_ranradius);
 ret |= clReleaseMemObject(d_ranx);
@@ -91,9 +91,9 @@ if (ret != CL_SUCCESS) {
 
 printf("free memory references from device\n");
 
-free(sd0);
-free(rd0);
-free(rd0_all);
+free(senses);
+free(positions);
+free(dislocations);
 free(random1);
 free(random2);
 free(h_r1);

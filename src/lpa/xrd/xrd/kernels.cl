@@ -2,7 +2,7 @@
 
 __kernel void udislo(__global double *random1,
                      __global double *random2,
-                     __global double3 *rd0,
+                     __global double3 *dislocations,
                      __global double2 *r1,
                      __global double3 *u1,
                      const double be_len,
@@ -59,7 +59,7 @@ __kernel void udislo(__global double *random1,
 
       // grab the coordinates and store them in the shared vector
       if ((kk+lid) < Nd) {
-        shared[lid] = rd0[kk+lid];
+        shared[lid] = dislocations[kk+lid];
       }
 
       // synchronization barrier
@@ -88,7 +88,7 @@ __kernel void udislo(__global double *random1,
 }
 
 __kernel void comptf(__global double16 *Vect16FC,
-                     __global double3 *rd0,
+                     __global double3 *dislocations,
                      __global double2 *r1,
                      __global double3 *u1,
                      const double be_len,
@@ -194,7 +194,7 @@ __kernel void comptf(__global double16 *Vect16FC,
 
       // grab the coordinates
       if ((kk+lid) < Nd) {
-        shared[lid] = rd0[kk+lid];
+        shared[lid] = dislocations[kk+lid];
       }
 
       // synchronization

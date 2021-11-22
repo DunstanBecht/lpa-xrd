@@ -3,12 +3,12 @@ double cumulated_time_kernel2 = 0.0f;
 size_t globalSize2[] = {Np};
 size_t localSize2[] = {64};
 
-double res_cos[NoFC][HARMONICS];
-double res_sin[NoFC][HARMONICS];
-double res_cos_std[NoFC][HARMONICS];
-double res_sin_std[NoFC][HARMONICS];
-double res_eps[NoFC];
-int res_nrp[NoFC];
+double res_cos[Nf][HARMONICS]; // real part of the Fourier transform
+double res_sin[Nf][HARMONICS]; // imaginary part of the Fourier transform
+double res_cos_std[Nf][HARMONICS]; // error off cos coefficients
+double res_sin_std[Nf][HARMONICS]; // error off sin coefficients
+double res_eps[Nf]; // mean square strain
+int res_nrp[Nf]; // number of translations of the random points outside de region of interest
 
 printf("loop over Fourier coefficients\n");
 
@@ -16,7 +16,7 @@ g_vec_len = length3(g_vec);
 
 cumulated_time_kernel2 = 0.0f;
 
-for (i=1; i<=NoFC; i++) { // L = a3 * i
+for (i=1; i<=Nf; i++) { // L = a3 * i
 
   for (j=0; j<HARMONICS; j++) {
     res_cos[i-1][j] = 0;
@@ -28,7 +28,7 @@ for (i=1; i<=NoFC; i++) { // L = a3 * i
   res_nrp[i-1] = 0;
 
   err = clSetKernelArg(kernel2, 0, sizeof(cl_mem), &d_Vect16FC);
-  err |= clSetKernelArg(kernel2, 1, sizeof(cl_mem), &d_rd0);
+  err |= clSetKernelArg(kernel2, 1, sizeof(cl_mem), &d_dislocations);
   err |= clSetKernelArg(kernel2, 2, sizeof(cl_mem), &d_r1);
   err |= clSetKernelArg(kernel2, 3, sizeof(cl_mem), &d_u1);
   err |= clSetKernelArg(kernel2, 4, sizeof(cl_double), &be_len);

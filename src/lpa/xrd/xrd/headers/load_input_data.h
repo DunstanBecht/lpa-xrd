@@ -1,7 +1,7 @@
 FILE *input; // input data file
 FILE *output; // output data file
 char buff[BUZZ_SIZE]; // buffer
-int i, j, k; // general pupose index
+int i, j, k, l; // general pupose index
 
 char version[8]; // lpa-input version
 float density; // real density [m^-2]
@@ -10,6 +10,8 @@ cl_double a_cell_param; // lattice parameter [nm]
 cl_double cfact_str; // contrast factor [1]
 cl_double a3; // Fourier variable step length [nm]
 cl_double nu; // Poisson's number [1]
+cl_double Om[3][3]; // transfer matrix
+int replications; // number of replications of the region of interest in square geometry
 
 cl_double3 l_uvw; // direction of 'l' (line vector) [uvw]
 cl_double3 L_uvw; // direction of 'L' (Fourier variable) [uvw]
@@ -25,9 +27,11 @@ cl_double3 a3_vec; // step vector of 'L' (Fourier variable) [nm]
 cl_double2 a3vd; // step vector projection of 'L' (Fourier variable) [nm]
 
 cl_double l_uvw_len; // line vector direction norm [1]
+cl_double L_uvw_len; // Fourier variable direction norm [1]
 cl_double b_vec_len; // Burgers vector norm [nm]
 cl_double g_hkl_len; // diffraction vector direction norm [1]
 cl_double g_vec_len; // diffraction vector norm [nm^-1]
+cl_double gd_vec_len; // diffraction vector in slip frame norm [nm^-1]
 cl_double bs_len; // Burgers vector screw part norm [nm]
 cl_double be_len; // Burgers vector edge part norm [nm]
 
@@ -40,12 +44,12 @@ cl_double3 gd_uni; // normalized diffraction vector in slip frame [1]
 cl_int Np; // number of random points for the Monte Carlo method
 cl_int Nd0; // number of dislocations in the input file
 cl_int Nd; // total number of dislocations
-cl_int NoFC; // number of values taken by the Fourier variable
+cl_int Nf; // number of values taken by the Fourier variable
 
 cl_double size; // radius or side of the region of interest [nm]
-cl_double3 *rd0; // (x,y) dislocations coordinates [nm]
-cl_int *sd0; // Burgers vector senses [1]
-cl_double3 *rd0_all; // (x,y) dislocations coordinates [nm] and Burgers vector senses [1]
+cl_double3 *positions; // (x,y) dislocations coordinates [nm]
+cl_int *senses; // Burgers vector senses [1]
+cl_double3 *dislocations; // (x,y) dislocations coordinates [nm] and Burgers vector senses [1]
 
 cl_double *random1; // random numbers
 cl_double *random2; // random numbers
@@ -53,8 +57,8 @@ cl_double *random2; // random numbers
 Np = atoi(argv[4]);
 printf("number of random points for the Monte Carlo method: %ld\n", Np);
 
-NoFC = atoi(argv[5]);
-printf("number of values taken by the Fourier variable: %ld\n", NoFC);
+Nf = atoi(argv[5]);
+printf("number of values taken by the Fourier variable: %ld\n", Nf);
 
 printf("input data file: %s\n", argv[3]);
 input = fopen(argv[3], "r");
@@ -145,18 +149,16 @@ if (bs_len < EPS) {
   L_uni.z = be_vec.z;
 }
 
-cl_double L_len = length3(L_uvw);
-L_uni.x = L_uvw.x/L_len;
-L_uni.y = L_uvw.y/L_len;
-L_uni.z = L_uvw.z/L_len;
+L_uvw_len = length3(L_uvw);
+L_uni.x = L_uvw.x/L_uvw_len;
+L_uni.y = L_uvw.y/L_uvw_len;
+L_uni.z = L_uvw.z/L_uvw_len;
 printf("normalized Fourier variable direction: %f %f %f\n", L_uni.x, L_uni.y, L_uni.z);
 
 d_uni.x = l_uni.y*L_uni.z - l_uni.z*L_uni.y;
 d_uni.y = l_uni.z*L_uni.x - l_uni.x*L_uni.z;
 d_uni.z = l_uni.x*L_uni.y - l_uni.y*L_uni.x;
 printf("cross product of l_uni and L_uni: %f %f %f\n", d_uni.x, d_uni.y, d_uni.z);
-
-cl_double Om[3][3];
 
 Om[0][0] = L_uni.x;
 Om[0][1] = L_uni.y;
@@ -184,10 +186,10 @@ gd_vec.z = Om[2][0]*g_vec.x + Om[2][1]*g_vec.y + Om[2][2]*g_vec.z;
 
 printf("diffraction vector in slip frame: %lf %lf %lf nm^-1\n", gd_vec.x, gd_vec.y, gd_vec.z);
 
-cl_double gd_len = length3(gd_vec);
-gd_uni.x = gd_vec.x/gd_len;
-gd_uni.y = gd_vec.y/gd_len;
-gd_uni.z = gd_vec.z/gd_len;
+gd_vec_len = length3(gd_vec);
+gd_uni.x = gd_vec.x/gd_vec_len;
+gd_uni.y = gd_vec.y/gd_vec_len;
+gd_uni.z = gd_vec.z/gd_vec_len;
 
 // region of interest geometry
 
@@ -197,15 +199,13 @@ printf("characteristic size of the region of interest: %lf nm\n", size);
 
 fgets(buff, BUZZ_SIZE, input);
 
-char *resucyl = strstr(buff, "radius");
-if (resucyl != NULL) {
+if (strstr(buff, "radius") != NULL) {
   printf("circular region of interest detected\n");
   FLAG_CYLINDER = 1;
   FLAG_SQUARE = 0;
 }
 
-char *resusquare = strstr(buff, "side");
-if (resusquare != NULL) {
+if (strstr(buff, "side") != NULL) {
   printf("square region of interest detected\n");
   FLAG_CYLINDER = 0;
   FLAG_SQUARE = 1;
@@ -213,19 +213,18 @@ if (resusquare != NULL) {
   char numbers[10];
   strcat(numbers, "");
   //printf("line length: %ld\n", strlen(buff));
-  int index = 0;
+  j = 0;
   for (i=0; i<strlen(buff); i++) {
     //printf("i=%d\n", i);
     if (isdigit(buff[i])) {
      //printf("ok");
-     numbers[index] = buff[i];
-     index += 1;
+     numbers[j] = buff[i];
+     j += 1;
     }
   }
   //printf("string: %s\n", numbers);
-  int rep = atoi(numbers);
-  printf("number of replications: %d\n", rep);
-  D_REPLICATION = rep;
+  replications = atoi(numbers);
+  printf("number of replications: %d\n", replications);
 }
 
 fscanf(input, "%lf", &a3);
@@ -248,45 +247,41 @@ fgets(buff, BUZZ_SIZE, input);
 fscanf(input, "%d", &Nd0);
 printf("number of dislocations in the input file: %d\n", Nd0);
 
-size_t ird0 = sizeof(cl_double3) * Nd0;
-printf("memory space for positions: %lu Bytes\n", ird0);
-rd0 = (cl_double3 *)malloc(sizeof(cl_double3)*Nd0);
+positions = (cl_double3 *)malloc(sizeof(cl_double3)*Nd0);
 
-size_t isd0 = sizeof(cl_int) * Nd0;
-printf("memory space for Burgers vectors: %lu Bytes\n", isd0);
-sd0 = (cl_int *)malloc(sizeof(cl_int)*Nd0);
+senses = (cl_int *)malloc(sizeof(cl_int)*Nd0);
 
 fgets(buff, BUZZ_SIZE, input);
 fgets(buff, BUZZ_SIZE, input);
 
 for(i=0; i<Nd0; i++) {
-  fscanf(input, "%d %le %le\n", &sd0[i], &rd0[i].x, &rd0[i].y);
-  //printf("%2d %9.6e %9.6e \n", sd0[i], rd0[i].x, rd0[i].y);
+  fscanf(input, "%d %le %le\n", &senses[i], &positions[i].x, &positions[i].y);
+  //printf("%2d %9.6e %9.6e \n", senses[i], positions[i].x, positions[i].y);
 }
 
 fclose(input);
 
 if (FLAG_SQUARE == 1) {
-  Nd = Nd0 * (2*D_REPLICATION+1) * (2*D_REPLICATION+1);
+  Nd = Nd0 * (2*replications+1) * (2*replications+1);
 } else {
   Nd = Nd0;
 }
 
 printf("total number of dislocations: %d\n", Nd);
 
-rd0_all = (cl_double3 *)malloc(sizeof(cl_double3)*Nd);
-size_t ird0_all = sizeof(cl_int) * Nd;
-printf("memory space for positions and Burgers vectors: %lu Bytes\n", ird0_all);
+dislocations = (cl_double3 *)malloc(sizeof(cl_double3)*Nd);
+size_t s_dislocations = sizeof(cl_double3) * Nd;
+printf("memory space for positions and Burgers vectors: %lu Bytes\n", s_dislocations);
 
-int index_all = -1;
+l = -1;
 
-for (i=-D_REPLICATION; i<=D_REPLICATION; i++) {
-  for (j=-D_REPLICATION; j<=D_REPLICATION; j++) {
+for (i=-replications; i<=replications; i++) {
+  for (j=-replications; j<=replications; j++) {
     for (k=0; k<Nd0; k++) {
-      index_all += 1;
-      rd0_all[index_all].x = rd0[k].x + i*size;
-      rd0_all[index_all].y = rd0[k].y + j*size;
-      rd0_all[index_all].z = (double)(sd0[k]);
+      l += 1;
+      dislocations[l].x = positions[k].x + i*size;
+      dislocations[l].y = positions[k].y + j*size;
+      dislocations[l].z = (double)(senses[k]);
     }
   }
 }

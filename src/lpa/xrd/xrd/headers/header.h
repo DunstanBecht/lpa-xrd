@@ -18,9 +18,8 @@ DEFINITION OF HEADER FILES
 DEFINITION OF IMPORTANTS GLOBAL VARIABLES
 ------------------------
 */
-int FLAG_SQUARE=0;
-int FLAG_CYLINDER=1;
-int D_REPLICATION=0;
+int FLAG_SQUARE;
+int FLAG_CYLINDER;
 #define HARMONICS 5
 /* The number of replications ranges from -D to D in each direction */
 /* a total of (2D+1)*(2D+1) cells is then constructed*/
