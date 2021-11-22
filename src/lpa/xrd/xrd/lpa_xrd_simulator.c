@@ -2,7 +2,7 @@
 
 int main(int argc, char **argv) {
 
-  printf("\nlpa-xrd version: !VERSION\n");
+  printf("lpa-xrd version: !VERSION\n");
 
   if (argc != 7) {
     printf("%d arguments detected but 7 were expected.\n", argc);

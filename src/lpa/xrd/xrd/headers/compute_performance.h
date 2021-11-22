@@ -10,6 +10,6 @@ printf("operations done by kernel 2: %e\n",op_kernel2);
 printf("floating point operations per second: %lf GFLOPS\n", op_kernel2/(time_kernel2*1.0e-9)*1.0e-9);
 printf("duration: %lf s (cumulated for all Fourier coefficients)\n", cumulated_time_kernel2*1.0e-9);
 
-printf("program ended successfully\n");
+printf("program ended successfully");
 
 return 0;
