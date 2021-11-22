@@ -41,7 +41,6 @@ cl_int Np; // number of random points for the Monte Carlo method
 cl_int Nd0; // number of dislocations in the input file
 cl_int Nd; // total number of dislocations
 cl_int NoFC; // number of values taken by the Fourier variable
-cl_int IndexFourier; // integer between 0 and NoFC-1
 
 cl_double size; // radius or side of the region of interest [nm]
 cl_double3 *rd0; // (x,y) dislocations coordinates [nm]

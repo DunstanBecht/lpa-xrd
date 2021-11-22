@@ -1,48 +1,32 @@
-// globalsize and localsize for kernel 2
 double time_kernel2 = 0.0f;
 double cumulated_time_kernel2 = 0.0f;
 size_t globalSize2[] = {Np};
 size_t localSize2[] = {64};
 
-output = fopen(argv[6], "w");
-printf("output file: %s\n", argv[6]);
-
-fprintf(output, "%8s # v: lpa-xrd version\n", "!VERSION");
-fprintf(output, "%8.2e # d: dislocation density [m^-2]\n", density);
-fprintf(output, "%2.0f %2.0f %2.0f # z: direction of 'l' (line vector) [uvw]\n", l_uvw.x, l_uvw.y, l_uvw.z);
-fprintf(output, "%2.0f %2.0f %2.0f # b: Burgers vector direction [uvw]\n", b_uvw.x, b_uvw.y, b_uvw.z);
-fprintf(output, "%2.0f %2.0f %2.0f # g: diffraction vector direction (hkl)\n", g_hkl.x, g_hkl.y, g_hkl.z);
-fprintf(output, "%8f # C: contrast coefficient [1]\n", cfact_str);
-fprintf(output, "%8f # a: cell parameter [nm]\n", a_cell_param);
-if (FLAG_SQUARE==1) {
-  fprintf(output, "%8.0f # s: side of the region of interest [nm]", size);
-  if (D_REPLICATION>0) {
-    fprintf(output, " PBC%d", D_REPLICATION);
-  }
-  fprintf(output, "\n");
-} else {
-  fprintf(output, "%8.0f # s: radius of the region of interest [nm]\n", size);
-}
-fprintf(output, "%8f # nu: Poisson's number [1]\n", nu);
-fprintf(output, "%8d # nd: number of dislocations in the input file\n", Nd0);
-fprintf(output, "%8d # np: number of random points\n", Np);
-fprintf(output, "# %4s", "L");
-
-for (i=1; i<6; i++){
-  fprintf(output, " %9s%d %9s%d %9s%d %9s%d", "cos", i, "err_cos", i, "sin", i, "err_sin", i);
-}
-fprintf(output, " %10s %10s\n", "<eps^2>", "bad_points");
+double res_cos[NoFC][HARMONICS];
+double res_sin[NoFC][HARMONICS];
+double res_cos_std[NoFC][HARMONICS];
+double res_sin_std[NoFC][HARMONICS];
+double res_eps[NoFC];
+int res_nrp[NoFC];
 
 printf("loop over Fourier coefficients\n");
 
-cumulated_time_kernel2 = 0.0f;
-
 g_vec_len = length3(g_vec);
 
-for (IndexFourier=1; IndexFourier<=NoFC; IndexFourier++) {
-  //printf("IndexFourier: %d\n", IndexFourier);
+cumulated_time_kernel2 = 0.0f;
 
-  // define kernel 2 arguments
+for (i=1; i<=NoFC; i++) { // L = a3 * i
+
+  for (j=0; j<HARMONICS; j++) {
+    res_cos[i-1][j] = 0;
+    res_sin[i-1][j] = 0;
+    res_cos_std[i-1][j] = 0;
+    res_sin_std[i-1][j] = 0;
+  }
+  res_eps[i-1] = 0;
+  res_nrp[i-1] = 0;
+
   err = clSetKernelArg(kernel2, 0, sizeof(cl_mem), &d_Vect16FC);
   err |= clSetKernelArg(kernel2, 1, sizeof(cl_mem), &d_rd0);
   err |= clSetKernelArg(kernel2, 2, sizeof(cl_mem), &d_r1);
@@ -52,7 +36,7 @@ for (IndexFourier=1; IndexFourier<=NoFC; IndexFourier++) {
   err |= clSetKernelArg(kernel2, 6, sizeof(cl_double), &size);
   err |= clSetKernelArg(kernel2, 7, sizeof(cl_double), &nu);
   err |= clSetKernelArg(kernel2, 8, sizeof(cl_int), &Np);
-  err |= clSetKernelArg(kernel2, 9, sizeof(cl_int), &IndexFourier);
+  err |= clSetKernelArg(kernel2, 9, sizeof(cl_int), &i);
   err |= clSetKernelArg(kernel2, 10, sizeof(cl_double), &g_vec_len);
   err |= clSetKernelArg(kernel2, 11, sizeof(cl_double3), &gd_vec);
   err |= clSetKernelArg(kernel2, 12, sizeof(cl_double2), &a3vd);
@@ -70,7 +54,7 @@ for (IndexFourier=1; IndexFourier<=NoFC; IndexFourier++) {
   // equeue kernel 2
   cl_event event_kernel2;
 
-  localSize2[0] = atoi(argv[2]); // 1 <= block <= 128 //
+  localSize2[0] = atoi(argv[2]); // 1 <= block <= 128
   //printf("kernel 2 globalSize: %lu\n", globalSize2[0]);
   //printf("kernel 2 locaSize: %lu\n", localSize2[0]);
 
@@ -94,119 +78,47 @@ for (IndexFourier=1; IndexFourier<=NoFC; IndexFourier++) {
 
   //printf("kernel 2 execution cumulated time: %lf\n", cumulated_time_kernel2*1.0e-6);
 
-  double time_reduction = wtime();
-
   // compute the total number of useful points
   cl_int Np_good = Np;
-  for(i=0; i<Np; i++) {
-    Np_good -= (h_inout[i]==0)? 1:0;
+  for(k=0; k<Np; k++) {
+    Np_good -= (h_inout[k]==0)? 1:0;
   }
+  res_nrp[i-1] = Np-Np_good;
   //printf("Np      = %ld\n", Np);
   //printf("Np-good = %ld\n", Np_good);
 
-  double eps2 = 0.0f;
-
-  double c1AL=0.0f, c2AL=0.0f, c3AL=0.0f, c4AL=0.0f, c5AL=0.0f;
-  double s1AL=0.0f, s2AL=0.0f, s3AL=0.0f, s4AL=0.0f, s5AL=0.0f;
-
-  // compute by a reduction operation the errors for several Fourier Harmonic
-  for (i=0; i< Np; i++) {
-    // error coefficient
-    eps2 += h_Vect16FC[i].sa;
-    // for each harmonic compute the real and imaginary parts
-    c1AL += h_Vect16FC[i].s0; s1AL += h_Vect16FC[i].s1;
-    c2AL += h_Vect16FC[i].s2; s2AL += h_Vect16FC[i].s3;
-    c3AL += h_Vect16FC[i].s4; s3AL += h_Vect16FC[i].s5;
-    c4AL += h_Vect16FC[i].s6; s4AL += h_Vect16FC[i].s7;
-    c5AL += h_Vect16FC[i].s8; s5AL += h_Vect16FC[i].s9;
-  }
-
-  time_reduction = wtime() - time_reduction;
-  printf("time-reduction: %e s\n", time_reduction);
-
   double coeff = 1.0f/(double)(Np_good);
-  printf("1/Np = %lf\n", coeff);
+  //printf("1/Np = %lf\n", coeff);
 
-  eps2 *= coeff;
-
-  c1AL *= coeff; s1AL *= coeff;
-  c2AL *= coeff; s2AL *= coeff;
-  c3AL *= coeff; s3AL *= coeff;
-  c4AL *= coeff; s4AL *= coeff;
-  c5AL *= coeff; s5AL *= coeff;
-
-  // mean values of the harmonics
-  double mean_c1AL = c1AL;
-  double mean_s1AL = s1AL;
-
-  double mean_c2AL = c2AL;
-  double mean_s2AL = s2AL;
-
-  double mean_c3AL = c3AL;
-  double mean_s3AL = s3AL;
-
-  double mean_c4AL = c4AL;
-  double mean_s4AL = s4AL;
-
-  double mean_c5AL = c5AL;
-  double mean_s5AL = s5AL;
-
-  double err_C1 = 0.0f;
-  double err_S1 = 0.0f;
-  double err_C2 = 0.0f;
-  double err_S2 = 0.0f;
-  double err_C3 = 0.0f;
-  double err_S3 = 0.0f;
-  double err_C4 = 0.0f;
-  double err_S4 = 0.0f;
-  double err_C5 = 0.0f;
-  double err_S5 = 0.0f;
-
-  for (i=0; i< Np; i++) {
-    if (h_inout[i]==1) {
-      err_C1 += (h_Vect16FC[i].s0-mean_c1AL) * (h_Vect16FC[i].s0-mean_c1AL);
-      err_S1 += (h_Vect16FC[i].s1-mean_s1AL) * (h_Vect16FC[i].s1-mean_s1AL);
-
-      err_C2 += (h_Vect16FC[i].s2-mean_c2AL) * (h_Vect16FC[i].s2-mean_c2AL);
-      err_S2 += (h_Vect16FC[i].s3-mean_s2AL) * (h_Vect16FC[i].s3-mean_s2AL);
-
-      err_C3 += (h_Vect16FC[i].s4-mean_c3AL) * (h_Vect16FC[i].s4-mean_c3AL);
-      err_S3 += (h_Vect16FC[i].s5-mean_s3AL) * (h_Vect16FC[i].s5-mean_s3AL);
-
-      err_C4 += (h_Vect16FC[i].s6-mean_c4AL) * (h_Vect16FC[i].s6-mean_c4AL);
-      err_S4 += (h_Vect16FC[i].s7-mean_s4AL) * (h_Vect16FC[i].s7-mean_s4AL);
-
-      err_C5 += (h_Vect16FC[i].s8-mean_c5AL) * (h_Vect16FC[i].s8-mean_c5AL);
-      err_S5 += (h_Vect16FC[i].s9-mean_s5AL) * (h_Vect16FC[i].s9-mean_s5AL);
+  // sum
+  for (k=0; k<Np; k++) {
+    res_eps[i-1] += h_Vect16FC[k].sa;
+    for (j=0; j<5; j++) {
+      res_cos[i-1][j] += h_Vect16FC[k].s[2*j];
+      res_sin[i-1][j] += h_Vect16FC[k].s[2*j+1];
     }
   }
 
-  // compute the quadratic errors
-  err_C1 = sqrt(err_C1)*coeff; err_S1 = sqrt(err_S1)*coeff;
-  err_C2 = sqrt(err_C2)*coeff; err_S2 = sqrt(err_S2)*coeff;
-  err_C3 = sqrt(err_C3)*coeff; err_S3 = sqrt(err_S3)*coeff;
-  err_C4 = sqrt(err_C4)*coeff; err_S4 = sqrt(err_S4)*coeff;
-  err_C5 = sqrt(err_C5)*coeff; err_S5 = sqrt(err_S5)*coeff;
+  // average
+  for (j=0; j<HARMONICS; j++) {
+    res_cos[i-1][j] *= coeff;
+    res_sin[i-1][j] *= coeff;
+  }
+  res_eps[i-1] *= coeff;
 
-  printf("c1AL=%9.6f err_C1=%9.6f\n", c1AL, err_C1);
-  printf("s1AL=%9.6f err_S1=%9.6f\n", s1AL, err_S1);
-  printf("c2AL=%9.6f err_C2=%9.6f\n", c2AL, err_C2);
-  printf("s2AL=%9.6f err_S2=%9.6f\n", s2AL, err_S2);
-  printf("c3AL=%9.6f err_C3=%9.6f\n", c3AL, err_C3);
-  printf("s3AL=%9.6f err_S3=%9.6f\n", s3AL, err_S3);
-  printf("c4AL=%9.6f err_C4=%9.6f\n", c4AL, err_C4);
-  printf("s4AL=%9.6f err_S4=%9.6f\n", s4AL, err_S4);
-  printf("c5AL=%9.6f err_C5=%9.6f\n", c5AL, err_C5);
-  printf("s5AL=%9.6f err_S5=%9.6f\n", s5AL, err_S5);
-
-  // dump the Fourier coefficients to file
-  fprintf(output,
-    "%6.1lf %10.7f %10.7f %10.7f %10.7f %10.7f %10.7f %10.7f %10.7f %10.7f %10.7f %10.7f %10.7f %10.7f %10.7f %10.7f %10.7f %10.7f %10.7f %10.7f %10.7f %10.7f %10d\n",
-    IndexFourier*a3,
-    c1AL, err_C1, s1AL, err_S1,
-    c2AL, err_C2, s2AL, err_S2,
-    c3AL, err_C3, s3AL, err_S3,
-    c4AL, err_C4, s4AL, err_S4,
-    c5AL, err_C5, s5AL, err_S5,
-    eps2, Np-Np_good);
+  // error
+  for (k=0; k<Np; k++) {
+    if (h_inout[k]==1) {
+      for (j=0; j<HARMONICS; j++) {
+        double err = (h_Vect16FC[k].s[2*j]-res_cos[i-1][j]);
+        res_cos_std[i-1][j] += err * err;
+        err = (h_Vect16FC[k].s[2*j+1]-res_sin[i-1][j]);
+        res_sin_std[i-1][j] += err * err;
+      }
+    }
+  }
+  for (j=0; j<HARMONICS; j++) {
+    res_cos_std[i-1][j] = sqrt(res_cos_std[i-1][j]) * coeff;
+    res_sin_std[i-1][j] = sqrt(res_sin_std[i-1][j]) * coeff;
+  }
 }
