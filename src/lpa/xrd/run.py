@@ -47,8 +47,8 @@ def distribution(
       **rundir (str): directory where to export run data (default: 'runs')
       **executer (Callable): function executing shell commands (default: os.)
       **h (int): hardware to use (1 for gpu / 0 for cpu) (default: 1)
-      **b (int): block size (default: 200)
-      **r (int): block repetitions (default: 1000)
+      **b (int): block size (default: 64)
+      **r (int): block repetitions (default: 3125)
       **f (int): number of Fourier coefficients (default: 50)
 
     Output:
@@ -65,8 +65,8 @@ def distribution(
     rundir = os.path.abspath(getkwa('rundir', kwargs, str, 'runs'))
     executer = getkwa('executer', kwargs, Callable, os.system)
     h = getkwa('h', kwargs, int, 1)
-    b = getkwa('b', kwargs, int, 200)
-    r = getkwa('r', kwargs, int, 1000)
+    b = getkwa('b', kwargs, int, 64)
+    r = getkwa('r', kwargs, int, 3125)
     f = getkwa('f', kwargs, int, 50)
     endkwa(kwargs)
     # make directory
