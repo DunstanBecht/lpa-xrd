@@ -1,4 +1,4 @@
-lpa-xrd version: 0.9.6
+lpa-xrd version: 0.9.7
 STEP 1: load input data file
 number of random points for the Monte Carlo method: 200000
 number of values taken by the Fourier variable: 50
@@ -34,35 +34,33 @@ Fourier variable step vector projection: -8.343860 0.000000 nm
 Poisson's number: 0.345000
 number of dislocations in the input file: 512
 total number of dislocations: 4608
-memory space for positions and Burgers vectors: 147456 Bytes
+memory space for positions and Burgers vectors: 147456 bytes
 STEP 2: generate random points
-memory space for random points positions: 1600000 Bytes
+memory space for random points positions: 1600000 bytes
 STEP 3: define opencl accelerator
-platforms IDs = 1
-kernel code size = 7272 Bytes
-hardware: 1
- 
- Device is  Tesla P100-PCIE-16GB  GPU from  NVIDIA Corporation  with a max of 56 compute units 
-work group, work item information
- max loc dim  1024  1024  64 
- Max work group size = 1024
- 
- DEVICE_MAX_CONSTANT_ARGS is :  9
- CL_DEVICE_LOCAL_MEM_SIZE: 49152
+number of OpenCL platforms available: 1
+memory space for OpenCL code: 7272 bytes
+hardware choosen: 1
+device: Tesla P100-PCIE-16GB
+GPU from: NVIDIA Corporation
+max compute units: 56
+max local dim: 1024 1024 64
+max work group size: 1024
+DEVICE_MAX_CONSTANT_ARGS: 9
+CL_DEVICE_LOCAL_MEM_SIZE: 49152
 OpenCL code successfully compiled
 STEP 4: create kernel 1
-allocation host h_r1: 3200000 Bytes
-allocation host h_u1: 6400000 Bytes
+memory space h_r1: 8 bytes
+memory space h_u1: 8 bytes
 create input and output device buffers for Kernel 1
-kernel 1 globalSize: 200000
-kernel 1 localSize: 200
-shared_size_kernel1: 6400 Bytes
+kernel 1 global size: 200000
+kernel 1 local size: 64
+shared_size_kernel1: 2048 bytes
 kernel 1 arguments definition done
 recommended workgroup size: 1024
 STEP 5: create kernel 2
-STEP 6: process kernel 1 results
-kernel 1 execution time: 174.913 ms
-STEP 7: process kernel 2 results
+STEP 6: get kernel 1 results
+STEP 7: get kernel 2 results
 loop over Fourier coefficients
 STEP 8: export output data file
 output file: /export/home/becht/xrd-test/10_rho5e13m-2_square_3200nm_RDD_d5e-5nm-2_screw_S0_PBC1_output/05.dat
@@ -70,9 +68,9 @@ free memory references from device
 free memory references from host
 STEP 9: compute GPU performance
 operations done by kernel 1: 1.843240e+10
-floating point operations per second: 105.380355 GFLOPS
-duration: 1.749131e-01 s
+floating point operations per second: 89.833487 GFLOPS
+duration: 2.051841e-01 s
 operations done by kernel 2: 2.488800e+10
-floating point operations per second: 142.849822 GFLOPS
-duration: 8.684645 s (cumulated for all Fourier coefficients)
+floating point operations per second: 120.581264 GFLOPS
+duration: 10.196604 s (cumulated for all Fourier coefficients)
 program ended successfully
