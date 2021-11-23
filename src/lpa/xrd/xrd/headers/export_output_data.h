@@ -1,6 +1,8 @@
 output = fopen(argv[6], "w");
 printf("output file: %s\n", argv[6]);
 
+/* --- write header data --------------------------------------------------- */
+
 fprintf(output, "%8s # v: lpa-xrd version\n", "!VERSION");
 fprintf(output, "%8.2e # d: dislocation density [m^-2]\n", density);
 fprintf(output, "%2.0f %2.0f %2.0f # z: direction of 'l' (line vector) [uvw]\n", l_uvw.x, l_uvw.y, l_uvw.z);
@@ -20,12 +22,17 @@ if (FLAG_SQUARE==1) {
 fprintf(output, "%8f # nu: Poisson's number [1]\n", nu);
 fprintf(output, "%8d # nd: number of dislocations in the input file\n", Nd0);
 fprintf(output, "%8d # np: number of random points\n", Np);
+
+/* --- write column names -------------------------------------------------- */
+
 fprintf(output, "# %4s", "L");
 
 for (i=1; i<=HARMONICS; i++){
   fprintf(output, " %9s%d %9s%d %9s%d %9s%d", "cos", i, "err_cos", i, "sin", i, "err_sin", i);
 }
 fprintf(output, " %10s %10s\n", "<eps^2>", "bad_points");
+
+/* --- write table --------------------------------------------------------- */
 
 for (i=0; i<Nf; i++) {
   fprintf(output, "%6.1lf", (i+1)*a3);
@@ -37,10 +44,11 @@ for (i=0; i<Nf; i++) {
       res_sin[i][j],
       res_sin_std[i][j]);
   }
-  fprintf(output, " %10.7f %10d\n", res_eps[i], res_nrp[i]);
+  fprintf(output, " %10.7f %10d\n", res_eps[i], Np-res_nrp[i]);
 }
 
-// dump results to file for debugging
+/* --- dump results to files for debugging --------------------------------- */
+
 if (DUMP == 1){
 
   FILE *fr;
@@ -61,6 +69,10 @@ if (DUMP == 1){
 
 }
 
+/* --- release memory ------------------------------------------------------ */
+
+printf("free memory references from device\n");
+
 ret = clFlush(queue);
 ret |= clFinish(queue);
 ret |= clReleaseKernel(kernel1);
@@ -70,26 +82,24 @@ ret |= clReleaseCommandQueue(queue);
 ret |= clReleaseContext(context);
 
 if (ret != CL_SUCCESS) {
-  printf("clRelease error\n");
-  exit(1);
+  printf("error encountered while decrementing references counts\n");
+  exit(EXIT_FAILURE);
 }
 
 ret = clReleaseMemObject(d_dislocations);
-ret |= clReleaseMemObject(d_ranangle);
-ret |= clReleaseMemObject(d_ranradius);
-ret |= clReleaseMemObject(d_ranx);
-ret |= clReleaseMemObject(d_rany);
+ret |= clReleaseMemObject(d_random1);
+ret |= clReleaseMemObject(d_random2);
 ret |= clReleaseMemObject(d_inout);
 ret |= clReleaseMemObject(d_r1);
 ret |= clReleaseMemObject(d_u1);
 ret |= clReleaseMemObject(d_Vect16FC);
 
 if (ret != CL_SUCCESS) {
-  printf("clReleaseMemObject error\n");
-  exit(1);
+  printf("error encountered while decrementing the memory object references counts\n");
+  exit(EXIT_FAILURE);
 }
 
-printf("free memory references from device\n");
+printf("free memory references from host\n");
 
 free(senses);
 free(positions);
@@ -100,5 +110,3 @@ free(h_r1);
 free(h_u1);
 free(h_inout);
 free(h_Vect16FC);
-
-printf("free memory references from host\n");

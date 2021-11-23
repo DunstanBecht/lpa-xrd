@@ -144,7 +144,7 @@ __kernel void comptf(__global double16 *Vect16FC,
   int kk;
   double signe = 0.0;
 
-  // Get k index of the random point i.e. 0 <= k < Np
+  // get k index of the random point i.e. 0 <= k < Np
   size_t k = get_global_id(0);
 
   // get the parameters of the opencl work-item

@@ -271,7 +271,7 @@ printf("total number of dislocations: %d\n", Nd);
 
 dislocations = (cl_double3 *)malloc(sizeof(cl_double3)*Nd);
 size_t s_dislocations = sizeof(cl_double3) * Nd;
-printf("memory space for positions and Burgers vectors: %lu Bytes\n", s_dislocations);
+printf("memory space for positions and Burgers vectors: %lu bytes\n", s_dislocations);
 
 l = -1;
 
