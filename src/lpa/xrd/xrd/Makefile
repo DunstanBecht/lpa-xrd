@@ -1,7 +1,7 @@
 #-- makefile for compiling OpenCL code
-all: a.out
-a.out: lpa_xrd_simulator.c
+all: lpa_xrd_simulator
+lpa_xrd_simulator: lpa_xrd_simulator.c
 	@echo "compile OpenCL code"
-	nvcc -O3 -w -DDUMP=0 lpa_xrd_simulator.c -lOpenCL
+	nvcc -O3 -w -DDUMP=0 lpa_xrd_simulator.c -o lpa_xrd_simulator -lOpenCL
 clean:
-	rm -f *.o a.out
+	rm -f *.o lpa_xrd_simulator

@@ -82,7 +82,7 @@ def distribution(
         os.path.join(expdir, expstm+'.'+expfmt), # output path
     ))
     cmd = (f"cd {clndir}; "
-           f"./a.out {args} > {os.path.join(rundir, impstm)}.out 2>&1")
+           f"./lpa_xrd_simulator {args} > {os.path.join(rundir, impstm)}.out 2>&1")
     res = executer(cmd)
     return cmd, str(res)
 

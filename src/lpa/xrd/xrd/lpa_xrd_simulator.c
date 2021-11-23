@@ -6,7 +6,7 @@ int main(int argc, char **argv) {
 
   if (argc != 7) {
     printf("%d arguments detected but 7 were expected.\n", argc);
-    printf("Example: './a.out <hardware> <block> <input> <nrp> <nfv> <output>' with:\n");
+    printf("Example: './lpa_xrd_simulator <hardware> <block> <input> <nrp> <nfv> <output>' with:\n");
     printf("hardware (int): execution support (CPU:0 / GPU:1)\n");
     printf("block (int): block size for the GPU block (from 2 to 256 depending on the GPU)\n");
     printf("input (string): path to the input data file\n");
@@ -43,6 +43,6 @@ int main(int argc, char **argv) {
   printf("STEP 9: compute GPU performance\n");
   #include "headers/compute_performance.h"
 
-  printf("program ended successfully");
+  printf("program ended successfully\n");
   return EXIT_SUCCESS;
 }

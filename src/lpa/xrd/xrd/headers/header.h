@@ -200,7 +200,7 @@ int output_device_info(cl_device_id device_id) {
     exit(EXIT_FAILURE);
   }
 
-  printf("max local dim: ");
+  printf("max local dim:");
   int i;
   for(i=0; i<max_work_itm_dims; i++) {
     printf(" %d", (int)(*(max_loc_size+i)));
