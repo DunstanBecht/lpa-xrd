@@ -8,7 +8,7 @@ double res_sin[Nf][HARMONICS]; // imaginary part of the Fourier transform
 double res_cos_std[Nf][HARMONICS]; // error off cos coefficients
 double res_sin_std[Nf][HARMONICS]; // error off sin coefficients
 double res_eps[Nf]; // mean square strain
-int res_nrp[Nf]; // number of translations of the random points outside de region of interest
+int res_nrp[Nf]; // number of random points inside the region of interest
 
 double residual; // difference between a value and the mean
 
@@ -81,16 +81,12 @@ for (i=1; i<=Nf; i++) { // L = a3 * i
   //printf("kernel 2 execution cumulated time: %lf\n", cumulated_time_kernel2*1.0e-6);
 
   // compute the total number of useful points
-  cl_int Np_good = Np;
+  res_nrp[i-1] = Np;
   for(k=0; k<Np; k++) {
-    Np_good -= (h_inout[k]==0)? 1:0;
+    if (h_inout[k]==0) {
+      res_nrp[i-1] -= 1;
+    }
   }
-  res_nrp[i-1] = Np-Np_good;
-  //printf("Np      = %ld\n", Np);
-  //printf("Np-good = %ld\n", Np_good);
-
-  double coeff = 1.0f/(double)(Np_good);
-  //printf("1/Np = %lf\n", coeff);
 
   // sum
   for (k=0; k<Np; k++) {
@@ -103,24 +99,22 @@ for (i=1; i<=Nf; i++) { // L = a3 * i
 
   // average
   for (j=0; j<HARMONICS; j++) {
-    res_cos[i-1][j] *= coeff;
-    res_sin[i-1][j] *= coeff;
+    res_cos[i-1][j] /= res_nrp[i-1];
+    res_sin[i-1][j] /= res_nrp[i-1];
   }
-  res_eps[i-1] *= coeff;
+  res_eps[i-1] /= res_nrp[i-1];
 
   // error
-  for (k=0; k<Np; k++) {
-    if (h_inout[k]==1) {
-      for (j=0; j<HARMONICS; j++) {
-        residual = (h_Vect16FC[k].s[2*j]-res_cos[i-1][j]);
+  for (j=0; j<HARMONICS; j++) {
+    for (k=0; k<Np; k++) {
+      if (h_inout[k]==1) {
+        residual = h_Vect16FC[k].s[2*j] - res_cos[i-1][j];
         res_cos_std[i-1][j] += residual * residual;
-        residual = (h_Vect16FC[k].s[2*j+1]-res_sin[i-1][j]);
+        residual = h_Vect16FC[k].s[2*j+1] - res_sin[i-1][j];
         res_sin_std[i-1][j] += residual * residual;
       }
     }
-  }
-  for (j=0; j<HARMONICS; j++) {
-    res_cos_std[i-1][j] = sqrt(res_cos_std[i-1][j]) * coeff;
-    res_sin_std[i-1][j] = sqrt(res_sin_std[i-1][j]) * coeff;
+    res_cos_std[i-1][j] = sqrt(res_cos_std[i-1][j]/(res_nrp[i-1]-1));
+    res_sin_std[i-1][j] = sqrt(res_sin_std[i-1][j]/(res_nrp[i-1]-1));
   }
 }
