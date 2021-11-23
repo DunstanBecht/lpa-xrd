@@ -10,6 +10,8 @@ double res_sin_std[Nf][HARMONICS]; // error off sin coefficients
 double res_eps[Nf]; // mean square strain
 int res_nrp[Nf]; // number of translations of the random points outside de region of interest
 
+double residual; // difference between a value and the mean
+
 printf("loop over Fourier coefficients\n");
 
 g_vec_len = length3(g_vec);
@@ -110,10 +112,10 @@ for (i=1; i<=Nf; i++) { // L = a3 * i
   for (k=0; k<Np; k++) {
     if (h_inout[k]==1) {
       for (j=0; j<HARMONICS; j++) {
-        double err = (h_Vect16FC[k].s[2*j]-res_cos[i-1][j]);
-        res_cos_std[i-1][j] += err * err;
-        err = (h_Vect16FC[k].s[2*j+1]-res_sin[i-1][j]);
-        res_sin_std[i-1][j] += err * err;
+        residual = (h_Vect16FC[k].s[2*j]-res_cos[i-1][j]);
+        res_cos_std[i-1][j] += residual * residual;
+        residual = (h_Vect16FC[k].s[2*j+1]-res_sin[i-1][j]);
+        res_sin_std[i-1][j] += residual * residual;
       }
     }
   }
