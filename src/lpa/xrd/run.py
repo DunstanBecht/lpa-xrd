@@ -45,6 +45,7 @@ def distribution(
       **expfmt (str): export format (default: 'dat')
       **clndir (str): program code clone directory (default: 'xrd')
       **rundir (str): directory where to export run data (default: 'runs')
+      **exestm (str): name of the executable (default: 'lpa_xrd_simulator')
       **executer (Callable): function executing shell commands (default: os.)
       **h (int): hardware to use (1 for gpu / 0 for cpu) (default: 1)
       **b (int): block size (default: 64)
@@ -63,6 +64,7 @@ def distribution(
     expdir = os.path.abspath(getkwa('expdir', kwargs, str, ''))
     clndir = os.path.abspath(getkwa('clndir', kwargs, str, clone_dir))
     rundir = os.path.abspath(getkwa('rundir', kwargs, str, 'runs'))
+    exestm = getkwa('exestm', kwargs, str, 'lpa_xrd_simulator')
     executer = getkwa('executer', kwargs, Callable, os.system)
     h = getkwa('h', kwargs, int, 1)
     b = getkwa('b', kwargs, int, 64)
@@ -82,7 +84,7 @@ def distribution(
         os.path.join(expdir, expstm+'.'+expfmt), # output path
     ))
     cmd = (f"cd {clndir}; "
-           f"./lpa_xrd_simulator {args} > {os.path.join(rundir, impstm)}.out 2>&1")
+           f"./{exestm} {args} > {os.path.join(rundir, impstm)}.out 2>&1")
     res = executer(cmd)
     return cmd, str(res)
 
