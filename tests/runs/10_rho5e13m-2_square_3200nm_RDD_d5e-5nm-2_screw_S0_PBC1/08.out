@@ -39,7 +39,7 @@ STEP 2: generate random points
 memory space for random points positions: 1600000 bytes
 STEP 3: define opencl accelerator
 number of OpenCL platforms available: 1
-memory space for OpenCL code: 7272 bytes
+memory space for OpenCL code: 7414 bytes
 hardware choosen: 1
 device: Tesla P100-PCIE-16GB
 GPU from: NVIDIA Corporation
@@ -68,9 +68,9 @@ free memory references from device
 free memory references from host
 STEP 9: compute GPU performance
 operations done by kernel 1: 1.843240e+10
-floating point operations per second: 94.377052 GFLOPS
-duration: 1.953060e-01 s
+floating point operations per second: 171.612485 GFLOPS
+duration: 1.074071e-01 s
 operations done by kernel 2: 2.488800e+10
-floating point operations per second: 120.862696 GFLOPS
-duration: 10.187218 s (cumulated for all Fourier coefficients)
+floating point operations per second: 240.827872 GFLOPS
+duration: 5.202601 s (cumulated for all Fourier coefficients)
 program ended successfully
