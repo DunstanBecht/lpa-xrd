@@ -64,8 +64,8 @@ printf("input data file: %s\n", argv[3]);
 input = fopen(argv[3], "r");
 
 if (input == NULL) {
-  printf("error while reading the input datafile\n");
-  exit(1);
+  printf("error encountered while reading the input data file\n");
+  exit(EXIT_FAILURE);
 }
 
 fscanf(input, "%s", &version);

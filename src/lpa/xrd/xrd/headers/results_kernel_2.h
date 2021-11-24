@@ -3,12 +3,12 @@ double cumulated_time_kernel2 = 0.0f;
 size_t globalSize2[] = {Np};
 size_t localSize2[] = {64};
 
-double res_cos[Nf][HARMONICS]; // real part of the Fourier transform
-double res_sin[Nf][HARMONICS]; // imaginary part of the Fourier transform
-double res_cos_std[Nf][HARMONICS]; // error off cos coefficients
-double res_sin_std[Nf][HARMONICS]; // error off sin coefficients
-double res_eps[Nf]; // mean square strain
-int res_nrp[Nf]; // number of random points inside the region of interest
+double output_cos[Nf][HARMONICS]; // estimator of the mean cos coefficients of the Fourier transform
+double output_sin[Nf][HARMONICS]; // estimator of the mean sin coefficients of the Fourier transform
+double output_err_cos[Nf][HARMONICS]; // estimator of the standard deviation of the cos mean (standard error)
+double output_err_sin[Nf][HARMONICS]; // estimator of the standard deviation of the sin mean (standard error)
+double output_eps2[Nf]; // estimator of the mean square strain
+int output_nrpi[Nf]; // number of random points inside the region of interest
 
 double residual; // difference between a value and the mean
 
@@ -18,16 +18,16 @@ g_vec_len = length3(g_vec);
 
 cumulated_time_kernel2 = 0.0f;
 
-for (i=1; i<=Nf; i++) { // L = a3 * i
+for (i=0; i<Nf; i++) { // L = a3 * i
 
   for (j=0; j<HARMONICS; j++) {
-    res_cos[i-1][j] = 0;
-    res_sin[i-1][j] = 0;
-    res_cos_std[i-1][j] = 0;
-    res_sin_std[i-1][j] = 0;
+    output_cos[i][j] = 0;
+    output_sin[i][j] = 0;
+    output_err_cos[i][j] = 0;
+    output_err_sin[i][j] = 0;
   }
-  res_eps[i-1] = 0;
-  res_nrp[i-1] = 0;
+  output_eps2[i] = 0;
+  output_nrpi[i] = 0;
 
   err = clSetKernelArg(kernel2, 0, sizeof(cl_mem), &d_Vect16FC);
   err |= clSetKernelArg(kernel2, 1, sizeof(cl_mem), &d_dislocations);
@@ -49,8 +49,8 @@ for (i=1; i<=Nf; i++) { // L = a3 * i
   err |= clSetKernelArg(kernel2, 17, shared_size_kernel1, NULL);
 
   if (err != CL_SUCCESS) {
-    printf("clSetKernelArg error for kernel 2\n");
-    exit(1);
+    printf("error encountered while setting the value of the kernel arguments\n");
+    exit(EXIT_FAILURE);
   }
 
   // equeue kernel 2
@@ -62,7 +62,8 @@ for (i=1; i<=Nf; i++) { // L = a3 * i
 
   err = clEnqueueNDRangeKernel(queue, kernel2, 1, NULL, globalSize2, localSize2, 0, NULL, &event_kernel2);
   if (err != CL_SUCCESS) {
-    printf("NDRange definition error for kernel 2\n");
+    printf("error encountered while enqueuing the command to execute the kernel\n");
+    exit(EXIT_FAILURE);
   }
 
   // handle events to monitor kernel's execution
@@ -81,40 +82,40 @@ for (i=1; i<=Nf; i++) { // L = a3 * i
   //printf("kernel 2 execution cumulated time: %lf\n", cumulated_time_kernel2*1.0e-6);
 
   // compute the total number of useful points
-  res_nrp[i-1] = Np;
+  output_nrpi[i] = Np;
   for(k=0; k<Np; k++) {
     if (h_inout[k]==0) {
-      res_nrp[i-1] -= 1;
+      output_nrpi[i] -= 1;
     }
   }
 
   // sum
   for (k=0; k<Np; k++) {
-    res_eps[i-1] += h_Vect16FC[k].sa;
+    output_eps2[i] += h_Vect16FC[k].sa;
     for (j=0; j<5; j++) {
-      res_cos[i-1][j] += h_Vect16FC[k].s[2*j];
-      res_sin[i-1][j] += h_Vect16FC[k].s[2*j+1];
+      output_cos[i][j] += h_Vect16FC[k].s[2*j];
+      output_sin[i][j] += h_Vect16FC[k].s[2*j+1];
     }
   }
 
   // average
   for (j=0; j<HARMONICS; j++) {
-    res_cos[i-1][j] /= res_nrp[i-1];
-    res_sin[i-1][j] /= res_nrp[i-1];
+    output_cos[i][j] /= output_nrpi[i];
+    output_sin[i][j] /= output_nrpi[i];
   }
-  res_eps[i-1] /= res_nrp[i-1];
+  output_eps2[i] /= output_nrpi[i];
 
   // error
   for (j=0; j<HARMONICS; j++) {
     for (k=0; k<Np; k++) {
       if (h_inout[k]==1) {
-        residual = h_Vect16FC[k].s[2*j] - res_cos[i-1][j];
-        res_cos_std[i-1][j] += residual * residual;
-        residual = h_Vect16FC[k].s[2*j+1] - res_sin[i-1][j];
-        res_sin_std[i-1][j] += residual * residual;
+        residual = h_Vect16FC[k].s[2*j] - output_cos[i][j];
+        output_err_cos[i][j] += residual * residual;
+        residual = h_Vect16FC[k].s[2*j+1] - output_sin[i][j];
+        output_err_sin[i][j] += residual * residual;
       }
     }
-    res_cos_std[i-1][j] = sqrt(res_cos_std[i-1][j]/(res_nrp[i-1]-1));
-    res_sin_std[i-1][j] = sqrt(res_sin_std[i-1][j]/(res_nrp[i-1]-1));
+    output_err_cos[i][j] = sqrt(output_err_cos[i][j]/(output_nrpi[i]-1)/output_nrpi[i]);
+    output_err_sin[i][j] = sqrt(output_err_sin[i][j]/(output_nrpi[i]-1)/output_nrpi[i]);
   }
 }

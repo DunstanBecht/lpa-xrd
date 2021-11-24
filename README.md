@@ -63,6 +63,17 @@ pip install -U lpa-xrd
  212.4  0.0446177  0.0015808 -0.0332234  0.0015770  0.0032781  0.0015777 -0.0188957  0.0015845 -0.0015135  0.0015908  0.0000217  0.0015719 -0.0046089  0.0015792  0.0074308  0.0015835 -0.0013925  0.0015730  0.0093487  0.0015896  0.0001658         63
 ```
 
+# Abbreviations
+
+Some abbreviations are used in the column names:
+
+* `cos<j>` estimator of the mean cos coefficients of the Fourier transform, harmonic `<j>`
+* `cos<j>` estimator of the mean sin coefficients of the Fourier transform, harmonic `<j>`
+* `err_cos<j>` estimator of the standard deviation of the cos coefficients mean (standard error), harmonic `<j>`
+* `err_sin<j>` estimator of the standard deviation of the sin coefficients mean (standard error), harmonic `<j>`
+* `eps2` estimator of the mean square strain
+* `nrpo` number of random points outside the region of interest for the current value of `L`
+
 # User guide
 
 It is necessary to install the [NVIDIA CUDA Toolkit](https://developer.nvidia.com/cuda-downloads) to compile the OpenCL code on NVIDIA GPUs.

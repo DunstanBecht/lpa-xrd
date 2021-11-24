@@ -1,10 +1,10 @@
 #pragma OPENCL EXTENSION cl_khr_fp64 : enable
 
-__kernel void udislo(__global double *random1,
-                     __global double *random2,
-                     __global double3 *dislocations,
-                     __global double2 *r1,
-                     __global double3 *u1,
+__kernel void udislo(__global double *random1, // random numbers 1
+                     __global double *random2, // random numbers 2
+                     __global double3 *dislocations, // dislocation positions and Burgers vector senses
+                     __global double2 *r1, // random points positions
+                     __global double3 *u1, // displacement field at random points
                      const double be_len,
                      const double bs_len,
                      const double size,
@@ -96,7 +96,7 @@ __kernel void comptf(__global double16 *Vect16FC,
                      double size,
                      double nu,
                      const int Np,
-                     const int IndexFourier,
+                     const int i, // L = i * a3
                      const double gs,
                      const double3 gd_vec,
                      const double2 a3vd,
@@ -159,7 +159,7 @@ __kernel void comptf(__global double16 *Vect16FC,
 
   if ((int)k < Np) {
     // step 1: compute the translated position
-    bb = (double)(IndexFourier)*a3vd;
+    bb = (double)(i+1)*a3vd;
     r2 = r1[k] + bb;
     if (Flag_Square == 0) {
       if (length(r2) > size) {
@@ -223,7 +223,7 @@ __kernel void comptf(__global double16 *Vect16FC,
 
     // compute data related to the Fourier Coefficients
     sz_gu = dot(gd_vec, du);
-    eps2l = (sz_gu/gs/(a3*(double)(IndexFourier)));
+    eps2l = (sz_gu/gs/(a3*(double)(i+1)));
     eps2l *= eps2l;
 
     c1AL = cos(1.0f*sz_gu);

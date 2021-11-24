@@ -30,7 +30,7 @@ fprintf(output, "# %4s", "L");
 for (i=1; i<=HARMONICS; i++){
   fprintf(output, " %9s%d %9s%d %9s%d %9s%d", "cos", i, "err_cos", i, "sin", i, "err_sin", i);
 }
-fprintf(output, " %10s %10s\n", "<eps^2>", "bad_points");
+fprintf(output, " %10s %10s\n", "eps2", "nrpo");
 
 /* --- write table --------------------------------------------------------- */
 
@@ -39,12 +39,12 @@ for (i=0; i<Nf; i++) {
   for (j=0; j<HARMONICS; j++){
     fprintf(output,
       " %10.7f %10.7f %10.7f %10.7f",
-      res_cos[i][j],
-      res_cos_std[i][j],
-      res_sin[i][j],
-      res_sin_std[i][j]);
+      output_cos[i][j],
+      output_err_cos[i][j],
+      output_sin[i][j],
+      output_err_sin[i][j]);
   }
-  fprintf(output, " %10.7f %10d\n", res_eps[i], Np-res_nrp[i]);
+  fprintf(output, " %10.7f %10d\n", output_eps2[i], Np-output_nrpi[i]);
 }
 
 /* --- dump results to files for debugging --------------------------------- */
