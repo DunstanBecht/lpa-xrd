@@ -1,4 +1,4 @@
-lpa-xrd version: 0.9.7
+lpa-xrd version: 0.9.8
 STEP 1: load input data file
 number of random points for the Monte Carlo method: 200000
 number of values taken by the Fourier variable: 50
@@ -38,7 +38,7 @@ STEP 2: generate random points
 memory space for random points positions: 1600000 bytes
 STEP 3: define opencl accelerator
 number of OpenCL platforms available: 1
-memory space for OpenCL code: 7414 bytes
+memory space for OpenCL code: 9762 bytes
 hardware choosen: 1
 device: Tesla P100-PCIE-16GB
 GPU from: NVIDIA Corporation
@@ -67,9 +67,9 @@ free memory references from device
 free memory references from host
 STEP 9: compute GPU performance
 operations done by kernel 1: 1.608400e+09
-floating point operations per second: 177.963821 GFLOPS
-duration: 9.037792e-03 s
+floating point operations per second: 176.844264 GFLOPS
+duration: 9.095008e-03 s
 operations done by kernel 2: 2.175600e+09
-floating point operations per second: 237.659532 GFLOPS
-duration: 0.460466 s (cumulated for all Fourier coefficients)
+floating point operations per second: 239.039938 GFLOPS
+duration: 0.455123 s (cumulated for all Fourier coefficients)
 program ended successfully
