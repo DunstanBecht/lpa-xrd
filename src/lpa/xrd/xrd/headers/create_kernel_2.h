@@ -23,7 +23,7 @@ if (h_inout == NULL) {
   exit(EXIT_FAILURE);
 }
 for (i=0; i<Np; i++) {
-  h_inout[i] = 0;
+  h_inout[i] = 1;
 }
 
 /* --- create buffer objects ----------------------------------------------- */
