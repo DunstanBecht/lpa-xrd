@@ -7,6 +7,9 @@ authors:
   - family-names: Becht
     given-names: Dunstan
     orcid: https://orcid.org/0000-0002-8524-4527
+  - family-names: Borbély
+    given-names: András
+    orcid: https://orcid.org/0000-0001-7877-5795
 title: lpa-xrd
 version: 0.9.8
 doi: 10.5281/zenodo.5701430
