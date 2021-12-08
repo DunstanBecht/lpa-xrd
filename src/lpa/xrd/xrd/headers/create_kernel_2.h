@@ -1,6 +1,17 @@
+size_t localSize2[1]; // kernel 2 local size
+size_t globalSize2[1]; // kernel 2 global size
 cl_kernel kernel2; // kernel object
+
 cl_double16 *h_Vect16FC; // vector for storing calculated values in the kernel
 cl_int *h_inout; // random point inside (1) or outside (0) the region of interest
+
+localSize2[0] = atoi(argv[2]);
+globalSize2[0] = localSize2[0]*ceil(Np/localSize2[0]); // must be a multiple of locaSize2
+printf("kernel 2 local size: %lu\n", localSize2[0]);
+printf("kernel 2 global size: %lu\n", globalSize2[0]);
+
+double time_kernel2 = 0.0f;
+double cumulated_time_kernel2 = 0.0f;
 
 /* --- create data structures on the host ---------------------------------- */
 

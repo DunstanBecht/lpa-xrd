@@ -1,6 +1,14 @@
+size_t localSize1[1]; // kernel 1 local size
+size_t globalSize1[1]; // kernel 1 global size
 cl_kernel kernel1; // kernel object
+
 cl_double2 *h_r1; // random point positions
 cl_double3 *h_u1; // displacement field at the random points
+
+localSize1[0] = atoi(argv[2]);
+globalSize1[0] = localSize1[0]*ceil(Np/localSize1[0]); // must be a multiple of locaSize1
+printf("kernel 1 global size: %lu\n", globalSize1[0]);
+printf("kernel 1 local size: %lu\n", localSize1[0]);
 
 /* --- create a kernel object ---------------------------------------------- */
 
@@ -54,12 +62,6 @@ if (err != CL_SUCCESS) {
 }
 
 /* --- set the value of the kernel arguments ------------------------------- */
-
-size_t globalSize1[] = {Np};
-size_t localSize1[] = {64}; // optimal value by default
-localSize1[0] = atoi(argv[2]); // choice of the local size
-printf("kernel 1 global size: %lu\n", globalSize1[0]);
-printf("kernel 1 local size: %lu\n", localSize1[0]);
 
 size_t shared_size_kernel1;
 shared_size_kernel1 = localSize1[0] * sizeof(cl_double3);

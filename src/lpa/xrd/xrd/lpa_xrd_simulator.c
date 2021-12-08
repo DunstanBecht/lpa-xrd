@@ -7,12 +7,12 @@ int main(int argc, char **argv) {
   if (argc != 7) {
     printf("%d arguments detected but 7 were expected.\n", argc);
     printf("Example: './lpa_xrd_simulator <hardware> <block> <input> <nrp> <nfv> <output>' with:\n");
-    printf("hardware (int): execution support (CPU:0 / GPU:1)\n");
-    printf("block (int): block size for the GPU block (from 2 to 256 depending on the GPU)\n");
-    printf("input (string): path to the input data file\n");
+    printf("hdw (int): hardware execution support (CPU:0 / GPU:1)\n");
+    printf("wgs (int): work-group size (depending on the GPU)\n");
+    printf("imp (string): path to the input data file\n");
     printf("nrp (int): number of random points for the Monte Carlo method\n");
     printf("nfv (int): number of values taken by the Fourier variable \n");
-    printf("output (string): path and name of the output data file\n");
+    printf("exp (string): path and name of the exported data file\n");
     exit(EXIT_FAILURE);
   }
 

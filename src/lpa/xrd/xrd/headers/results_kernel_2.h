@@ -1,22 +1,14 @@
-double time_kernel2 = 0.0f;
-double cumulated_time_kernel2 = 0.0f;
-size_t globalSize2[] = {Np};
-size_t localSize2[] = {64};
-
 double output_cos[Nf][HARMONICS]; // estimator of the mean cos coefficients of the Fourier transform
 double output_sin[Nf][HARMONICS]; // estimator of the mean sin coefficients of the Fourier transform
 double output_err_cos[Nf][HARMONICS]; // estimator of the standard deviation of the cos mean (standard error)
 double output_err_sin[Nf][HARMONICS]; // estimator of the standard deviation of the sin mean (standard error)
 double output_eps2[Nf]; // estimator of the mean square strain
 int output_nrpi[Nf]; // number of random points inside the region of interest
-
 double residual; // difference between a value and the mean
 
 printf("loop over Fourier coefficients\n");
 
 g_vec_len = length3(g_vec);
-
-cumulated_time_kernel2 = 0.0f;
 
 for (i=0; i<Nf; i++) { // L = a3 * i
 
@@ -55,10 +47,6 @@ for (i=0; i<Nf; i++) { // L = a3 * i
 
   // equeue kernel 2
   cl_event event_kernel2;
-
-  localSize2[0] = atoi(argv[2]); // 1 <= block <= 128
-  //printf("kernel 2 globalSize: %lu\n", globalSize2[0]);
-  //printf("kernel 2 locaSize: %lu\n", localSize2[0]);
 
   err = clEnqueueNDRangeKernel(queue, kernel2, 1, NULL, globalSize2, localSize2, 0, NULL, &event_kernel2);
   if (err != CL_SUCCESS) {
