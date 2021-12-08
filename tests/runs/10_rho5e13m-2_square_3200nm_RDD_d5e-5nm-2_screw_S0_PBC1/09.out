@@ -1,8 +1,8 @@
-lpa-xrd version: 0.9.8
+lpa-xrd version: 0.9.9
 STEP 1: load input data file
 number of random points for the Monte Carlo method: 200000
 number of values taken by the Fourier variable: 50
-input data file: /export/home/becht/xrd-test/input/10_rho5e13m-2_square_3200nm_RDD_d5e-5nm-2_screw_S0_PBC1/09.dat
+input data file: /home/dunstan/Documents/lpa-xrd/tests/input/10_rho5e13m-2_square_3200nm_RDD_d5e-5nm-2_screw_S0_PBC1/09.dat
 lpa-input version: 1.2.4
 density: 5.00e+13 m^-2
 direction of 'l' (line vector): 1 1 0 [uvw]
@@ -39,38 +39,40 @@ STEP 2: generate random points
 memory space for random points positions: 1600000 bytes
 STEP 3: define opencl accelerator
 number of OpenCL platforms available: 1
-memory space for OpenCL code: 9762 bytes
+memory space for OpenCL code: 9526 bytes
 hardware choosen: 1
-device: Tesla P100-PCIE-16GB
+device: NVIDIA GeForce GTX 1060 3GB
 GPU from: NVIDIA Corporation
-max compute units: 56
+max compute units: 9
 max local dim: 1024 1024 64
 max work group size: 1024
 DEVICE_MAX_CONSTANT_ARGS: 9
 CL_DEVICE_LOCAL_MEM_SIZE: 49152
 OpenCL code successfully compiled
 STEP 4: create kernel 1
+kernel 1 global size: 200000
+kernel 1 local size: 64
 memory space h_r1: 8 bytes
 memory space h_u1: 8 bytes
 create input and output device buffers for Kernel 1
-kernel 1 global size: 200000
-kernel 1 local size: 64
 shared_size_kernel1: 2048 bytes
 kernel 1 arguments definition done
-recommended workgroup size: 1024
+recommended workgroup size: 256
 STEP 5: create kernel 2
+kernel 2 local size: 64
+kernel 2 global size: 200000
 STEP 6: get kernel 1 results
 STEP 7: get kernel 2 results
 loop over Fourier coefficients
 STEP 8: export output data file
-output file: /export/home/becht/xrd-test/10_rho5e13m-2_square_3200nm_RDD_d5e-5nm-2_screw_S0_PBC1_output/09.dat
+output file: /home/dunstan/Documents/lpa-xrd/tests/10_rho5e13m-2_square_3200nm_RDD_d5e-5nm-2_screw_S0_PBC1_output/09.dat
 free memory references from device
 free memory references from host
 STEP 9: compute GPU performance
 operations done by kernel 1: 1.843240e+10
-floating point operations per second: 175.755618 GFLOPS
-duration: 1.048752e-01 s
+floating point operations per second: 12.949567 GFLOPS
+duration: 1.423399e+00 s
 operations done by kernel 2: 2.488800e+10
-floating point operations per second: 240.636152 GFLOPS
-duration: 5.203408 s (cumulated for all Fourier coefficients)
+floating point operations per second: 17.671115 GFLOPS
+duration: 70.418580 s (cumulated for all Fourier coefficients)
 program ended successfully
