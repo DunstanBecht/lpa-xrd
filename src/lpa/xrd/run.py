@@ -34,8 +34,6 @@ def distribution(
     """
     Run the simulation on a distribution file input.
 
-    r*b gives the number of random points.
-
     Input:
         impstm (str): stem of the input
       **expstm (str): stem of the output (default: '<impstm>_output')
@@ -47,10 +45,10 @@ def distribution(
       **rundir (str): directory where to export run data (default: 'runs')
       **exestm (str): name of the executable (default: 'lpa_xrd_simulator')
       **executer (Callable): function executing shell commands (default: os.)
-      **h (int): hardware to use (1 for gpu / 0 for cpu) (default: 1)
-      **b (int): block size (default: 64)
-      **r (int): block repetitions (default: 3125)
-      **f (int): number of Fourier coefficients (default: 50)
+      **hdw (int): hardware execution support (CPU:0 / GPU:1) (default: 1)
+      **wgs (int): work-group size (default: 64)
+      **nrp (int): number of random points (default: 200000)
+      **nfv (int): number of Fourier variable values (default: 50)
 
     Output:
         cmd (str): executed sh command
@@ -66,21 +64,23 @@ def distribution(
     rundir = os.path.abspath(getkwa('rundir', kwargs, str, 'runs'))
     exestm = getkwa('exestm', kwargs, str, 'lpa_xrd_simulator')
     executer = getkwa('executer', kwargs, Callable, os.system)
-    h = getkwa('h', kwargs, int, 1)
-    b = getkwa('b', kwargs, int, 64)
-    r = getkwa('r', kwargs, int, 3125)
-    f = getkwa('f', kwargs, int, 50)
+    hdw = getkwa('hdw', kwargs, int, 1)
+    wgs = getkwa('wgs', kwargs, int, 64)
+    nrp = getkwa('nrp', kwargs, int, 200000)
+    nfv = getkwa('nfv', kwargs, int, 50)
     endkwa(kwargs)
     # make directory
-    if not os.path.exists(rundir):
+    if not os.path.isdir(rundir):
         os.mkdir(rundir)
+    if not os.path.isdir(clndir):
+        raise ValueError("the simulator must be cloned with xrd.code.clone()")
     # run
     args = " ".join((
-        str(h), # hardware
-        str(b), # block size
+        str(hdw), # hardware
+        str(wgs), # work-group size
         os.path.join(impdir, impstm+'.'+impfmt), # input path
-        str(r*b), # number of random points
-        str(f), # number of Fourier coefficients
+        str(nrp), # number of random points
+        str(nfv), # number of Fourier variable values
         os.path.join(expdir, expstm+'.'+expfmt), # output path
     ))
     cmd = (f"cd {clndir}; "
@@ -123,7 +123,7 @@ def sample(
     if not os.path.exists(expdir_stm):
         os.mkdir(expdir_stm)
     else:
-        raise ValueError(f"existing output directory: {expdir_stm}")
+        raise ValueError(f"delete existing output directory: {expdir_stm}")
     # run
     cmdl, resl = [], []
     stm_fmt = [os.path.splitext(e) for e in os.listdir(impdir_stm)]
