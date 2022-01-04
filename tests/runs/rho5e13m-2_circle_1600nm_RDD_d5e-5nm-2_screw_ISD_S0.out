@@ -1,8 +1,8 @@
-lpa-xrd version: 0.9.9
+lpa-xrd version: 1.0.0
 STEP 1: load input data file
 number of random points for the Monte Carlo method: 200000
 number of values taken by the Fourier variable: 50
-input data file: /home/dunstan/Documents/lpa-xrd/tests/input/rho5e13m-2_circle_1600nm_RDD_d5e-5nm-2_screw_ISD_S0.dat
+input data file: /export/home/becht/test/input/rho5e13m-2_circle_1600nm_RDD_d5e-5nm-2_screw_ISD_S0.dat
 lpa-input version: 1.2.4
 density: 5.00e+13 m^-2
 direction of 'l' (line vector): 1 1 0 [uvw]
@@ -38,11 +38,11 @@ STEP 2: generate random points
 memory space for random points positions: 1600000 bytes
 STEP 3: define opencl accelerator
 number of OpenCL platforms available: 1
-memory space for OpenCL code: 9526 bytes
+memory space for OpenCL code: 9762 bytes
 hardware choosen: 1
-device: NVIDIA GeForce GTX 1060 3GB
+device: Tesla P100-PCIE-16GB
 GPU from: NVIDIA Corporation
-max compute units: 9
+max compute units: 56
 max local dim: 1024 1024 64
 max work group size: 1024
 DEVICE_MAX_CONSTANT_ARGS: 9
@@ -56,7 +56,7 @@ memory space h_u1: 8 bytes
 create input and output device buffers for Kernel 1
 shared_size_kernel1: 2048 bytes
 kernel 1 arguments definition done
-recommended workgroup size: 256
+recommended workgroup size: 1024
 STEP 5: create kernel 2
 kernel 2 local size: 64
 kernel 2 global size: 200000
@@ -64,14 +64,14 @@ STEP 6: get kernel 1 results
 STEP 7: get kernel 2 results
 loop over Fourier coefficients
 STEP 8: export output data file
-output file: /home/dunstan/Documents/lpa-xrd/tests/rho5e13m-2_circle_1600nm_RDD_d5e-5nm-2_screw_ISD_S0_output.dat
+output file: /export/home/becht/test/rho5e13m-2_circle_1600nm_RDD_d5e-5nm-2_screw_ISD_S0_output.dat
 free memory references from device
 free memory references from host
 STEP 9: compute GPU performance
 operations done by kernel 1: 3.216400e+09
-floating point operations per second: 12.839517 GFLOPS
-duration: 2.505079e-01 s
+floating point operations per second: 378.481218 GFLOPS
+duration: 8.498176e-03 s
 operations done by kernel 2: 4.346400e+09
-floating point operations per second: 17.161686 GFLOPS
-duration: 12.405242 s (cumulated for all Fourier coefficients)
+floating point operations per second: 237.973428 GFLOPS
+duration: 0.719864 s (cumulated for all Fourier coefficients)
 program ended successfully
