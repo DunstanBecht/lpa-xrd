@@ -28,9 +28,9 @@ fprintf(output, "%8d # np: number of random points\n", Np);
 fprintf(output, "# %4s", "L");
 
 for (i=1; i<=HARMONICS; i++){
-  fprintf(output, " %9s%d %9s%d %9s%d %9s%d", "cos", i, "err_cos", i, "sin", i, "err_sin", i);
+  fprintf(output, " %21s%d %13s%d %21s%d %13s%d", "cos", i, "err_cos", i, "sin", i, "err_sin", i);
 }
-fprintf(output, " %10s %10s\n", "eps2", "nrpo");
+fprintf(output, " %22s %10s\n", "eps2", "nrpo");
 
 /* --- write table --------------------------------------------------------- */
 
@@ -38,13 +38,13 @@ for (i=0; i<Nf; i++) {
   fprintf(output, "%6.1lf", (i+1)*a3);
   for (j=0; j<HARMONICS; j++){
     fprintf(output,
-      " %10.7f %10.7f %10.7f %10.7f",
+      " %22.15E %14.7E %22.15E %14.7E",
       output_cos[i][j],
       output_err_cos[i][j],
       output_sin[i][j],
       output_err_sin[i][j]);
   }
-  fprintf(output, " %10.7f %10d\n", output_eps2[i], Np-output_nrpi[i]);
+  fprintf(output, " %22.15E %10d\n", output_eps2[i], Np-output_nrpi[i]);
 }
 
 /* --- dump results to files for debugging --------------------------------- */
