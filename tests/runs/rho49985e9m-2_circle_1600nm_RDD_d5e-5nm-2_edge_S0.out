@@ -2,8 +2,8 @@ lpa-xrd version: 1.0.0
 STEP 1: load input data file
 number of random points for the Monte Carlo method: 200000
 number of values taken by the Fourier variable: 50
-input data file: /export/home/becht/test/input/rho5e13m-2_circle_1600nm_RDD_d5e-5nm-2_edge_S0.dat
-lpa-input version: 1.2.4
+input data file: /export/home/becht/lpa-xrd/input/rho49985e9m-2_circle_1600nm_RDD_d5e-5nm-2_edge_S0.dat
+lpa-input version: 1.2.9
 density: 5.00e+13 m^-2
 direction of 'l' (line vector): 1 -1 -2 [uvw]
 direction of 'L' (Fourier variable): 1 1 0 [uvw]
@@ -12,24 +12,24 @@ normalized line vector: 0.408248 -0.408248 -0.816497
 diffraction vector direction: 2 0 0 (hkl)
 normalized diffraction vector: 1.000000 0.000000 0.000000
 contrast coefficient: 0.266310
-cell parameter: 0.404940 nm
-Burgers vector: 0.202470 0.202470 0.000000 nm
+cell parameter: 0.404600 nm
+Burgers vector: 0.202300 0.202300 0.000000 nm
 Burgers vector screw part norm: 0.000000 nm
 Burgers vector screw part: 0.000000 -0.000000 -0.000000 nm
-Burgers vector edge part: 0.202470 0.202470 0.000000 nm
-Burgers vector edge part norm: 0.286336 nm
+Burgers vector edge part: 0.202300 0.202300 0.000000 nm
+Burgers vector edge part norm: 0.286095 nm
 edge dislocations detected
 normalized Fourier variable direction: 0.707107 0.707107 0.000000
 cross product of l_uni and L_uni: 0.577350 -0.577350 0.577350
 | 0.707107  0.707107  0.000000|
 | 0.577350 -0.577350  0.577350|
 | 0.408248 -0.408248 -0.816497|
-diffraction vector in slip frame: 3.492403 2.851535 2.016340 nm^-1
+diffraction vector in slip frame: 3.495338 2.853931 2.018034 nm^-1
 characteristic size of the region of interest: 1600.000000 nm
 circular region of interest detected
-Fourier variable step size: 11.800000 nm
-Fourier variable step vector: 8.343860 6.812733 4.817330 nm
-Fourier variable step vector projection: 8.343860 6.812733 nm
+Fourier variable step size: 5.000000 nm
+Fourier variable step vector: 3.535534 2.886751 2.041241 nm
+Fourier variable step vector projection: 3.535534 2.886751 nm
 Poisson's number: 0.345000
 number of dislocations in the input file: 402
 total number of dislocations: 402
@@ -38,7 +38,7 @@ STEP 2: generate random points
 memory space for random points positions: 1600000 bytes
 STEP 3: define opencl accelerator
 number of OpenCL platforms available: 1
-memory space for OpenCL code: 9762 bytes
+memory space for OpenCL code: 9526 bytes
 hardware choosen: 1
 device: Tesla P100-PCIE-16GB
 GPU from: NVIDIA Corporation
@@ -64,14 +64,14 @@ STEP 6: get kernel 1 results
 STEP 7: get kernel 2 results
 loop over Fourier coefficients
 STEP 8: export output data file
-output file: /export/home/becht/test/rho5e13m-2_circle_1600nm_RDD_d5e-5nm-2_edge_S0_output.dat
+output file: /export/home/becht/lpa-xrd/rho49985e9m-2_circle_1600nm_RDD_d5e-5nm-2_edge_S0_output.dat
 free memory references from device
 free memory references from host
 STEP 9: compute GPU performance
 operations done by kernel 1: 1.608400e+09
-floating point operations per second: 386.619745 GFLOPS
-duration: 4.160160e-03 s
+floating point operations per second: 118.253298 GFLOPS
+duration: 1.360131e-02 s
 operations done by kernel 2: 2.175600e+09
-floating point operations per second: 238.853503 GFLOPS
-duration: 0.355707 s (cumulated for all Fourier coefficients)
+floating point operations per second: 159.989034 GFLOPS
+duration: 0.679462 s (cumulated for all Fourier coefficients)
 program ended successfully
