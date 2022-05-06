@@ -77,4 +77,4 @@ print("$ "+cmd)
 print(res)
 print()
 
-input("OK")
+print("OK")

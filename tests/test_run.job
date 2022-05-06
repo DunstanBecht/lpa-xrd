@@ -41,7 +41,7 @@ START_TIME=$SECONDS
 echo job started at
 date
 cd $SCRATCH
-python3 $SCRIPT
+python3 $SCRIPT > python_script_output.txt
 echo ------------------------------------------------------
 echo job finished at
 date
