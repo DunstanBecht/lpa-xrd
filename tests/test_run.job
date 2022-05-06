@@ -1,0 +1,56 @@
+#!/bin/bash -l
+#SBATCH --job-name=lpa-xrd
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=dunstan.becht@etu.emse.fr
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
+#SBATCH --time=01:00:00
+#SBATCH --partition=gpu.q
+#SBATCH --gres=gpu:1
+unset SLURM_GTIDS
+
+SCRIPT=test_run.py
+echo ------------------------------------------------------
+echo number of nodes in the job resource allocation: $SLURM_NNODES
+echo nodes allocated to the job: $SLURM_JOB_NODELIST
+echo directory from which sbatch was invoked: $SLURM_SUBMIT_DIR
+echo hostname of the computer from which sbatch was invoked: $SLURM_SUBMIT_HOST
+echo id of the job allocation: $SLURM_JOB_ID
+echo name of the job: $SLURM_JOB_NAME
+echo name of the partition in which the job is running: $SLURM_JOB_PARTITION
+echo number of nodes requested: $SLURM_JOB_NUM_NODES
+echo number of tasks requested per node: $SLURM_NTASKS_PER_NODE
+echo ------------------------------------------------------
+echo generating hostname list
+COMPUTEHOSTLIST=$( scontrol show hostnames $SLURM_JOB_NODELIST |paste -d, -s )
+echo ------------------------------------------------------
+echo creating scratch directories on nodes $SLURM_JOB_NODELIST
+SCRATCH=/scratch/$USER-$SLURM_JOB_ID
+srun -n$SLURM_NNODES mkdir -m 770 -p $SCRATCH  || exit $?
+echo ------------------------------------------------------
+echo transferring files from frontend to compute nodes $SLURM_JOB_NODELIST
+srun -n$SLURM_NNODES cp -rvf $SLURM_SUBMIT_DIR/* $SCRATCH  || exit $?
+echo ------------------------------------------------------
+echo load packages
+module purge
+module load cuda/10.1
+module load anaconda/python3
+python3 -m pip install -U lpa-xrd
+echo ------------------------------------------------------
+START_TIME=$SECONDS
+echo job started at
+date
+cd $SCRATCH
+python3 $SCRIPT
+echo ------------------------------------------------------
+echo job finished at
+date
+ELAPSED_TIME=$(($SECONDS - $START_TIME))
+echo elapsed time: $ELAPSED_TIME
+echo ------------------------------------------------------
+echo transferring result files from compute nodes to frontend
+srun -n$SLURM_NNODES cp -rvf $SCRATCH  $SLURM_SUBMIT_DIR   || exit $?
+echo ------------------------------------------------------
+echo deleting scratch from nodes $SLURM_JOB_NODELIST
+srun -n$SLURM_NNODES rm -rvf $SCRATCH  || exit 0
+echo ------------------------------------------------------

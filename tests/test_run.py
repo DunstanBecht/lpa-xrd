@@ -12,6 +12,9 @@ $ cd <tests-directory>
 Commands for launching simulations:
 $ python3 test_code.py
 $ python3 test_run.py
+
+This script can also be submitted with:
+$ sbatch test_run.job
 """
 
 from lpa.xrd import run
